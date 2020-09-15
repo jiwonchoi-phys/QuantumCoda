@@ -1,3 +1,5 @@
 # QuantumCoda
 
-Quantum da vinci code game
+PKNU Capstone Design
+Team "Explorer" repository
+Project: Quantum da vinci code game
