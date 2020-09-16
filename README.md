@@ -1,7 +1,7 @@
 # QuantumCoda
 
-PKNU Capstone Design
-Team "Explorer" repository
+2020 PKNU Capstone Design \n
+Team "Explorer" repository \n
 Project: Quantum da vinci code game
 
 200916
