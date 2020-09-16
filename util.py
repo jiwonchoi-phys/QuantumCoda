@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
 
 # RGB color information
 BLACK   = (  0,  0,  0)
@@ -15,15 +16,9 @@ PURPLE  = (217, 65,197)
 
 
 # Object size
-SCREEN_WIDTH = 900
+SCREEN_WIDTH  = 900
 SCREEN_HEIGHT = 600
+SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 CARD_WIDTH = 80
-CARD_HEIGHT = 1.6*CARD_WIDTH
-
-
-# Font information
-consolas20 = pygame.font.SysFont("consolas",20)
-consolas30 = pygame.font.SysFont("consolas",30)
-arial20    = pygame.font.SysFont("arial",20)
-arial30    = pygame.font.SysFont("arial",30)
+CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
