@@ -20,3 +20,6 @@ Project: Quantum da vinci code game
 - 통합 - 09.17.py 업로드 :
   1. 기존 배열.py 에 색상 정보 저장 추가
   2. making_card_복사본.py 과 수정된 배열.py 연결
+
+200917 영철
+  카드 분배 완성
