@@ -23,3 +23,4 @@ Project: Quantum da vinci code game
 
 200917 영철
   카드 분배 완성
+  종희의 카드 생성과 바로 이어서 연동 가능하게 함
