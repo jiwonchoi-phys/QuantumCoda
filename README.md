@@ -11,3 +11,4 @@ Project: Quantum da vinci code game
 
 200917 종희
 - making_card_복사본.py : 색깔 구분 제외한, 카드 생성
+-> 이후 색깔 구분을 포함한 카드 생성 (19:52분경 )
