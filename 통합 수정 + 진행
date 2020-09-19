@@ -174,7 +174,7 @@ for i in range(0,pn): # 플레이어 수만큼 리스트 생성
         qwer = ti[k+i*stn]
         p[i].append(qwer)
         ti.pop(ti.index(qwer))
-        public_field[i].append("?")
+        public_field[i].append("?") # 공개 필드에 알수없는(?)카드를 추가
         
 ############################################################################   게임 진행을 위한 함수지정
 #   3) 정렬===============================================================
@@ -217,21 +217,21 @@ def next_turn(i):
 
 # 전체적인 진행 함수
 
-def action(turn):
+def action(turn):                                                               
     global choice_player, choice_card
     print("플레이어",turn,"차례 입니다")
-    ti_b = []
-    ti_w = []
-    for i in range(len(ti)-1):
+    ti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
+    ti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
+    for i in range(len(ti)-1):  # 검은색 흰색 그룹에 색에 맞게 넣음
         if ti[i][0] == 1:
             ti_b.append(ti[i])
         elif ti[i][0] == 0:
             ti_w.append(ti[i])
     while 1:
-        choice_color = input("가져갈 카드의 색깔을 골라주세요 (b,w):")
-        if choice_color == "b":
-            recent_card = random.choice(ti_b)
-            p[turn-1].append(recent_card)
+        choice_color = input("가져갈 카드의 색깔을 골라주세요 (b,w):")    # 검은색이면 검은색 뽑고 흰색이면 흰색 뽑게함
+        if choice_color == "b":                                         # 입력받은 색깔이 b,w에 따라 그에 맞는 색카드를
+            recent_card = random.choice(ti_b)                           # 뽑고 패에 추가 최근 카드는 이후 틀렸을 때
+            p[turn-1].append(recent_card)                               # 카드를 넘기기 위해 가져옴
             public_field[turn-1].append("?")
             break
         elif choice_color == "w":
@@ -241,12 +241,12 @@ def action(turn):
             break
         else:
             print("입력오류")
-    ti.pop(ti.index(recent_card))
-    spooky_arrange(turn-1)
+    ti.pop(ti.index(recent_card))   # 뽑은 카드를 다시 뽑으면 안되니 뽑은 카드는 필드에서 삭제함
+    spooky_arrange(turn-1)          # 뽑았으니 재배열함
     tile_arrange(turn-1)
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
-    while 1:
-        choice_player = float(input("맞추고 싶은 상대방을 고르세요:"))
+    while 1:                        # 플레이어를 지목하는 코드
+        choice_player = float(input("맞추고 싶은 상대방을 고르세요:")) # 플레이어 수를 입력받아서 그에 맞게 선택지를 줌
         choice_player = int(choice_player)
         if choice_player > pn or choice_player < 1:
             print("그런 플레이어는 없습니다")
@@ -259,28 +259,27 @@ def action(turn):
             break
         else:
             print("입력오류")
-    while 1:
+    while 1:                        # 지목한 플레이어의 카드를 지목하고 유추한 후 상황을 전개하는 코드
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
-        choice_card = float(input("맟추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))
-        choice_card = int(choice_card)
+        choice_card = float(input("맟추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
+        choice_card = int(choice_card)                                                                 # 제대로 골랐는지 확인함
         if choice_card > len(p[choice_player-1]) or choice_card < 1:
             print("존재하지 않는 카드입니다")
         elif public_field[choice_player-1][choice_card-1] != "?":
             print("그 카드는 이미 공개되었습니다")
         elif choice_card <= len(p[choice_player-1]) or choice_card >= 1:
             print(choice_card,"번째 카드를 선택했습니다")
-            choice_num = float(input("그 카드의 숫자는 무엇입니까:"))
-            choice_num = int(choice_num)
+            choice_num = float(input("그 카드의 숫자는 무엇입니까:"))       # 제대로 골랐으니 숫자를 찍어라 함 
+            choice_num = int(choice_num)                                  # 유추한 다음 룰에 맞게 상황을 조정
             if choice_num != p[choice_player-1][choice_card-1][1][0] and choice_num != p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")
-                collapse(turn,p[turn-1].index(recent_card)+1)
+                print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
+                collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
                 public(turn,p[turn-1].index(recent_card)+1)
-                turn = choice_player
                 break
             elif choice_num == p[choice_player-1][choice_card-1][1][0] or choice_num == p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자가 있습니다 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다")
-                collapse(choice_player,choice_card)
-                if choice_num == collapse_num:
+                print("그런 숫자가 있습니다 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
+                collapse(choice_player,choice_card)                                       # 상대가 어떻게 붕괴시킬지 고름
+                if choice_num == collapse_num:                                            # 이 또한 미리 짜놓은 코드를 사용
                     print("숫자를 정확히 맞추셨습니다. 룰에 따라 카드를 공개합니다")
                     public(choice_player,choice_card)
                     break
@@ -296,11 +295,11 @@ def collapse(x,y): # x는 붕괴 권한이 있는 플레이어, y는 붕괴시�
         print("플레이어",x,"는 붕괴시킬 숫자를 골라주세요")
         print("붕괴시킬 카드 :",p[x-1][y-1])
         print("나의 패 :",p[x-1])
-        collapse_num = float(input("붕괴 숫자:"))
-        collapse_num = int(collapse_num)
+        collapse_num = float(input("붕괴 숫자:"))       #붕괴 숫자를 받아서 붕괴시키고자 하는 카드의 번호와 비교 후 알맞는 숫자를 
+        collapse_num = int(collapse_num)                #붕괴시킴
         if collapse_num == p[x-1][y-1][1][0]:
             p[x-1][y-1][1][1] = p[x-1][y-1][1][0]
-            recent_collapse_num = p[x-1][y-1][1][0]
+            recent_collapse_num = p[x-1][y-1][1][0]     #최근 붕괴 숫자는 나중 연쇄 붕괴를 위해 가져옴
             recent_collapse_color = p[x-1][y-1][0]
             break
         elif collapse_num == p[x-1][y-1][1][1]:
@@ -316,31 +315,34 @@ def collapse(x,y): # x는 붕괴 권한이 있는 플레이어, y는 붕괴시�
 def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관련된 카드들을 붕괴시킴
    print("컴퓨터가 판단해서 전체적으로 붕괴 할 것이 있으면 붕괴 시키겠습니다")
    global public_check
-   public_check = copy.deepcopy(public_field)
-   omg = 0   
-   while 1:
-       if public_check[omg].count("?") == 0:
-           omg += 1
-       if p[omg][public_check[omg].index("?")][0] == y:   
-           if p[omg][public_check[omg].index("?")][1][0] == x:
-               p[omg][public_check[omg].index("?")][1][0] = p[omg][public_check[omg].index("?")][1][1]
-               x = p[omg][public_check[omg].index("?")][1][1]
-               public_check[omg][public_check[omg].index("?")] = "E"
-               omg = 0
-           elif p[omg][public_check[omg].index("?")][1][1] == x:
-               p[omg][public_check[omg].index("?")][1][1] = p[omg][public_check[omg].index("?")][1][0]
-               x = p[omg][public_check[omg].index("?")][1][0]
-               public_check[omg][public_check[omg].index("?")] = "E"
+   public_check1 = copy.deepcopy(public_field) 
+   public_check2 = copy.deepcopy(public_field)          #파이썬이 리스트 복사하는게 까탈스러워서 딮카피를 써야 복사한 리스트와
+   omg = 0                                              #복사된 리스트가 서로 다른 주소를 할당 받아게 되어 이후 한쪽이 수정되어도
+   while 1:                                             #다른쪽이 수정 안됨
+       if public_check1[omg].count("?") == 0:            #공개 필드의 모름숫자는  ?로 함 omg는 플레이어 수임 예로 public_check[omg]
+           omg += 1                                     #면 omg 숫자에 해당되는 플레이어 패를 검토중임
+       if p[omg][public_check1[omg].index("?")][0] == y:   # 붕괴한 숫자와 색깔을 가져와서 플레이어 패를 하나하나 비교
+           if p[omg][public_check1[omg].index("?")][1][0] == x:      #그래서 붕괴될께 있으면 붕괴하고 최근 붕괴 숫자를 최신화하고 
+               p[omg][public_check1[omg].index("?")][1][0] = p[omg][public_check1[omg].index("?")][1][1] #처음부터 다시 스캔
+               x = p[omg][public_check1[omg].index("?")][1][1]                                           # 반복
+               public_check2[omg][public_check1[omg].index("?")] = "E"   # check 2,1 의 차이는 check1이 확인하면서 아닌거는 
+               public_check1 = copy.deepcopy(public_check2)             # E로 표현하는데 붕괴 해야할 카드를 찾아버리면
+               omg = 0                                                  # 처음부터 다시 스캔해야 하기 때문에 백업용으로
+           elif p[omg][public_check1[omg].index("?")][1][1] == x:       # check2를 놔둠 그리고 붕괴한 카드는 check2에 E로 
+               p[omg][public_check1[omg].index("?")][1][1] = p[omg][public_check1[omg].index("?")][1][0] #표현되어 다시 체크 할 일이 없음
+               x = p[omg][public_check1[omg].index("?")][1][0]
+               public_check2[omg][public_check1[omg].index("?")] = "E"
+               public_check1 = copy.deepcopy(public_check2)
                omg = 0
            else:
-               public_check[omg][public_check[omg].index("?")] = "E"
-               if public_check[omg].count("?") == 0:
+               public_check1[omg][public_check1[omg].index("?")] = "E" # 여기서 E는 ?카드를 뒤집어 봤다는 표시로 
+               if public_check1[omg].count("?") == 0:
                    omg += 1
-       elif p[omg][public_check[omg].index("?")][0] != y:
-            public_check[omg][public_check[omg].index("?")] = "E"
-            if public_check[omg].count("?") == 0:
+       elif p[omg][public_check1[omg].index("?")][0] != y:
+            public_check1[omg][public_check1[omg].index("?")] = "E"
+            if public_check1[omg].count("?") == 0:
                 omg += 1
-       if omg == pn:
+       if omg == pn: # 모든 플레어의 패를 끝까지 다 훑었으면 정지 (즉 더이상 붕괴 시킬게 없으니 반복없이 브레이크로 옴)
           break
            
 # 카드 공개 함수
