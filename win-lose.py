@@ -5,5 +5,5 @@ def winlose_condition (player):
         lose_game() # 게임 종료 (게임 종료 후 새게임을 할지 프로그램을 종료할지 선택) # pygame에서 처리해야 할 듯함
     if len(opplayer.closed_deck) == 0:
         stop_game() # 게임을 멈춤 (즉 패는 공개되어 있는채로 종료) # pygame에서 처리해야 할 듯함
-    if len(all.opplayer.closed_deck) == 0:
+    if all(len(player.closed_deck)) == True:
         win_game() # 게임을 이긴 것으로 처리 # 이것 역시 pygame에서 처리해야 할 듯?
