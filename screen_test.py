@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Sep 15 18:50:53 2020
-
-@author: jiwon
-"""
-
 
 import pygame
 from util import *
@@ -15,7 +9,6 @@ pygame.display.set_caption("Quantum Coda")
 clock = pygame.time.Clock()
 done = False
 clock.tick(30)
-
 
 
 class PRINTTEXT():
@@ -46,19 +39,30 @@ class PRINTTEXT():
             text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
             screen.blit(self.text,text_rect)
         
+        elif loc == 'bottom left':
+            text_rect = self.text.get_rect()
+            text_rect.center = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
+            screen.blit(self.text,text_rect)
+        
+        elif loc == 'bottom right':
+            text_rect = self.text.get_rect()
+            text_rect.center = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
+            screen.blit(self.text,text_rect)
+        
         elif type(loc) == tuple: # User input of location
             text_rect = self.text.get_rect()
-            text_rect.center == loc
-            screen.blit(self.text,text_rect)
+            text_rect.center = loc
+            screen.blit(self.text,text_rect)        
+
 
 class CARD():
     def __init__(self,color,num):
         # Set card&font color
         if color == 1: # Black
             self.card_color = BLACK
-            self.font_color = WHITE
+            self.font_color = GRAY
         else:
-            self.card_color = WHITE
+            self.card_color = GRAY
             self.font_color = BLACK
         
         self.card_num = num
@@ -74,7 +78,9 @@ class CARD():
         pass
     
     def draw_img(self, loc=(0,0)):
-        pygame.Rect(loc(0),loc(1),self.width,self.height)
+        x, y = loc[0:2]
+        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
+
 
 class PLAYER():
     def __init__(self):
@@ -85,23 +91,23 @@ class PLAYER():
     def num_opened(self):
         return len(self.opened_deck)
 
-        
 
 
 # Set screen size & background color
 screen = pygame.display.set_mode(SCREEN_SIZE)
 screen.fill(WHITE)
-
-
 pygame.display.update()
 
 
 # Starting menu object
 title = PRINTTEXT("Quantum Coda",size=50)        
-new_game = PRINTTEXT("New Game",size=30)
-input_pn = PRINTTEXT("# of players: ", size=20)
+new_p2 = PRINTTEXT("2 Player", size=30)
+new_p3 = PRINTTEXT("3 Player", size=30)
+new_p4 = PRINTTEXT("4 Player", size=30)
 color_active = GRAY
 color_inactive = WHITE
+card1 = CARD(1,1)
+card2 = CARD(0,1)
 
 # =============== MAIN LOOP =====================
 while not done:
@@ -112,9 +118,12 @@ while not done:
 
         # Starting menu
         title._blit_(loc='top center')
-        new_game._blit_(loc='bottom center')
-        input_pn._blit_(loc=(100,400))
-
+        
+        new_p2._blit_(loc='bottom left')
+        new_p3._blit_(loc='bottom center')
+        new_p4._blit_(loc='bottom right')
+        card1.draw_img()
+        card2.draw_img(loc=(60,0))
 
         pygame.display.flip()
 
