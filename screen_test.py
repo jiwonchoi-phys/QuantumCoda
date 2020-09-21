@@ -60,13 +60,14 @@ class CARD():
         # Set card&font color
         if color == 1: # Black
             self.card_color = BLACK
-            self.font_color = GRAY
+            self.font_color = WHITE
         else:
             self.card_color = GRAY
             self.font_color = BLACK
         
         self.card_num = num
         self.width, self.height = CARD_SIZE
+        self.number = PRINTTEXT("%s" % self.card_num, 25, color=self.font_color)
 
     def get_color(self):
         return self.card_color
@@ -80,6 +81,8 @@ class CARD():
     def draw_img(self, loc=(0,0)):
         x, y = loc[0:2]
         pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
+        self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+        
 
 
 class PLAYER():
@@ -105,11 +108,11 @@ new_p2 = PRINTTEXT("2 Player", size=30)
 new_p3 = PRINTTEXT("3 Player", size=30)
 new_p4 = PRINTTEXT("4 Player", size=30)
 color_active = GRAY
-color_inactive = WHITE
 card1 = CARD(1,1)
 card2 = CARD(0,1)
 
-# =============== MAIN LOOP =====================
+
+# ================== MAIN LOOP =====================
 while not done:
 
     for event in pygame.event.get():
