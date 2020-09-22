@@ -9,9 +9,9 @@
 
 ############# 2020 09 22 패치 노트 ######################
 
-# 1. 카드 뽑는 코드를 매우 단축함 매우 효율적임
+# 1. 카드 뽑는 코드를 매우 단축함 과거에 비해 매우 효율적임
 # 2. 공개 필드 카드도 배열을 추가하면서 카드 자체가 바뀌는 현상이 발생했으나 현재 수정후 없어짐
-# 3. acton함수를 없애고 분할하여 각각 따로 함수를 만듬
+# 3. action함수를 없애고 분할하여 각각 따로 함수를 만듬
 
 ########################################################
 
@@ -36,26 +36,26 @@ def make_spooky(x):
         if sum(cut) == max_card_num + 1:
             break
         elif sum(cut) > max_card_num + 1:
-            cut.pop()
+            cut2 = cut.pop()
             if max_card_num + 1 - sum(cut) < 3:
-                cut[len(cut)] += max_card_num + 1 - sum(cut)
+                cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
             else:
-                cut[len(cut)] = max_card_num + 1 - sum(cut)
-    card_num = list(numpy.zeros(len(cut)))
+                cut.append(cut2)
+                cut[len(cut)-1] = max_card_num + 1 - sum(cut)    
+    card_num = list(numpy.zeros(len(cut))) 
     add_card_s = -cut[0]
     add_card_f = 0
     for i in range(0,len(cut)):
         card_num[i] = []
-        add_card_s += cut[i]
-        add_card_f += cut[i]
-        for k in range(add_card_s,add_card_f):
-            card_num[i].append(card_list[k])
+        add_card_s += cut[i] 
+        add_card_f += cut[i]                   
+        for k in range(add_card_s,add_card_f): 
+            card_num[i].append(card_list[k])  
     for i in range(0,len(card_num)):
-        for k in range(0,len(card_num[i])):
-            spooky_card_num = [card_num[i][k-1],card_num[i][k]]
+        for k in range(0,len(card_num[i])):   
+            spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
             x.append(spooky_card_num)
     return x           
-
 
 ############################################################################   게임 진행을 위한 함수지정
 #   3) 정렬===============================================================
