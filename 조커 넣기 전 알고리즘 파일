@@ -1,193 +1,62 @@
-############# 패치 노트 ######################
+############# 2020 09 21 패치 노트 ######################
 
 # 1. 필드의 카드가 모자라면 뽑지 못하게 변경
 # 2. 공개 필드에 있는 카드도 플레이어가 가진 카드가 배열 될때 맞춰서 배열되게 변경
 # 3. "?"카드에도 색을 부여
 # 4. 카드유추를 성공 했을 때 연속진행 할껀지 멈출껀지에 대한 선택지 제공
 
-#############################################
+########################################################
 
+############# 2020 09 22 패치 노트 ######################
+
+# 1. 카드 뽑는 코드를 매우 단축함 매우 효율적임
+# 2. 공개 필드 카드도 배열을 추가하면서 카드 자체가 바뀌는 현상이 발생했으나 현재 수정후 없어짐
+# 3. acton함수를 없애고 분할하여 각각 따로 함수를 만듬
+
+########################################################
 
 import random
 import numpy
 import copy
+import math
 
-################################# 카드 숫자를 색깔별로 2개씩 창조
+################################# 카드를 생성하는 함수
 
-max_card_num = 5
-card_num_kind = list(range(0,max_card_num+1))
-card_num = []    #양자 번호
-for i in range(0,max_card_num+1):
-    card_num.append(card_num_kind[i])
-    card_num.append(card_num_kind[i])
-random.shuffle(card_num)
-
-################################# 변수지정
-
-field_black = []
-field_white = []                             #뽑기전에 카드들이 놓여 있는 판
-field_num = list(range(0,max_card_num+1))   #숫자 종류 내림차순
-field_count = list(numpy.zeros(max_card_num+1))   
-y = []                                  #1개의 패
-loop_check = list(numpy.zeros(max_card_num+1))
-loop_num = 1
-
-################################# 카드 뽑기
-
-reset_card_num = card_num
-
-while 1:                                #1개의 패에 숫자 2개를 넣기
+def make_spooky(x):
+    global max_card_num
+    max_card_num = 5
+    min_loop_num = 2
+    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2))
+    cut = []
+    card_list = list(range(0,max_card_num+1))
+    random.shuffle(card_list)
     while 1:
-        loop_e = 0                      #에러 판별 숫자 0이면 에러 없고 1이면 에러 있다
-        count_sum_1 = 0
-        count_sum_2 = 0
-        x = card_num.pop()              #임의로 숫자 뽑기
-        x1 = card_num.pop()
-        count_sum_1 = count_sum_1+field_count.count(1)
-        count_sum_2 = count_sum_2+field_count.count(2)
-        if x == x1:                     #같은 수를 뽑았을 때 대처
-            card_num.append(x)
-            card_num.append(x1)
-            random.shuffle(card_num)
-            loop_e = 1
-        if loop_e == 0:                          #나온 숫자의 개수를 카운트 하고  패에 뽑은 숫자 2개를 추가
-            field_count[field_num.index(x)] += 1
-            field_count[field_num.index(x1)] += 1
-            y.append(x)
-            y.append(x1)
+        cut1 = 3+random.choice(cut_num)
+        cut.append(cut1)
+        if sum(cut) == max_card_num + 1:
             break
-    if len(field_black) == max_card_num +1:                             #필드에 패를 추가함
-        field_white.append(y)
-    elif len(field_white) == 0:
-        field_black.append(y)
-    if len(field_black) == max_card_num +1 and len(field_white) == 0:
-        loop_e = 1                   
-    y = []
-    count_sum_1_a = field_count.count(1) 
-    count_sum_2_a = field_count.count(2)
-    if count_sum_1_a == count_sum_1 + 2:
-        loop_check[field_num.index(x)] = loop_num
-        loop_check[field_num.index(x1)] = loop_num
-        loop_num += 1
-    elif count_sum_2_a == count_sum_2 + 1:
-        if field_count[field_num.index(x)] == 2 and field_count[field_num.index(x1)] != 2:
-            loop_check[field_num.index(x1)] = loop_check[field_num.index(x)]
-        elif field_count[field_num.index(x1)] == 2 and field_count[field_num.index(x)] != 2:
-            loop_check[field_num.index(x)] = loop_check[field_num.index(x1)]
-    else:
-        x1_loop_num = loop_check[field_num.index(x1)]
-        check_num = 0
-        while 1:
-            if check_num == len(loop_check):
-                break
-            if loop_check[check_num] == x1_loop_num:
-                loop_check[check_num] = loop_check[field_num.index(x)]
-            check_num += 1
-            
-    if len(card_num) == 2 and card_num[0] == card_num[1]:   # 무힌 루프에 빠지지 않게 하기위해 무한 루프에 빠지는 
-        loop_e = 1
-    if loop_check.count(0) == 0:
-        loop_max_num = max(loop_check)
-        max_count = 0
-        while 1:
-            if loop_check.count(loop_max_num - max_count) == len(loop_check):
-                loop_e = 1
-            elif loop_check.count(loop_max_num - max_count) == 2:
-                loop_e = 1
-            max_count += 1
-            if max_count == loop_max_num:
-                break
-    if loop_e == 1:
-        if len(field_black) != max_card_num + 1:                                              # 조건이 오면 초기화를 시킴
-            field_black = []
-        elif len(field_black) == max_card_num + 1:
-            field_white = []
-        card_num = []    
-        for i in range(0,max_card_num+1):
-            card_num.append(card_num_kind[i])
-            card_num.append(card_num_kind[i])
-        random.shuffle(card_num)
-        field_count = list(numpy.zeros(max_card_num+1))
-        loop_check = list(numpy.zeros(max_card_num+1))
-        loop_num = 1
-    if len(field_black) == max_card_num + 1 and len(field_white) == max_card_num + 1:              #패를 다 분배하면 멈춤
-        break                             
-
-print("field black:",field_black)
-print("field white:",field_white)
-print("field_count",field_count)
-print("숫자:",field_num)
-print("루프:",loop_check)
-
-#   1$ 게임 시작시 배분과 정열@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        elif sum(cut) > max_card_num + 1:
+            cut.pop()
+            if max_card_num + 1 - sum(cut) < 3:
+                cut[len(cut)] += max_card_num + 1 - sum(cut)
+            else:
+                cut[len(cut)] = max_card_num + 1 - sum(cut)
+    card_num = list(numpy.zeros(len(cut)))
+    add_card_s = -cut[0]
+    add_card_f = 0
+    for i in range(0,len(cut)):
+        card_num[i] = []
+        add_card_s += cut[i]
+        add_card_f += cut[i]
+        for k in range(add_card_s,add_card_f):
+            card_num[i].append(card_list[k])
+    for i in range(0,len(card_num)):
+        for k in range(0,len(card_num[i])):
+            spooky_card_num = [card_num[i][k-1],card_num[i][k]]
+            x.append(spooky_card_num)
+    return x           
 
 
-#   1) 타일에 색상 정보 추가 및 섞기======================================
-tb = list(range(0,max_card_num+1))  #타일 블랙: 검은 타일 묶음 생성
-tw = list(range(0,max_card_num+1))  #타일 화이트
-
-fcn=(max_card_num+1)*2              #full card number
-
-ti = []                             #전체 타일 묶음
-
-for i in range(0,max_card_num+1):   #색상 정보 추가 (검정 1, 흰색 0)
-    tb[i]=[1,field_black[i]]
-    tw[i]=[0,field_white[i]]
-    ti.append(tb[i])
-    ti.append(tw[i])
-
-random.shuffle(ti)                  #모든 타일 섞음
-print("섞은 전체 타일: ",ti)
-
-
-#   2) 플레이어 수와 시작 타일 수 지정 및 배포=============================
-
-#   2-1) 플레이어 수 지정--------------------------------------------------
-player_num_max = 4  #게임 가능 플레이어 수 제한
-while 1:
-    print("플레이 최소 인원은 2명이고 최대 인원은",player_num_max,"명 입니다")
-    print("플레이어 수를 소수로 입력하면 앞에 있는 숫자로 결정됩니다. ex)2.5는 2명")
-    pn = float(input("플레이어 수를 입력해주세요:"))
-    pn = int(pn)
-    if pn > player_num_max:
-        print("플레이어 수가 너무 많습니다 다시 입력해주세요")
-    elif pn < 2:
-        print("플레이어 수가 너무 적습니다 다시 입력해주세요")
-    elif pn >=2 and pn <= player_num_max:
-        print("플레이어 수가",pn,"명으로 결정되었습니다.")
-        break
-    else:
-        print("입력오류")
-p = list(range(0,pn))   #플레이 묶음 생성
-public_field = list(range(0,pn))  #공개된 카드 필드
-
-#   2-2) 타일수 지정--------------------------------------------------------
-while 1:
-    print("시작시 가져갈 초기 타일 수를 결정해 주세요(3 권장))")
-
-    stn = float(input("스타팅 타일 수:"))
-    stn = int(stn)
-    if stn > fcn/pn:
-        print("패를 나누기 위한 전체 타일 수가 부족합니다. 작은 수로 다시 입력해주세요")
-    elif stn < 2:
-        print("타일 수가 너무 적습니다 다시 입력해주세요")
-    elif stn >= 2 and stn <= fcn/pn:
-        print("플레이어가 받는 타일 수가",stn,"개로 결정되었습니다.")
-        break
-    else:
-        print("입력오류")
-    
-for i in range(0,pn): # 플레이어 수만큼 리스트 생성
-    p[i] = []
-    public_field[i] = []
-    for k in range(0,stn): #플레이어 리스트에 타일 배분
-        qwer = random.choice(ti)
-        p[i].append(qwer)
-        ti.pop(ti.index(qwer))
-        if qwer[0] == 0:
-            public_field[i].append([0,"?"]) # 공개 필드에 알수없는(?)카드를 추가
-        elif qwer[0] == 1:
-            public_field[i].append([1,"?"])
 ############################################################################   게임 진행을 위한 함수지정
 #   3) 정렬===============================================================
 
@@ -246,11 +115,9 @@ def c_p():
         else:
             print("입력오류")
 
-# 전체적인 진행 함수
-
-def action(turn):        # turn인 플레이어가 취하는 액션                                                       
-    global choice_player, choice_card
-    print("플레이어",turn,"차례 입니다")
+# 뽑는 카드 색깔 정하는 코드
+def c_color():           
+    global choice_color, recent_card
     ti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
     ti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
     for i in range(len(ti)-1):  # 검은색 흰색 그룹에 색에 맞게 넣음
@@ -286,8 +153,11 @@ def action(turn):        # turn인 플레이어가 취하는 액션
         elif len(ti) == 0:
             print("더 이상 뽑을 카드가 없습니다 플레이어 지목 단계로 넘어갑니다.")
             break
-    print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
-    c_p() # 플레이어 지목
+
+# 지목한 플레이어의 카드 유추 코드
+
+def c_card():            
+    global choice_card
     while 1:                        # 지목한 플레이어의 카드를 지목하고 유추한 후 상황을 전개하는 코드
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
         choice_card = float(input("맟추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
@@ -399,7 +269,7 @@ def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관
 # 카드 공개 함수
 
 def public(x,y): # 카드 공개 함수, 공개될 플레이어 x의 y카드를 공개
-    public_field[x-1][y-1] = p[x-1][y-1]
+    public_field[x-1][y-1] = copy.deepcopy(p[x-1][y-1])
     public_field[x-1][y-1][1][0] = collapse_num
     public_field[x-1][y-1][1][1] = collapse_num
     print("붕괴 후 플레이어",x,"의 패:",public_field[x-1])
@@ -407,16 +277,85 @@ def public(x,y): # 카드 공개 함수, 공개될 플레이어 x의 y카드를 
 
 # 공개 필드 정렬함수
 def public_arrange():
-    print(public_field)
-    print(p)
     for i in range(0,pn):
         for k in range(0,len(public_field[i])):
             if public_field[i][k][1] != "?" and public_field[i][k] != p[i][k]:
-                public_field[i][p[i].index(public_field[i][k])] = p[i][p[i].index(public_field[i][k])]
-                public_field[i][k][0] = public_field[i][p[i].index(public_field[i][k])][0]
+                omg2 = copy.deepcopy(public_field[i][k])
+                public_field[i][k][0] = public_field[i][p[i].index(omg2)][0]
                 public_field[i][k][1] = "?"
-
+                public_field[i][p[i].index(omg2)] = copy.deepcopy(omg2)
+                
 ################################################################################# 게임 진행
+
+field_black = []
+field_white = []
+make_spooky(field_black)
+make_spooky(field_white)
+
+fcn=(max_card_num+1)*2              #full card number
+
+ti = []                             #전체 타일 묶음
+tb = []
+tw = []
+
+for i in range(0,max_card_num+1):   #색상 정보 추가 (검정 1, 흰색 0)
+    tb.append([1,field_black[i]])
+    tw.append([0,field_white[i]])
+    ti.append(tb[i])
+    ti.append(tw[i])
+
+random.shuffle(ti)                  #모든 타일 섞음
+print("섞은 전체 타일: ",ti)
+
+
+#   2) 플레이어 수와 시작 타일 수 지정 및 배포=============================
+
+#   2-1) 플레이어 수 지정--------------------------------------------------
+player_num_max = 4  #게임 가능 플레이어 수 제한
+while 1:
+    print("플레이 최소 인원은 2명이고 최대 인원은",player_num_max,"명 입니다")
+    print("플레이어 수를 소수로 입력하면 앞에 있는 숫자로 결정됩니다. ex)2.5는 2명")
+    pn = float(input("플레이어 수를 입력해주세요:"))
+    pn = int(pn)
+    if pn > player_num_max:
+        print("플레이어 수가 너무 많습니다 다시 입력해주세요")
+    elif pn < 2:
+        print("플레이어 수가 너무 적습니다 다시 입력해주세요")
+    elif pn >=2 and pn <= player_num_max:
+        print("플레이어 수가",pn,"명으로 결정되었습니다.")
+        break
+    else:
+        print("입력오류")
+p = list(range(0,pn))   #플레이 묶음 생성
+public_field = list(range(0,pn))  #공개된 카드 필드
+
+#   2-2) 타일수 지정--------------------------------------------------------
+while 1:
+    print("시작시 가져갈 초기 타일 수를 결정해 주세요(3 권장))")
+
+    stn = float(input("스타팅 타일 수:"))
+    stn = int(stn)
+    if stn > fcn/pn:
+        print("패를 나누기 위한 전체 타일 수가 부족합니다. 작은 수로 다시 입력해주세요")
+    elif stn < 2:
+        print("타일 수가 너무 적습니다 다시 입력해주세요")
+    elif stn >= 2 and stn <= fcn/pn:
+        print("플레이어가 받는 타일 수가",stn,"개로 결정되었습니다.")
+        break
+    else:
+        print("입력오류")
+    
+for i in range(0,pn): # 플레이어 수만큼 리스트 생성
+    p[i] = []
+    public_field[i] = []
+    for k in range(0,stn): #플레이어 리스트에 타일 배분
+        qwer = random.choice(ti)
+        p[i].append(qwer)
+        ti.pop(ti.index(qwer))
+        if qwer[0] == 0:
+            public_field[i].append([0,"?"]) # 공개 필드에 알수없는(?)카드를 추가
+        elif qwer[0] == 1:
+            public_field[i].append([1,"?"])
 
 for i in list(range(0,pn)): # 플레이어 전체에 대해 스포키 수 배열
     spooky_arrange(i)
@@ -439,14 +378,18 @@ while 1: # 순서 정하기
 
 turn_count = 0
 while 1:
-    action(turn) # 게임 1번 진행
+    print("플레이어",turn,"차례 입니다")
+    c_color() # 색깔 결정
+    print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
+    c_p() # 플레이어 지목
+    c_card() # 카드 숫자 유추
     overall_collapse(recent_collapse_num,recent_collapse_color) # 전체적인 컴퓨터 오토 붕괴
     spooky_arrange(turn-1) # 재배열
     tile_arrange(turn-1)
     public_arrange() # 공개 필드도 맞춰서 재배열
     next_turn(turn) # 턴바꿈
     turn_count += 1
-    if turn_count == 2: # 일단 게임 2번만 진행
+    if turn_count == 5: # 일단 게임 2번만 진행
         break
 
 
