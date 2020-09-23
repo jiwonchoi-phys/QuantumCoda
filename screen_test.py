@@ -95,7 +95,8 @@ class PLAYER():
 
 
 class BUTTON():
-    def __init__(self, msg, x, y, width, height, inactive_color, active_color, font_color=BLACK, action=None):
+    def __init__(self, msg, x, y, width, height, inactive_color, active_color,\
+        font_color=BLACK, font="consolas", font_size=30, action=None):
         self.msg = msg
         self.x = x
         self.y = y
@@ -103,12 +104,16 @@ class BUTTON():
         self.h = height
         self.ic = inactive_color
         self.ac = active_color
-        self.mouse_pos = pygame.mouse.get_pos()
-        self.click = pygame.mouse.get_pressed()
+        self.f = font
+        self.fc = font_color
+        self.fs = font_size
 
     def _draw_(self):
-        if self.x + self.w > mouse[0] > self.x and \
-            self.y + self.h > mouse[1]> self.y:
+        mouse_pos = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        if self.x + self.w > mouse_pos[0] > self.x and \
+            self.y + self.h > mouse_pos[1]> self.y:
+            
             pygame.draw.rect(screen,self.ac,(self.x,self.y,self.w,self.h))
 
             if click[0] == 1 and action != None:
@@ -116,24 +121,12 @@ class BUTTON():
         
         else:
             pygame.draw.rect(screen, self.ic, (self.x,self.y,self.w,self.h))
-
-
-def button(msg,x,y,w,h,ic,ac,action=None):
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-    if x+w > mouse[0] > x and y+h > mouse[1] > y:
-        pygame.draw.rect(screen,ac,(x,y,w,h))
-
-        if click[0] == 1 and action != None:
-            action()         
-    else:
-        pygame.draw.rect(screen, ic,(x,y,w,h))
-
-    text = pygame.font.SysFont("comicsansms",20)
-    textSurf = text.render(msg,True,BLACK)
-    textRect = textSurf.get_rect()
-    textRect.center = ( (x+(w/2)), (y+(h/2)) )
-    screen.blit(textSurf, textRect)
+        
+        text = pygame.font.SysFont(self.f, self.fs)
+        textSurf = text.render(self.msg,True,self.fc)
+        textRect = textSurf.get_rect()
+        textRect.center = (self.x + self.w/2, self.y + self.h/2)
+        screen.blit(textSurf,textRect)
 
 
 # Set screen size & background color
@@ -151,7 +144,7 @@ color_active = GRAY
 card1 = CARD(1,1)
 card2 = CARD(0,1)
 
-mouse_pos = pygame.mouse.get_pos()
+but1 = BUTTON("button",100,100,200,200,ORANGE,PURPLE)
 
 
 # ================== MAIN LOOP =====================
@@ -169,8 +162,8 @@ while not done:
         new_p4._blit_(loc='bottom right')
         card1.draw_img()
         card2.draw_img(loc=(60,0))
-        button("msg",100,100,100,100,BLACK,GRAY,action=None)
-
+        but1._draw_()
+        
         pygame.display.flip()
 
 pygame.quit()
