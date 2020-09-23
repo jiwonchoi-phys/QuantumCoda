@@ -34,13 +34,13 @@ def make_spooky(x):
     global max_card_num
     max_card_num = 5
     min_loop_num = 2
-    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2))
+    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # [0,1]
     cut = []
-    card_list = list(range(0,max_card_num+1))
-    random.shuffle(card_list)
+    card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
+    random.shuffle(card_list) #섞는다
     while 1:
         cut1 = 3+random.choice(cut_num)
-        cut.append(cut1)
+        cut.append(cut1) # 3 아님 4 추가
         if sum(cut) == max_card_num + 1:
             break
         elif sum(cut) > max_card_num + 1:
@@ -58,7 +58,7 @@ def make_spooky(x):
         add_card_s += cut[i] 
         add_card_f += cut[i]                   
         for k in range(add_card_s,add_card_f): 
-            card_num[i].append(card_list[k])  
+            card_num[i].append(card_list[k])
     for i in range(0,len(card_num)):
         for k in range(0,len(card_num[i])):   
             spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
@@ -66,9 +66,9 @@ def make_spooky(x):
     return x           
 
 ############################################################################   게임 진행을 위한 함수지정
-#   3) 정렬===============================================================
+#   정렬===============================================================
 
-#   3-1) spooky 숫자 정렬-------------------------------------------------
+#   1) spooky 숫자 정렬-------------------------------------------------
 def spooky_arrange(i):
     dummy = p[i]            # 임시 리스트 생성
     for k in list(range(0,len(dummy))): 
@@ -78,7 +78,7 @@ def spooky_arrange(i):
             dummy[k][1][0], dummy[k][1][1] = dummy[k][1][1], dummy[k][1][0]
             p[i]= dummy
 
-#   3-2) 평균값 정렬 및 색상 정렬 옵션----------------------------------------
+#   2) 평균값 정렬 및 색상 정렬 옵션----------------------------------------
 color_arrange_on = 0 # 평균값 중복시 색상에 따라 배열 규칙을 추가할 것인가? [0: no, 1: use] # (GUI 처리 해야됨)
 def tile_arrange(i):
     dummy = p[i]    #임시 리스트 생성
@@ -95,14 +95,14 @@ def tile_arrange(i):
                         dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
             else:   #앞에 놈이 더크면  교환 후 저장
                     dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
-                    p[i]= dummy #
+                    p[i]= dummy
 
+#   3) 배열----------------------------------------------------------------
 def arrange(i): # 위의 spooky_arrange tile_arrange 함수 같이 실행 # 순서 중요
     spooky_arrange(i)
     tile_arrange(i)
     
-# 턴넘기기 함수
-
+#   4) 턴넘기기 함수-------------------------------------------------------
 def next_turn(i):
     global turn
     turn = i+1 # 턴을 다음 플레이어에게 넘김.
