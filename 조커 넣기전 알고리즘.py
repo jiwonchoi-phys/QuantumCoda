@@ -15,11 +15,15 @@
 
 ########################################################
 
-############# 2020 09 23 핫픽스 ######################
+############# 2020 09 23 패치노트 ######################
 
 # 1. 카드 생성 코드 단축화 과정에서 생긴 오류를 수정
 # 2. 이전에 내가 플레이어 x의 몇번째 카드를 선택했었는지 알려주게 변경
 # 3. 좀더 자주 패 상황을 보여주도록 변경
+# 4. 색깔 선택 단계에서 카드를 다 뽑으면 무한 루프에 걸리는 현상을 수정 
+# 5. 이전에 내가 지목했던 카드를 알려주는 과정에서 생겼던 오류 수정
+# 6. 필드에 남아있는 카드가 없어서 더 이상 못뽑을 때 카드 지목에 실패하면 오픈될 카드가 없어서 생기는 오류를 
+#    아무런 카드도 오픈 안하고 진행하도록 변경
 
 ########################################################
 
@@ -30,7 +34,7 @@ import math
 
 ################################# 카드를 생성하는 함수
 
-def make_spooky(x):
+def make_spooky(x): # x라는 리스트를 넣으면 스포키 카드를 생성해서 x에 추가하고  x를 리턴 
     global max_card_num # 패의 최대 숫자 전역변수
     max_card_num = 5
     min_loop_num = 2 # 최소 루프 개수
@@ -66,9 +70,9 @@ def make_spooky(x):
     return x           
 
 ############################################################################   게임 진행을 위한 함수지정
-#   정렬===============================================================
+#   3) 정렬===============================================================
 
-#   1) spooky 숫자 정렬-------------------------------------------------
+#   3-1) spooky 숫자 정렬-------------------------------------------------
 def spooky_arrange(i):
     dummy = p[i]            # 임시 리스트 생성
     for k in list(range(0,len(dummy))): 
@@ -78,7 +82,7 @@ def spooky_arrange(i):
             dummy[k][1][0], dummy[k][1][1] = dummy[k][1][1], dummy[k][1][0]
             p[i]= dummy
 
-#   2) 평균값 정렬 및 색상 정렬 옵션----------------------------------------
+#   3-2) 평균값 정렬 및 색상 정렬 옵션----------------------------------------
 color_arrange_on = 0 # 평균값 중복시 색상에 따라 배열 규칙을 추가할 것인가? [0: no, 1: use] # (GUI 처리 해야됨)
 def tile_arrange(i):
     dummy = p[i]    #임시 리스트 생성
@@ -95,14 +99,14 @@ def tile_arrange(i):
                         dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
             else:   #앞에 놈이 더크면  교환 후 저장
                     dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
-                    p[i]= dummy
+                    p[i]= dummy #
 
-#   3) 배열----------------------------------------------------------------
 def arrange(i): # 위의 spooky_arrange tile_arrange 함수 같이 실행 # 순서 중요
     spooky_arrange(i)
     tile_arrange(i)
     
-#   4) 턴넘기기 함수-------------------------------------------------------
+# 턴넘기기 함수
+
 def next_turn(i):
     global turn
     turn = i+1 # 턴을 다음 플레이어에게 넘김.
@@ -131,7 +135,8 @@ def c_p():
 # 뽑는 카드 색깔 정하는 코드
 
 def c_color():           
-    global choice_color, recent_card
+    global choice_color, recent_card, c_color_e
+    c_color_e = 0
     ti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
     ti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
     for i in range(len(ti)-1):  # 검은색 흰색 그룹에 색에 맞게 넣음
@@ -140,7 +145,11 @@ def c_color():
         elif ti[i][0] == 0:
             ti_w.append(ti[i])
     while 1:
-        if len(ti) != 0:
+        if len(ti_b) == 0 and len(ti_w) == 0:
+            print("더 이상 뽑을 카드가 없습니다 플레이어 지목 단계로 넘어갑니다.")
+            c_color_e = 1
+            break
+        else:
             choice_color = input("가져갈 카드의 색깔을 골라주세요 (b,w):")    # 검은색이면 검은색 뽑고 흰색이면 흰색 뽑게함
             if choice_color == "b" and len(ti_b) != 0:                      # 입력받은 색깔이 b,w에 따라 그에 맞는 색카드를
                 recent_card = random.choice(ti_b)                           # 뽑고 패에 추가 최근 카드는 이후 틀렸을 때
@@ -164,16 +173,14 @@ def c_color():
                 print("흰색 카드가 없습니다")
             else:
                 print("입력오류")
-        elif len(ti) == 0:
-            print("더 이상 뽑을 카드가 없습니다 플레이어 지목 단계로 넘어갑니다.")
-            break
+
 
 # 지목한 플레이어의 카드 유추 코드
 
 def c_card():            
     global choice_card
     while 1:                        # 지목한 플레이어의 카드를 지목하고 유추한 후 상황을 전개하는 코드
-        if len(p[turn-1]) != stn + 1:
+        if turn_count >= pn:
             print("이전에 지목했던",choice_player,"플레이어의 카드는",p[choice_player-1].index(before_choice_card[turn-1][choice_player-1])+1,"번째 카드입니다.")
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
         print("나의 패:",p[turn-1])
@@ -193,13 +200,18 @@ def c_card():
             before_choice_card[turn-1][choice_player-1] = p[choice_player-1][choice_card-1]
             if choice_num != p[choice_player-1][choice_card-1][1][0] and choice_num != p[choice_player-1][choice_card-1][1][1]:
                 print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
-                collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
-                public(turn,p[turn-1].index(recent_card)+1)
+                if c_color_e == 1:
+                    print("이번 턴에 뽑은 카드가 없습니다 공개없이 진행합니다")
+                else:
+                    collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
+                    public(turn,p[turn-1].index(recent_card)+1)
                 break
             elif choice_num == p[choice_player-1][choice_card-1][1][0] or choice_num == p[choice_player-1][choice_card-1][1][1]:
                 print("그런 숫자가 있습니다 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
                 collapse(choice_player,choice_card)                                       # 상대가 어떻게 붕괴시킬지 고름
-                if choice_num == collapse_num:                                            # 이 또한 미리 짜놓은 코드를 사용
+                before_choice_card[turn-1][choice_player-1][1][0] = collapse_num          # 이 또한 미리 짜놓은 코드를 사용
+                before_choice_card[turn-1][choice_player-1][1][1] = collapse_num
+                if choice_num == collapse_num:                                            
                     print("숫자를 정확히 맞추셨습니다. 룰에 따라 카드를 공개합니다")
                     public(choice_player,choice_card)
                     while 1:
@@ -353,8 +365,7 @@ public_field = list(range(0,pn))  # 공개된 카드 필드
 before_choice_card = list(range(0,pn))
 for i in range(0,pn):
     before_choice_card[i] = list(range(0,pn))
-    for k in range(0,pn):
-        before_choice_card[i][k] = 0
+
 
 
 #   2-2) 타일수 지정--------------------------------------------------------
@@ -420,3 +431,4 @@ while 1:
 
 
 #   2$  끝)@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
