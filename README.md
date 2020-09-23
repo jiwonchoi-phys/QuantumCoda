@@ -1,32 +1,37 @@
 # QuantumCoda
 
-2020 PKNU Capstone Design
-Team "Explorer" repository
-Project: Quantum da vinci code game
+Wecome to visit our repository! This repository is for **QuantumCoda (양자 다빈치 코드)** development. Our goal is making a new game including physics phenomenon on Capstone Design I Class at 2020 fall semester.
 
-200916
-지원
+- 2020 PKNU Capstone Design
+- Team "Explorer" repository
+- Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
+- Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
+
+We'll write development notes here. The notes can be written in Korean.
+
+## 3rd Week (09.14~09.20)
+### 200916 지원
 - screen_test.py : 시작 메뉴 구현(다음에 player 수를 숫자로 받아서 입력 받고 게임 화면으로 넘어가는 코드 짤 예정)
 - util.py : 색깔 RGB 정보, Obj 크기 정보
 
-200917 종희
+### 200917 종희
 - making_card_복사본.py : 색깔 구분 제외한, 카드 생성
 -> 이후 색깔 구분을 포함한 카드 생성 (19:52분경 )
 
-200917 지원
+### 200917 지원
 - screen.py(update) : PLAYER, CARD class 생성(필요한 기능은 그때그때 추가예정)
 
-200917 세형 (19:52분 이후 ~ 23:35분경 )
+### 200917 세형 (19:52분 이후 ~ 23:35분경 )
 - 통합 - 09.17.py 업로드 :
   1. 기존 '배열.py' 에 색상 정보 저장 추가
   2. 'making_card_복사본.py'과 수정된 '배열.py' 연결
   * 중요!!) 이후 배열을 위해 각각의 타일 내 색상 정보가 필수적이라 판단 됨
   
-200917 영철
+### 200917 영철
   카드 분배 완성
   종희의 카드 생성과 바로 이어서 연동 가능하게 함
 
-200918 세형 (업로드 시간 11:05)
+### 200918 세형 (업로드 시간 11:05)
 - 통합 18일(11h05m).py 업로드 :
   (변경)
   1. [플레이어 수]와 [스타팅 타일 개수]를 입력 받게 변경
@@ -41,7 +46,7 @@ Project: Quantum da vinci code game
   4) 정수로 입력받게 개선 [2-2)부분에 해당]
   5) 평균값도 같고 spooky 숫자도 모두 같은 경우 생상으로 우선 순위 설정 추가
 
-200919 세형 (업로드 시간 11:00)
+### 200919 세형 (업로드 시간 11:00)
 - 통합 19일(11h00m).py 업로드 :
   (변경)
   1. 'spooky 정렬' '타일 평균값 정렬' 을 def 함수로 개선
@@ -57,7 +62,8 @@ Project: Quantum da vinci code game
   4) 플레이어 수나 타일 수를 정수로 입력받게 개선 [2-2)부분에 해당]
   5) 평균값도 같고 spooky 숫자도 모두 같은 경우 생상으로 우선 순위 설정 검토 (기존 다비치 룰에 따라 추가 예정)
   
-200919 영철 대략적인 게임 진행까지 업로드
+### 200919 영철 
+대략적인 게임 진행까지 업로드
   
   1.카드를 맞췄을 때 연속진행할껀지 턴을 넘길껀지에 대한 코드를 안짰었음
   
@@ -65,7 +71,8 @@ Project: Quantum da vinci code game
   
   3.아직 실행해서 여러 시도를 안해봐서 문제점을 찾지 못함
 
-200921) 조커카드 넣기 전 알고리즘에 해당 
+## 4th Week (09.21~09.27)
+### 200921 영철 조커카드 넣기 전 알고리즘에 해당 
 
 ############# 패치 노트 ######################
 
@@ -82,7 +89,7 @@ Project: Quantum da vinci code game
 
 #############################################
 
-200922 세형 (업로드 시간 15:30)
+### 200922 세형 (업로드 시간 15:30)
 - 조커 넣기 전 알고리즘 파일 (22일 15.30 수정) 업로드 :
   (변경)
   1. 타일 평균값 정렬 중 평균값이 같고 spooky 숫자 모두 중복시 검정 타일이 왼쪽에 정렬되게 추가
@@ -115,3 +122,6 @@ Project: Quantum da vinci code game
   3. 좀더 자주 패 상황을 보여주도록 변경
 
 ########################################################
+
+
+## 5th Week (09.28~10.04)
