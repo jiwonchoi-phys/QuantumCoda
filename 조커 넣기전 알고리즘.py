@@ -70,27 +70,25 @@ def make_spooky(x):
 
 #   3-1) spooky 숫자 정렬-------------------------------------------------
 def spooky_arrange(i):
-    dummy = p[i]            #임시 리스트 생성
+    dummy = p[i]            # 임시 리스트 생성
     for k in list(range(0,len(dummy))): 
-        if dummy[k][1][0] < dummy[k][1][1]: # 두 spooky 수 고려 작으면 놔둠
+        if dummy[k][1][0] < dummy[k][1][1]: # 두 spooky 수 고려 작으면 놔둠 dummy[k][1][0] 의미: [k]: for문 [1]은 spooky [0]: spooky중 첫 째
             pass
-        else:   #다르면 교환 후 저장
+        else:   # 다르면 교환 후 저장
             dummy[k][1][0], dummy[k][1][1] = dummy[k][1][1], dummy[k][1][0]
             p[i]= dummy
 
-
-#   3-2) 평균값 정렬-------------------------------------------------------
-turn_n = 0                          #턴 수, 2$-2) 참고
-color_arrange_on = 0 # 평균값 중복시 색상에 따라 배열 규칙을 추가할 것인가? [0: no, 1: use]
+#   3-2) 평균값 정렬 및 색상 정렬 옵션----------------------------------------
+color_arrange_on = 0 # 평균값 중복시 색상에 따라 배열 규칙을 추가할 것인가? [0: no, 1: use] # (GUI 처리 해야됨)
 def tile_arrange(i):
     dummy = p[i]    #임시 리스트 생성
     for q in range(0,len(dummy)):   #총 길이만큼 교환 실행
-#        print(q,"회 교환) 플레이어",i,"의 타일과 spooky 수", dummy) #확인  주석처리
+        # print(q,"회 교환) 플레이어",i,"의 타일과 spooky 수", dummy) # 테스트용 주석처리입니다 삭제금지!!
         for k in list(range(0,len(dummy)-1)):   #모든 원소에 대해
             if dummy[k][1][0]+dummy[k][1][1] <= dummy[k+1][1][0]+dummy[k+1][1][1]: # 두 spooky 수 평균값 고려 작거나 같으면 놔둠
-                if dummy[k][1][0]+dummy[k][1][1] == dummy[k+1][1][0]+dummy[k+1][1][1]: # 평균값 중복시 작은spooky 수 비교
+                if dummy[k][1][0]+dummy[k][1][1] == dummy[k+1][1][0]+dummy[k+1][1][1]: # 평균값 중복시 작은 spooky 수 비교
                     if  dummy[k][1][0] <= dummy[k+1][1][0]:                            
-                        if dummy[k][1][0] == dummy[k+1][1][0] and color_arrange_on == 1: #평균값 중복에 스푸키 숫자도 모두 곂치는 경우 + 색상 배열 사용시 검정이 왼쪽에 오게 설정
+                        if dummy[k][1][0] == dummy[k+1][1][0] and color_arrange_on == 1: # 평균값 중복에 스푸키 숫자도 모두 겹치는 경우 + 색상 배열 사용시 검정이 왼쪽에 오게 설정
                             if  dummy[k][0] < dummy[k+1][0]:                             #ㄴ 따라서 평균값 3으로 [0,[1,5]][1,[2,4]] [0,[2,4]] 의 배열이 가능
                                 dummy[k+1], dummy[k] = dummy[k], dummy[k+1]              #ㄴ 우선순위 spooky 정렬 > 색상 정렬 : 이유 색상을 우선순위 먼저 두면 평균값이 동일한 애들이 많을때 "블블블화화화" 같은 배열이 생김
                     else: #아니면 바꿔
@@ -99,7 +97,7 @@ def tile_arrange(i):
                     dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
                     p[i]= dummy
 
-def arrange(i):
+def arrange(i): # 위의 spooky_arrange tile_arrange 함수 같이 실행 # 순서 중요
     spooky_arrange(i)
     tile_arrange(i)
     
@@ -131,6 +129,7 @@ def c_p():
             print("입력오류")
 
 # 뽑는 카드 색깔 정하는 코드
+
 def c_color():           
     global choice_color, recent_card
     ti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
@@ -313,20 +312,21 @@ field_white = []
 make_spooky(field_black)
 make_spooky(field_white)
 
-fcn=(max_card_num+1)*2              #full card number
+fcn=(max_card_num+1)*2              # full card number
 
-ti = []                             #전체 타일 묶음
-tb = []
-tw = []
+ti = []                             # 전체 타일 묶음
+tb = []                             # Tile Black
+tw = []                             # Tile White
 
-for i in range(0,max_card_num+1):   #색상 정보 추가 (검정 1, 흰색 0)
+for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 으로 구분하는 for문)
     tb.append([1,field_black[i]])
     tw.append([0,field_white[i]])
     ti.append(tb[i])
-    ti.append(tw[i])
+    ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
 
-random.shuffle(ti)                  #모든 타일 섞음
-#ti = [[1, [3, 5]], [1, [1, 0]], [1, [4, 1]], [1, [2, 5]], [0, [1, 0]], [1, [2, 3]], [0, [3, 0]], [0, [2, 5]], [0, [4, 5]], [0, [3, 2]], [1, [0, 4]], [0, [4, 1]]]
+random.shuffle(ti)                  # 모든 타일 섞음
+# 아래 ti는 테스트를 위한 임시 타일묶음으로 지우지 말아주세요!!
+# ti = [[1, [3, 5]], [1, [1, 0]], [1, [4, 1]], [1, [2, 5]], [0, [1, 0]], [1, [2, 3]], [0, [3, 0]], [0, [2, 5]], [0, [4, 5]], [0, [3, 2]], [1, [0, 4]], [0, [4, 1]]]
 print("섞은 전체 타일: ",ti)
 
 
@@ -348,8 +348,8 @@ while 1:
         break
     else:
         print("입력오류")
-p = list(range(0,pn))   #플레이 묶음 생성
-public_field = list(range(0,pn))  #공개된 카드 필드
+p = list(range(0,pn))   # 플레이어 묶음 생성
+public_field = list(range(0,pn))  # 공개된 카드 필드
 before_choice_card = list(range(0,pn))
 for i in range(0,pn):
     before_choice_card[i] = list(range(0,pn))
@@ -374,8 +374,8 @@ while 1:
         print("입력오류")
     
 for i in range(0,pn): # 플레이어 수만큼 리스트 생성
-    p[i] = []
-    public_field[i] = []
+    p[i] = []                           # 플레이어 i가 가지고 있는 패 (공개되지 않은것)
+    public_field[i] = []                # 플레이어 i가 가지고 있는 패중 공개된 것들
     for k in range(0,stn): #플레이어 리스트에 타일 배분
         qwer = random.choice(ti)
         p[i].append(qwer)
@@ -386,13 +386,13 @@ for i in range(0,pn): # 플레이어 수만큼 리스트 생성
             public_field[i].append([1,"?"])
     
 for i in list(range(0,pn)): # 플레이어 전체에 대해 스포키 수 배열
-    arrange(i)
+    arrange(i) # 위에 정의된 패를 정렬하는 함수
     print("결과) 플레이어",i+1,"의 타일과 spooky 수", p[i])
 
 while 1: # 순서 정하기
     print("오름차순으로 턴을 결정합니다. 먼저 플레이할 플레이어를 지정해주세요 (ex 1: 플레이어 1)")
     turn = float(input("먼저 시작할 플레이어 설정: "))
-    turn= int(turn)
+    turn = int(turn)
     if turn > pn:
         print("존재하지 않는 플레이어 번호입니다. 다시 입력해주세요")
     elif turn < 1:
@@ -401,29 +401,21 @@ while 1: # 순서 정하기
         print("첫 턴의 플레이어가",turn,"으로 결정 되었습니다.")
         break
 
-turn_count = 0
+turn_count = 0 # Turn Count
 while 1:
     print("플레이어",turn,"차례 입니다")
-    print("나의 패:",p[turn-1])
-    c_color() # 색깔 결정
+    print("나의 패:",p[turn-1]) # turn-1은 단순하게 list가 0부터 시작하므로 -1을 넣은 것
+    c_color() # 검정, 흰색 색깔 결정 후 가져오는 것까지의 함수
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
     c_p() # 플레이어 지목
     c_card() # 카드 숫자 유추
     overall_collapse(recent_collapse_num,recent_collapse_color) # 전체적인 컴퓨터 오토 붕괴
-    spooky_arrange(turn-1) # 재배열
-    tile_arrange(turn-1)
+    arrange(turn-1) # 재배열
     public_arrange() # 공개 필드도 맞춰서 재배열
     next_turn(turn) # 턴바꿈
-    turn_count += 1
-    if turn_count == 5: # 일단 게임 2번만 진행
+    turn_count += 1 # 턴이 끝나서 카운트 추가
+    if turn_count == 5: # 일단 게임 2번만 진행 # 실행 확인용 코드임 (추후 삭제)
         break
-
-
-# 상대 숫자 맞추는 코드 시작
-
-# 상대 숫자 맞추는 코드 > 붕괴 코드  끝
-
-
     
 
 
