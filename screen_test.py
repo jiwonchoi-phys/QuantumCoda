@@ -84,7 +84,6 @@ class CARD():
         self.number._blit_(loc=(x + self.width/2, y + self.height/2))
         
 
-
 class PLAYER():
     def __init__(self):
         self.deck_list = []
@@ -94,6 +93,47 @@ class PLAYER():
     def num_opened(self):
         return len(self.opened_deck)
 
+
+class BUTTON():
+    def __init__(self, msg, x, y, width, height, inactive_color, active_color, font_color=BLACK, action=None):
+        self.msg = msg
+        self.x = x
+        self.y = y
+        self.w = width
+        self.h = height
+        self.ic = inactive_color
+        self.ac = active_color
+        self.mouse_pos = pygame.mouse.get_pos()
+        self.click = pygame.mouse.get_pressed()
+
+    def _draw_(self):
+        if self.x + self.w > mouse[0] > self.x and \
+            self.y + self.h > mouse[1]> self.y:
+            pygame.draw.rect(screen,self.ac,(self.x,self.y,self.w,self.h))
+
+            if click[0] == 1 and action != None:
+                action()
+        
+        else:
+            pygame.draw.rect(screen, self.ic, (self.x,self.y,self.w,self.h))
+
+
+def button(msg,x,y,w,h,ic,ac,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(screen,ac,(x,y,w,h))
+
+        if click[0] == 1 and action != None:
+            action()         
+    else:
+        pygame.draw.rect(screen, ic,(x,y,w,h))
+
+    text = pygame.font.SysFont("comicsansms",20)
+    textSurf = text.render(msg,True,BLACK)
+    textRect = textSurf.get_rect()
+    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    screen.blit(textSurf, textRect)
 
 
 # Set screen size & background color
@@ -111,6 +151,8 @@ color_active = GRAY
 card1 = CARD(1,1)
 card2 = CARD(0,1)
 
+mouse_pos = pygame.mouse.get_pos()
+
 
 # ================== MAIN LOOP =====================
 while not done:
@@ -127,6 +169,7 @@ while not done:
         new_p4._blit_(loc='bottom right')
         card1.draw_img()
         card2.draw_img(loc=(60,0))
+        button("msg",100,100,100,100,BLACK,GRAY,action=None)
 
         pygame.display.flip()
 
