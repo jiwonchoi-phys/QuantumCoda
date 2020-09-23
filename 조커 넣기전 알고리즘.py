@@ -31,15 +31,15 @@ import math
 ################################# 카드를 생성하는 함수
 
 def make_spooky(x):
-    global max_card_num
+    global max_card_num # 패의 최대 숫자 전역변수
     max_card_num = 5
-    min_loop_num = 2
-    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # [0,1]
+    min_loop_num = 2 # 루프가 생성되는 개수
+    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # [0,1] # math.ceil함수는 숫자 올림
     cut = []
     card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
-    random.shuffle(card_list) #섞는다
-    while 1:
-        cut1 = 3+random.choice(cut_num)
+    random.shuffle(card_list) # 섞는다 (shuffle 함수 기능)
+    while 1: # 패에 들어가는 숫자가 3번 이상 반복되지 않도록 방지하는 루프
+        cut1 = 3+random.choice(cut_num) # cut_num의 임의 원소 선택
         cut.append(cut1) # 3 아님 4 추가
         if sum(cut) == max_card_num + 1:
             break
