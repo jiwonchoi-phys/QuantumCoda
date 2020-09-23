@@ -95,7 +95,7 @@ def tile_arrange(i):
                         dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
             else:   #앞에 놈이 더크면  교환 후 저장
                     dummy[k+1], dummy[k] = dummy[k], dummy[k+1]
-                    p[i]= dummy
+                    p[i]= dummy #
 
 def arrange(i): # 위의 spooky_arrange tile_arrange 함수 같이 실행 # 순서 중요
     spooky_arrange(i)
