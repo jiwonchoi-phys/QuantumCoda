@@ -124,4 +124,12 @@ We'll write development notes here. The notes can be written in Korean.
 ########################################################
 
 
+
+################ 2020 09 23 gui(지원) ##################
+  
+  BUTTON 클래스 구현
+  게임 메인화면 구현 시작 예정
+
+
+
 ## 5th Week (09.28~10.04)
