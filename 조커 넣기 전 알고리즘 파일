@@ -9,9 +9,17 @@
 
 ############# 2020 09 22 패치 노트 ######################
 
-# 1. 카드 뽑는 코드를 매우 단축함 과거에 비해 매우 효율적임
+# 1. 카드 생성 코드를 매우 단축함 과거에 비해 매우 효율적임
 # 2. 공개 필드 카드도 배열을 추가하면서 카드 자체가 바뀌는 현상이 발생했으나 현재 수정후 없어짐
 # 3. action함수를 없애고 분할하여 각각 따로 함수를 만듬
+
+########################################################
+
+############# 2020 09 23 핫픽스 ######################
+
+# 1. 카드 생성 코드 단축화 과정에서 생긴 오류를 수정
+# 2. 이전에 내가 플레이어 x의 몇번째 카드를 선택했었는지 알려주게 변경
+# 3. 좀더 자주 패 상황을 보여주도록 변경
 
 ########################################################
 
@@ -159,7 +167,10 @@ def c_color():
 def c_card():            
     global choice_card
     while 1:                        # 지목한 플레이어의 카드를 지목하고 유추한 후 상황을 전개하는 코드
+        if len(p[turn-1]) != stn + 1:
+            print("이전에 지목했던",choice_player,"플레이어의 카드는",p[choice_player-1].index(before_choice_card[turn-1][choice_player-1])+1,"번째 카드입니다.")
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
+        print("나의 패:",p[turn-1])
         choice_card = float(input("맟추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
         choice_card = int(choice_card)                                                                 # 제대로 골랐는지 확인함
         if choice_card > len(p[choice_player-1]) or choice_card < 1:
@@ -169,8 +180,11 @@ def c_card():
             print("그 카드는 이미 공개되었습니다")
         elif choice_card <= len(p[choice_player-1]) or choice_card >= 1:
             print(choice_card,"번째 카드를 선택했습니다")
+            print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
+            print("나의 패:",p[turn-1])
             choice_num = float(input("그 카드의 숫자는 무엇입니까:"))       # 제대로 골랐으니 숫자를 찍어라 함 
             choice_num = int(choice_num)                                  # 유추한 다음 룰에 맞게 상황을 조정
+            before_choice_card[turn-1][choice_player-1] = p[choice_player-1][choice_card-1]
             if choice_num != p[choice_player-1][choice_card-1][1][0] and choice_num != p[choice_player-1][choice_card-1][1][1]:
                 print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
                 collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
@@ -328,6 +342,12 @@ while 1:
         print("입력오류")
 p = list(range(0,pn))   #플레이 묶음 생성
 public_field = list(range(0,pn))  #공개된 카드 필드
+before_choice_card = list(range(0,pn))
+for i in range(0,pn):
+    before_choice_card[i] = list(range(0,pn))
+    for k in range(0,pn):
+        before_choice_card[i][k] = 0
+
 
 #   2-2) 타일수 지정--------------------------------------------------------
 while 1:
@@ -356,7 +376,7 @@ for i in range(0,pn): # 플레이어 수만큼 리스트 생성
             public_field[i].append([0,"?"]) # 공개 필드에 알수없는(?)카드를 추가
         elif qwer[0] == 1:
             public_field[i].append([1,"?"])
-
+    
 for i in list(range(0,pn)): # 플레이어 전체에 대해 스포키 수 배열
     spooky_arrange(i)
 
@@ -379,6 +399,7 @@ while 1: # 순서 정하기
 turn_count = 0
 while 1:
     print("플레이어",turn,"차례 입니다")
+    print("나의 패:",p[turn-1])
     c_color() # 색깔 결정
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
     c_p() # 플레이어 지목
