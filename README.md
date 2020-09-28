@@ -166,3 +166,6 @@ We'll write development notes here. The notes can be written in Korean.
 
  ## 5th Week (09.28~10.04)
 
+200928 지원
+main_test.py : 카드 분배 후 카드 이미지 생성
+- 숫자 노출 여부, 버튼 기능 추가 예정
