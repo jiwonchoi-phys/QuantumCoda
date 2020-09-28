@@ -1,4 +1,8 @@
 import pygame
+import math
+import random
+import numpy
+
 
 pygame.init()
 
@@ -100,7 +104,7 @@ class CARD():
         
         self.card_num = num
         self.width, self.height = CARD_SIZE
-        self.number = PRINTTEXT("%s" % self.card_num, 25, color=self.font_color)
+        self.number = PRINTTEXT("%s" % self.card_num, 15, color=self.font_color)
 
     def get_color(self):
         return self.card_color
