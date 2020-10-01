@@ -40,6 +40,15 @@
 
 ########################################################
 
+############# 2020 10 01 패치노트 ######################
+
+# 1. 승패코드 근본 오류 수정
+# 2. 컴퓨터 오토 붕괴에서 뽑을 카드 더미는 붕괴 안하던 현상을 수정
+# 3. 아웃된 플레이어는 지목할 수 없도록 변경
+# 4. 모두 아웃 시켰을 때 더이상 게임을 진행 못하도록 해야함
+
+########################################################
+
 import random
 import numpy
 import copy
@@ -127,6 +136,8 @@ def next_turn(i):
     global turn, win
     turn = i+1 # 턴을 다음 플레이어에게 넘김.
     win = 0
+    if turn == pn+1:
+        turn = 1
     while 1:
         if count_qm(public_field[turn-1]) == 0:
             turn += 1
@@ -135,8 +146,7 @@ def next_turn(i):
                 turn = 1
         else:
             break
-    if turn == pn+1:
-        turn = 1
+
 
     #탈락한 플레이어를 제외 하고 턴 넘김 필요.
 
@@ -144,7 +154,7 @@ def next_turn(i):
 
 def count_qm(x): # x는 알고 싶은 플레이어의 공개필드 리스트
     qm_num = 0
-    for i in range(0,len(x)-1):
+    for i in range(0,len(x)):
         if x[i][1] == "?":
             qm_num += 1
     return qm_num
@@ -153,13 +163,13 @@ def count_qm(x): # x는 알고 싶은 플레이어의 공개필드 리스트
 
 def c_p():
     global choice_player
-    while 1:                        # 플레이어를 지목하는 코드
+    while 1:                        # 플레이어를 지목하는 코드  
         choice_player = float(input("맞추고 싶은 상대방을 고르세요:")) # 플레이어 수를 입력받아서 그에 맞게 선택지를 줌
-        choice_player = int(choice_player)
+        choice_player = int(choice_player) 
         if choice_player > pn or choice_player < 1:
             print("그런 플레이어는 없습니다")
-        elif len(p[choice_player-1]) == 0:
-            print("그 플레이어는 카드가 없습니다")
+        elif count_qm(public_field[choice_player-1]) == 0:
+            print("그 플레이어는 아웃되었습니다")
         elif choice_player == turn:
             print("자신을 선택할 수 없습니다")
         elif choice_player <= pn and choice_player >= 1:
@@ -191,6 +201,7 @@ def c_color():
                 recent_card = random.choice(ti_b)                           # 뽑고 패에 추가 최근 카드는 이후 틀렸을 때
                 p[turn-1].append(recent_card)                               # 카드를 넘기기 위해 가져옴
                 public_field[turn-1].append([1,"?"])
+                field_count.pop(ti.index(recent_card))
                 ti.pop(ti.index(recent_card))   # 뽑은 카드를 다시 뽑으면 안되니 뽑은 카드는 필드에서 삭제함
                 arrange(turn-1)          # 뽑았으니 재배열함
                 break
@@ -200,6 +211,7 @@ def c_color():
                 recent_card = random.choice(ti_w)
                 p[turn-1].append(recent_card)
                 public_field[turn-1].append([0,"?"])
+                field_count.pop(ti.index(recent_card))
                 ti.pop(ti.index(recent_card))   # 뽑은 카드를 다시 뽑으면 안되니 뽑은 카드는 필드에서 삭제함
                 arrange(turn-1)          # 뽑았으니 재배열함
                 break
@@ -248,6 +260,7 @@ def c_card():
                 if choice_num == collapse_num:                                            
                     print("숫자를 정확히 맞추셨습니다. 룰에 따라 카드를 공개합니다")
                     public(choice_player,choice_card)
+                    
                     while 1:
                         choice_turn = input("한번 더 맞추시겠습니까? (y/n):")
                         cpb = 0
@@ -294,8 +307,7 @@ def collapse(x,y): # x는 붕괴 권한이 있는 플레이어, y는 붕괴시�
 
 def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관련된 카드들을 붕괴시킴
    print("컴퓨터가 판단해서 전체적으로 붕괴 할 것이 있으면 붕괴 시키겠습니다")
-   global public_check
-   for i in range(0,pn):
+   for i in range(0,pn): # 오토 붕괴를 하기 위해 카드 형식을 수정
        for k in range(0,len(public_field[i])):
                if public_field[i][k][1] == "?":
                    public_field[i][k] = "?"
@@ -303,6 +315,7 @@ def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관
    public_check2 = copy.deepcopy(public_field)          #파이썬이 리스트 복사하는게 까탈스러워서 딮카피를 써야 복사한 리스트와
    omg = 0                                              #복사된 리스트가 서로 다른 주소를 할당 받아게 되어 이후 한쪽이 수정되어도
    while 1:                                             #다른쪽이 수정 안됨
+       fkdo = 0    
        if public_check1[omg].count("?") == 0:            #공개 필드의 모름숫자는  ?로 함 omg는 플레이어 수임 예로 public_check[omg]
            omg += 1                                     #면 omg 숫자에 해당되는 플레이어 패를 검토중임
        elif p[omg][public_check1[omg].index("?")][0] == y:   # 붕괴한 숫자와 색깔을 가져와서 플레이어 패를 하나하나 비교
@@ -326,13 +339,43 @@ def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관
             public_check1[omg][public_check1[omg].index("?")] = "E"
             if public_check1[omg].count("?") == 0:
                 omg += 1
-       if omg == pn: # 모든 플레어의 패를 끝까지 다 훑었으면 정지 (즉 더이상 붕괴 시킬게 없으니 반복없이 브레이크로 옴)
-          for i in range(0,pn):
-              for k in range(0,len(public_field[i])):
-                  if public_field[i][k] == "?":
-                      public_field[i][k] = [p[i][k][0],"?"]    
-          break
-           
+       if omg == pn: # 모든 플레어의 패를 끝까지 다 훑었으면 뽑을 패 더미도 확인
+          if len(ti) == 0: # 뽑을 패 더미가 없으면 카드 형식을 다시 원래대로 함
+              for i in range(0,pn):
+                  for k in range(0,len(public_field[i])):
+                      if public_field[i][k] == "?":
+                          public_field[i][k] = [p[i][k][0],"?"]    
+              break
+          else:
+              ti_c = 0 # 뽑을 패 더미를 하나하나 확인해서 붕괴시킴
+              while 1:
+                  if ti[ti_c][0] == y:
+                      if ti[ti_c][1][0] == x and field_count[ti_c] != "E":
+                          ti[ti_c][1][0] = ti[ti_c][1][1]
+                          x = ti[ti_c][1][1]
+                          omg = 0
+                          field_count[ti_c] = "E"
+                          break
+                      elif ti[ti_c][1][1] == x and field_count[ti_c] != "E":
+                          ti[ti_c][1][1] = ti[ti_c][1][0]
+                          x =ti[ti_c][1][0]
+                          omg = 0
+                          field_count[ti_c] = "E"
+                          break
+                      else:
+                          ti_c += 1
+                  else:
+                      ti_c += 1
+                  if ti_c == len(ti) - 1:
+                      fkdo = 1
+                      break
+       if fkdo == 1:
+           for i in range(0,pn):
+                  for k in range(0,len(public_field[i])):
+                      if public_field[i][k] == "?":
+                          public_field[i][k] = [p[i][k][0],"?"] 
+           break
+                      
 # 카드 공개 함수
 
 def public(x,y): # 카드 공개 함수, 공개될 플레이어 x의 y카드를 공개
@@ -356,7 +399,7 @@ def public_arrange():
 
 field_black = []
 field_white = []
-make_spooky(field_black)
+make_spooky(field_black)            # 검,흰 타일 만듬
 make_spooky(field_white)
 
 fcn=(max_card_num+1)*2              # full card number
@@ -370,8 +413,7 @@ for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 �
     tw.append([0,field_white[i]])
     ti.append(tb[i])
     ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
-ti.append([1,[100,100]])            # 조커 추가, 조커 구분을 쉽게 하기위해 조커를 100이라 설정
-ti.append([0,[100,100]])
+
 
 random.shuffle(ti)                  # 모든 타일 섞음
 # 아래 ti는 테스트를 위한 임시 타일묶음으로 지우지 말아주세요!!
@@ -399,7 +441,7 @@ while 1:
         print("입력오류")
 p = list(range(0,pn))   # 플레이어 묶음 생성
 public_field = list(range(0,pn))  # 공개된 카드 필드
-before_choice_card = list(range(0,pn))
+before_choice_card = list(range(0,pn)) # 이전에 어떤 카드를 픽 했는지 알려주기 위한 리스트
 for i in range(0,pn):
     before_choice_card[i] = list(range(0,pn))
 
@@ -431,11 +473,12 @@ for i in range(0,pn): # 플레이어 수만큼 리스트 생성
         elif qwer[0] == 1:
             public_field[i].append([1,"?"])
     
-print("조커를 가지고 있다면 원하는 위치에 배열해주세요 이 메세지는 조커가 없어도 발생합니다")
 for i in list(range(0,pn)): # 플레이어 전체에 대해 배열    
     arrange(i) # 위에 정의된 패를 정렬하는 함수
     # print(p[i]) # 확인용 삭제금지
     print("결과) 플레이어",i+1,"의 타일과 spooky 수", p[i])
+
+field_count = list(range(len(ti))) # 오토 붕괴에서 뽑을 카드 더미를 스캔하기 위한 리스트
 
 while 1: # 순서 정하기
     print("오름차순으로 턴을 결정합니다. 먼저 플레이할 플레이어를 지정해주세요 (ex 1: 플레이어 1)")
@@ -456,7 +499,7 @@ while 1:
     c_color() # 검정, 흰색 색깔 결정 후 가져오는 것까지의 함수
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
     while 1:
-        one_more = 0
+        one_more = 0 # one_more 는 연속해서 카드를 맞출껀지에 대한 변수로 1이면 연속해서 맞추겠다는 뜻
         c_p() # 플레이어 지목
         c_card() # 카드 숫자 유추
         overall_collapse(recent_collapse_num,recent_collapse_color) # 전체적인 컴퓨터 오토 붕괴
@@ -469,5 +512,5 @@ while 1:
     if win == pn-1: 
         print("플레이어",turn,"의 승리")
         break
-   
+    
 #   끝)@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
