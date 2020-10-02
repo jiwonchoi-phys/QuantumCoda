@@ -7,7 +7,10 @@ Wecome to visit our repository! This repository is for **QuantumCoda (양자 다
 - Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
 - Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
-We'll write recent development notes here. The notes can be written in Korean. If you want to watch previous update notes, see [Here](https://github.com/jiwonchoi-phys/QuantumCoda/QuantumCoda/UpdateNotes)
+We'll write recent development notes here. The notes can be written in Korean. If you want to watch previous update notes, see [Here](https://github.com/jiwonchoi-phys/QuantumCoda/tree/master/UpdateNotes)
+
+## 1st Week ~ 4th Week
+Update notes of 1st week to 4th week are now moved. See [Here](UpdateNotes/1st~4th.md).
 
 ## 5th Week (09.28~10.04)
 
