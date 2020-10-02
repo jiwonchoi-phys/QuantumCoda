@@ -1,3 +1,19 @@
+"""
+Some discription for util.py
+
+                    CLASS
+===========================================
+PRINTTEXT(msg,size,font,color,antialias = True,background=None)
+디스플레이에 문자열 출력
+    
+CARD(color,num)
+카드 클래스
+
+
+"""
+
+
+
 import pygame
 import math
 import random
@@ -39,15 +55,7 @@ min_loop_num = 2
 
 
 class PRINTTEXT():
-    """
-    PRINTTEXT : 디스플레이에 글자를 출력하기 위한 클래스
 
-    msg : 출력하고자 하는 문자열
-    size : 문자열의 사이즈
-    font : 문자열의 글꼴
-    color : 문자열의 색깔
-    ...
-    """
 
     def __init__(self, msg, size, font='consolas', color=BLACK, antialias=True, background=None):
         self.msg = msg
@@ -59,38 +67,42 @@ class PRINTTEXT():
         texts = pygame.font.SysFont(self.font, self.size)
         self.text = texts.render(self.msg, self.antialias, self.color, self.background)
     
-    def _blit_(self, loc=(0,0)):
+    def _blit_(self, loc=(0,0), loc_center=True):
         
-        if loc == 'top center': 
-            text_rect = self.text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
-            screen.blit(self.text,text_rect)
+        if loc_center == True:
+            if loc == 'top center': 
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'center':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'bottom center':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'bottom left':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'bottom right':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
+                screen.blit(self.text,text_rect)
+            
+            elif type(loc) == tuple: # User input of location
+                text_rect = self.text.get_rect()
+                text_rect.center = loc
+                screen.blit(self.text,text_rect)        
         
-        elif loc == 'center':
-            text_rect = self.text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-            screen.blit(self.text,text_rect)
-        
-        elif loc == 'bottom center':
-            text_rect = self.text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
-            screen.blit(self.text,text_rect)
-        
-        elif loc == 'bottom left':
-            text_rect = self.text.get_rect()
-            text_rect.center = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
-            screen.blit(self.text,text_rect)
-        
-        elif loc == 'bottom right':
-            text_rect = self.text.get_rect()
-            text_rect.center = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
-            screen.blit(self.text,text_rect)
-        
-        elif type(loc) == tuple: # User input of location
-            text_rect = self.text.get_rect()
-            text_rect.center = loc
-            screen.blit(self.text,text_rect)        
-
+        else:
+            if type(loc) == tuple: # User input of location
+                screen.blit(self.text,loc)
 
 class CARD():
     def __init__(self,color,num):
@@ -104,8 +116,12 @@ class CARD():
         
         self.card_num = num
         self.width, self.height = CARD_SIZE
+        self.opened = True
         self.number = PRINTTEXT("%s" % self.card_num, 15, color=self.font_color)
 
+    def is_opened(self):
+        self.opened = True
+    
     def get_color(self):
         return self.card_color
 
@@ -118,7 +134,9 @@ class CARD():
     def draw_img(self, loc=(0,0)):
         x, y = loc[0:2]
         pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
-        self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+        pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
+        if self.opened == True:
+            self.number._blit_(loc=(x + self.width/2, y + self.height/2))
         
 
 class PLAYER():
@@ -127,6 +145,33 @@ class PLAYER():
         self.closed_deck = []
         self.opened_deck = []
     
+    def draw_card(self,x,y):
+        for i, card in enumerate(self.deck_list):
+            card.draw_img(loc=(x + i*CARD_WIDTH,y))
+    
+    def tile_arrange(self):
+        deck = self.deck_list    #임시 리스트 생성
+        for q in range(len(deck)):
+            for k in range(0,len(deck)-1):
+                
+                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()):
+                    pass
+                
+                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()):
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:
+                        pass
+                
+                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:
+                        if deck[k].get_color() < deck[k+1].get_color():
+                            deck[k+1],deck[k] = deck[k],deck[k+1]
+                    
+                    else:
+                        deck[k+1],deck[k] = deck[k],deck[k+1]
+                
+                else:
+                    deck[k+1],deck[k] = deck[k],deck[k+1]
+                    self.deck_list = deck
+        
 
 class BUTTON():
     def __init__(self, msg, x, y, width, height, inactive_color, active_color,\
@@ -162,6 +207,7 @@ class BUTTON():
         textRect = textSurf.get_rect()
         textRect.center = (self.x + self.w/2, self.y + self.h/2)
         screen.blit(textSurf,textRect)
+
 
 
 def make_spooky(x):

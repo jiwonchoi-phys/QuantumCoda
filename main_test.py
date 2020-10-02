@@ -1,7 +1,7 @@
 import pygame
 from util import *
 
-# Initialize pygame
+#======== Initialize pygame ==========
 pygame.init()
 pygame.display.set_caption("Quantum Coda")
 clock = pygame.time.Clock()
@@ -13,8 +13,14 @@ screen = pygame.display.set_mode(SCREEN_SIZE)
 screen.fill(WHITE)
 pygame.display.update()
 
-# 2 players game
+
+select_card = PRINTTEXT("Select card", 20)
+
+
+
+#========== 카드 생성 및 배분 ==========
 num_players = 2
+stn = 4
 
 players = [PLAYER() for i in range(num_players)]
 print(players)
@@ -27,7 +33,7 @@ field_white = []
 make_spooky(field_black)
 make_spooky(field_white)
 
-fcn=(max_card_num+1)*2              # full card number
+fcn=(max_card_num+1)*2
 
 ti = []                             # 전체 타일 묶음
 tb = []                             # Tile Black
@@ -41,44 +47,53 @@ for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 �
 
 
 random.shuffle(ti)                  # 모든 타일 섞음
-# 아래 ti는 테스트를 위한 임시 타일묶음으로 지우지 말아주세요!!
-# ti = [[1, [3, 5]], [1, [1, 0]], [1, [4, 1]], [1, [2, 5]], [0, [1, 0]], [1, [2, 3]], [0, [3, 0]], [0, [2, 5]], [0, [4, 5]], [0, [3, 2]], [1, [0, 4]], [0, [4, 1]]]
 print("섞은 전체 타일: ",ti)
 
+# 생성된 카드를 클래스로 복제
 tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))]
 
-
-for i in range(len(tii)):
-    print(tii[i].get_color(), tii[i].get_num())
-
-
-num_players = 3
-stn = 3
-
+# num_players만큼 플레이어 생성
 p = [PLAYER() for i in range(num_players)]
 
-for i in range(num_players): # 플레이어 수만큼 리스트 생성
-    p[i].deck_list = []                           # 플레이어 i가 가지고 있는 패 (공개되지 않은것)
-    p[i].opened_deck = []                # 플레이어 i가 가지고 있는 패중 공개된 
-    for k in range(0,stn): #플레이어 리스트에 타일 배분
+# PLAYER의 덱에 생성된 카드 랜덤으로 추가
+for i in range(num_players):
+    p[i].deck_list = []
+    p[i].opened_deck = []
+    for k in range(0,stn):
         qwer = random.choice(tii)
         p[i].deck_list.append(qwer)
         tii.pop(tii.index(qwer))
 
+        
+turn = 1
 
-title = PRINTTEXT("Quantum Coda", size=50)
+pl_turn = PRINTTEXT("Turn of player"+str(turn),20)
 
+
+
+#============ MAIN LOOP ============
 while not done:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
         
-        title._blit_(loc='top center')
+        # 덱의 카드 정렬
+        p[0].tile_arrange()       
+        p[1].tile_arrange()
         
+        # 덱 그리기
+        p[0].draw_card(300, 400)
+        p[1].draw_card(300, 100)        
         
-        for i, card in enumerate(tii):
-            card.draw_img(loc=(i*CARD_WIDTH,0))
+        #################################################
+        ########## 평균에 따라 카드 재배열 필요 ###########
+        #################################################
+        
+        # 카드 지목
+        select_card._blit_(loc=(5,30),loc_center=False)
+        pl_turn._blit_(loc=(5,5),loc_center=False)        
+        
         pygame.display.flip()
         
         
