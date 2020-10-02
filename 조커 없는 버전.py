@@ -135,18 +135,23 @@ def arrange(i): # 위의 spooky_arrange tile_arrange 함수 같이 실행 # 순�
 def next_turn(i):
     global turn, win
     turn = i+1 # 턴을 다음 플레이어에게 넘김.
-    win = 0
-    if turn == pn+1:
-        turn = 1
+    win = 0 # 숭리 변수 win 초기화
+    if turn == pn+1: # 턴이 플레이어보다 많아지면
+        turn = 1 # 턴을 초기화
     while 1:
         if count_qm(public_field[turn-1]) == 0:
+            print("플레이어",turn,"는 패가 모두 공개되어 있습니다. 턴을 넘김니다.")
             turn += 1
             win += 1
             if turn == pn+1:
                 turn = 1
         else:
             break
-
+    if win == pn-1:
+        print("플레이어", turn,"의 승리입니다.")
+        print("게임을 종료합니다.")
+        raise SystemExit # 현재 실행되고 있는 프로그램 종료
+    return turn
 
     #탈락한 플레이어를 제외 하고 턴 넘김 필요.
 
@@ -162,8 +167,16 @@ def count_qm(x): # x는 알고 싶은 플레이어의 공개필드 리스트
 # 플레이어 지목 함수
 
 def c_p():
-    global choice_player
+    global choice_player, turn
     while 1:                        # 플레이어를 지목하는 코드  
+        for i in range(pn): # next_turn 함수같이 플레이어 제외하고 패공개시 게임 끝나게 함
+            dummy = 0 # 임의의 변수
+            if count_qm(public_field[pn-1]) == 0:
+                dummy += 1
+                if dummy == pn-1: # win == pn-1과 같은 논리
+                    print("플레이어의 패가 공개되어 지목할 수 없습니다.")
+                    print("플레이어",turn,"의 승리입니다.")
+                    raise SystemExit
         choice_player = float(input("맞추고 싶은 상대방을 고르세요:")) # 플레이어 수를 입력받아서 그에 맞게 선택지를 줌
         choice_player = int(choice_player) 
         if choice_player > pn or choice_player < 1:
@@ -279,6 +292,8 @@ def c_card():
                     break
                 if cpb == 1:
                     break
+        else:
+            print("입력오류")
 
 # 카드 1개 붕괴 함수
 
@@ -509,8 +524,5 @@ while 1:
             break
     next_turn(turn) # 턴바꿈
     turn_count += 1 # 턴이 끝나서 카운트 추가, 몇턴이 지났는지 알아보기 위해서 꼭 필요함
-    if win == pn-1: 
-        print("플레이어",turn,"의 승리")
-        break
-    
+
 #   끝)@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
