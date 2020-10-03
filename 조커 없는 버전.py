@@ -243,7 +243,7 @@ def c_card():
             print("이전에 지목했던",choice_player,"플레이어의 카드는",p[choice_player-1].index(before_choice_card[turn-1][choice_player-1])+1,"번째 카드입니다.")
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
         print("나의 패:",p[turn-1])
-        choice_card = float(input("맟추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
+        choice_card = float(input("맞추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
         choice_card = int(choice_card)                                                                 # 제대로 골랐는지 확인함
         if choice_card > len(p[choice_player-1]) or choice_card < 1:
             print("존재하지 않는 카드입니다")
@@ -258,15 +258,15 @@ def c_card():
             choice_num = int(choice_num)                                  # 유추한 다음 룰에 맞게 상황을 조정
             before_choice_card[turn-1][choice_player-1] = p[choice_player-1][choice_card-1]
             if choice_num != p[choice_player-1][choice_card-1][1][0] and choice_num != p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
+                print("그런 숫자는 없습니다. 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
                 if c_color_e == 1:
-                    print("이번 턴에 뽑은 카드가 없습니다 공개없이 진행합니다")
+                    print("이번 턴에 뽑은 카드가 없습니다. 공개없이 진행합니다")
                 else:
                     collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
                     public(turn,p[turn-1].index(recent_card)+1)
                 break
             elif choice_num == p[choice_player-1][choice_card-1][1][0] or choice_num == p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자가 있습니다 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
+                print("그런 숫자가 있습니다. 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
                 collapse(choice_player,choice_card)                                       # 상대가 어떻게 붕괴시킬지 고름
                 before_choice_card[turn-1][choice_player-1][1][0] = collapse_num          # 이 또한 미리 짜놓은 코드를 사용
                 before_choice_card[turn-1][choice_player-1][1][1] = collapse_num
