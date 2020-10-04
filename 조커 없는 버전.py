@@ -214,9 +214,9 @@ def c_color():
 # 지목한 플레이어의 카드 유추 코드
 
 def c_card():            
-    global choice_card, one_more
+    global choice_card, one_more, rcn
     while 1:                        # 지목한 플레이어의 카드를 지목하고 유추한 후 상황을 전개하는 코드
-        if turn_count >= pn:
+        if len(before_choice_card[turn-1][choice_player-1]) != 0:
             print("이전에 지목했던",choice_player,"플레이어의 카드는",p[choice_player-1].index(before_choice_card[turn-1][choice_player-1])+1,"번째 카드입니다.")
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
         print("나의 패:",p[turn-1])
@@ -238,6 +238,7 @@ def c_card():
                 print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
                 if c_color_e == 1:
                     print("이번 턴에 뽑은 카드가 없습니다 공개없이 진행합니다")
+                    rcn = 1
                 else:
                     collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
                     public(turn,p[turn-1].index(recent_card)+1)
@@ -434,6 +435,8 @@ public_field = list(range(0,pn))  # 공개된 카드 필드
 before_choice_card = list(range(0,pn)) # 이전에 어떤 카드를 픽 했는지 알려주기 위한 리스트
 for i in range(0,pn):
     before_choice_card[i] = list(range(0,pn))
+    for k in range(0,pn):
+        before_choice_card[i][k] = []
 
 #   3-2) 타일수 지정--------------------------------------------------------
 while 1:
@@ -493,11 +496,13 @@ while 1:
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
     while 1:
         one_more = 0 # one_more 는 연속해서 카드를 맞출껀지에 대한 변수로 1이면 연속해서 맞추겠다는 뜻
+        rcn = 0
         c_p() # 플레이어 지목
         c_card() # 카드 숫자 유추
-        overall_collapse(recent_collapse_num,recent_collapse_color) # 전체적인 컴퓨터 오토 붕괴
-        arrange(turn-1) # 재배열
-        public_arrange() # 공개 필드도 맞춰서 재배열
+        if rcn != 1:
+            overall_collapse(recent_collapse_num,recent_collapse_color) # 전체적인 컴퓨터 오토 붕괴
+            arrange(turn-1) # 재배열
+            public_arrange() # 공개 필드도 맞춰서 재배열
         if one_more == 0:
             break
     next_turn(turn) # 턴바꿈
