@@ -135,23 +135,18 @@ def arrange(i): # 위의 spooky_arrange tile_arrange 함수 같이 실행 # 순�
 def next_turn(i):
     global turn, win
     turn = i+1 # 턴을 다음 플레이어에게 넘김.
-    win = 0 # 숭리 변수 win 초기화
-    if turn == pn+1: # 턴이 플레이어보다 많아지면
-        turn = 1 # 턴을 초기화
+    win = 0
+    if turn == pn+1:
+        turn = 1
     while 1:
         if count_qm(public_field[turn-1]) == 0:
-            print("플레이어",turn,"는 패가 모두 공개되어 있습니다. 턴을 넘김니다.")
             turn += 1
             win += 1
             if turn == pn+1:
                 turn = 1
         else:
             break
-    if win == pn-1:
-        print("플레이어", turn,"의 승리입니다.")
-        print("게임을 종료합니다.")
-        raise SystemExit # 현재 실행되고 있는 프로그램 종료
-    return turn
+
 
     #탈락한 플레이어를 제외 하고 턴 넘김 필요.
 
@@ -167,16 +162,8 @@ def count_qm(x): # x는 알고 싶은 플레이어의 공개필드 리스트
 # 플레이어 지목 함수
 
 def c_p():
-    global choice_player, turn
+    global choice_player
     while 1:                        # 플레이어를 지목하는 코드  
-        for i in range(pn): # next_turn 함수같이 플레이어 제외하고 패공개시 게임 끝나게 함
-            dummy = 0 # 임의의 변수
-            if count_qm(public_field[pn-1]) == 0:
-                dummy += 1
-                if dummy == pn-1: # win == pn-1과 같은 논리
-                    print("플레이어의 패가 공개되어 지목할 수 없습니다.")
-                    print("플레이어",turn,"의 승리입니다.")
-                    raise SystemExit
         choice_player = float(input("맞추고 싶은 상대방을 고르세요:")) # 플레이어 수를 입력받아서 그에 맞게 선택지를 줌
         choice_player = int(choice_player) 
         if choice_player > pn or choice_player < 1:
@@ -243,7 +230,7 @@ def c_card():
             print("이전에 지목했던",choice_player,"플레이어의 카드는",p[choice_player-1].index(before_choice_card[turn-1][choice_player-1])+1,"번째 카드입니다.")
         print("플레이어",choice_player,"의 패:",public_field[choice_player-1])
         print("나의 패:",p[turn-1])
-        choice_card = float(input("맞추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
+        choice_card = float(input("맟추고 싶은 카드 번호를 고르세요 상대방 기준 왼쪽부터 1번입니다:"))     # 이제 카드를 고르게 하고
         choice_card = int(choice_card)                                                                 # 제대로 골랐는지 확인함
         if choice_card > len(p[choice_player-1]) or choice_card < 1:
             print("존재하지 않는 카드입니다")
@@ -258,15 +245,15 @@ def c_card():
             choice_num = int(choice_num)                                  # 유추한 다음 룰에 맞게 상황을 조정
             before_choice_card[turn-1][choice_player-1] = p[choice_player-1][choice_card-1]
             if choice_num != p[choice_player-1][choice_card-1][1][0] and choice_num != p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자는 없습니다. 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
+                print("그런 숫자는 없습니다 룰에 따라 방금 뽑은 카드를 붕괴하고 공개 합니다")    # 스포키 숫자중 한개도 못맞힘
                 if c_color_e == 1:
-                    print("이번 턴에 뽑은 카드가 없습니다. 공개없이 진행합니다")
+                    print("이번 턴에 뽑은 카드가 없습니다 공개없이 진행합니다")
                 else:
                     collapse(turn,p[turn-1].index(recent_card)+1)       #미리 짜놓은 붕괴함수와 필드에 공개하는 함수를 사용
                     public(turn,p[turn-1].index(recent_card)+1)
                 break
             elif choice_num == p[choice_player-1][choice_card-1][1][0] or choice_num == p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자가 있습니다. 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
+                print("그런 숫자가 있습니다 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
                 collapse(choice_player,choice_card)                                       # 상대가 어떻게 붕괴시킬지 고름
                 before_choice_card[turn-1][choice_player-1][1][0] = collapse_num          # 이 또한 미리 짜놓은 코드를 사용
                 before_choice_card[turn-1][choice_player-1][1][1] = collapse_num
@@ -292,8 +279,6 @@ def c_card():
                     break
                 if cpb == 1:
                     break
-        else:
-            print("입력오류")
 
 # 카드 1개 붕괴 함수
 
@@ -381,7 +366,7 @@ def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관
                           ti_c += 1
                   else:
                       ti_c += 1
-                  if ti_c == len(ti) - 1:
+                  if ti_c == len(ti):
                       fkdo = 1
                       break
        if fkdo == 1:
@@ -483,15 +468,18 @@ for i in range(0,pn): # 플레이어 수만큼 리스트 생성
         qwer = random.choice(ti)
         p[i].append(qwer)
         ti.pop(ti.index(qwer))
-        if qwer[0] == 0:
-            public_field[i].append([0,"?"]) # 공개 필드에 알수없는(?)카드를 추가
-        elif qwer[0] == 1:
-            public_field[i].append([1,"?"])
     
 for i in list(range(0,pn)): # 플레이어 전체에 대해 배열    
     arrange(i) # 위에 정의된 패를 정렬하는 함수
     # print(p[i]) # 확인용 삭제금지
     print("결과) 플레이어",i+1,"의 타일과 spooky 수", p[i])
+
+for i in range(0,pn): # 공개필드에 미지수 ?를 넣음
+    for k in range(0,stn):
+        if p[i][k][0] == 0:
+            public_field[i].append([0,"?"])
+        elif p[i][k][0] == 1:
+            public_field[i].append([1,"?"])
 
 field_count = list(range(len(ti))) # 오토 붕괴에서 뽑을 카드 더미를 스캔하기 위한 리스트
 
@@ -524,5 +512,8 @@ while 1:
             break
     next_turn(turn) # 턴바꿈
     turn_count += 1 # 턴이 끝나서 카운트 추가, 몇턴이 지났는지 알아보기 위해서 꼭 필요함
-
+    if win == pn-1: 
+        print("플레이어",turn,"의 승리")
+        break
+    
 #   끝)@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
