@@ -154,23 +154,23 @@ class PLAYER():
         for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
             for k in range(0,len(deck)-1):      # 모든 원소에 대해
                 
-                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()): # 흰색이 먼저
+                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()): # spooky 수 합을 비교: 앞에놈이 작으면 놔둠.
                     pass
                 
-                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 두 색상이 같다면
-                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # spooky 값 비교: 앞에 놈이 작으면 패스
+                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 평균이 같다면, 
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # spooky 값 비교: 앞에 놈이 작으면 패스 26 17 ? 
                         pass
                 
-                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]: # spooky 값이 같으면
-                        if deck[k].get_color() < deck[k+1].get_color():
-                            deck[k+1],deck[k] = deck[k],deck[k+1]
+                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:    # spooky 값이 같으면 26 62
+                        if deck[k].get_color() < deck[k+1].get_color():     # 검정색이 뒤로 오면,
+                            deck[k+1],deck[k] = deck[k],deck[k+1]           # 흰색이 먼저오게 바꿈.
                     
                     else:
                         deck[k+1],deck[k] = deck[k],deck[k+1]
                 
-                else:
-                    deck[k+1],deck[k] = deck[k],deck[k+1]
-                    self.deck_list = deck
+                else:                                       # 앞에 놈이 크먼 타일 바꿈
+                    deck[k+1],deck[k] = deck[k],deck[k+1] 
+                    self.deck_list = deck                   # 저장
         
 
 class BUTTON():
@@ -211,13 +211,13 @@ class BUTTON():
 
 
 def make_spooky(x):
-    global max_card_num # 패의 최대 숫자 전역변수
-    global min_loop_num  # 최소 루프 개수
+    global max_card_num     # 패의 최대 숫자 전역변수
+    global min_loop_num     # 최소 루프 개수
     
     cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # [0,1] # math.ceil함수는 숫자 올림
-    cut = []                     # cut1을 보관하는 장소
-    card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
-    random.shuffle(card_list) # 섞는다 (shuffle 함수 기능)
+    cut = []                                    # cut1을 보관하는 장소
+    card_list = list(range(0,max_card_num+1))   # 0~5 총 6개
+    random.shuffle(card_list)                   # 섞는다 (shuffle 함수 기능)
     
     while 1:  # 얽힐 숫자들을 정하는 코드
         cut1 = 3+random.choice(cut_num) # cut_num의 임의 원소 선택, 루프 안에 들어가는 숫자의 개수, 3+가 있는 이유는 최소 루프 안에 들어있는 카드 숫자가 3이상이어야 하기 때문에. cut_num에서 숫자를 가져오는 이유는 루프 안에 있는 숫자의 개수를 다양화하기 위해 가져옴.
@@ -226,10 +226,10 @@ def make_spooky(x):
         if sum(cut) == max_card_num + 1:         # 총 얽힘수가 총 카드수랑 같으면 멈춤
             break
     
-        elif sum(cut) > max_card_num + 1:            # cut수가 총 카드수보다 크면 마지막 cut1을 cut에서 뺀 후 뺀 것을 cut2라고 지정
+        elif sum(cut) > max_card_num + 1:           # cut수가 총 카드수보다 크면 마지막 cut1을 cut에서 뺀 후 뺀 것을 cut2라고 지정
             cut2 = cut.pop()
     
-            if max_card_num + 1 - sum(cut) < 3:         # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
+            if max_card_num + 1 - sum(cut) < 3:     # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
                 cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
     
             else:
