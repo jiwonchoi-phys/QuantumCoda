@@ -132,7 +132,7 @@ class CARD():
         pass
     
     def draw_img(self, loc=(0,0)):
-        x, y = loc[0:2]0    # ?
+        x, y = loc[0:2]    # ?
         pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height]) # 사각형 그림 (왼쪽, 위, 너비, 높이)
         pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
         if self.opened == True:
@@ -154,14 +154,14 @@ class PLAYER():
         for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
             for k in range(0,len(deck)-1):      # 모든 원소에 대해
                 
-                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()):
+                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()): # 흰색이 먼저
                     pass
                 
-                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()):
-                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:
+                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 두 색상이 같다면
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # spooky 값 비교: 앞에 놈이 작으면 패스
                         pass
                 
-                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:
+                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]: # spooky 값이 같으면
                         if deck[k].get_color() < deck[k+1].get_color():
                             deck[k+1],deck[k] = deck[k],deck[k+1]
                     
