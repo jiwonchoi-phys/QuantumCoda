@@ -95,7 +95,7 @@ class PRINTTEXT():
                 text_rect.center = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
                 screen.blit(self.text,text_rect)
             
-            elif type(loc) == tuple: # User input of location 튜플이면 그 값을 위치로 받음. ex. (5,10) ?
+            elif type(loc) == tuple: # User input of location 튜플이면 그 값을 위치로 받음. ex. (5,10)
                 text_rect = self.text.get_rect()
                 text_rect.center = loc
                 screen.blit(self.text,text_rect)        
@@ -128,7 +128,7 @@ class CARD():
     def get_num(self):
         return self.card_num
 
-    def out(self):      # 아직 추가 안한거 ?
+    def out(self):      # 아직 추가 안한거 ??
         pass
     
     def draw_img(self, loc=(0,0)):
@@ -158,10 +158,10 @@ class PLAYER():
                     pass
                 
                 elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 평균이 같다면, 
-                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # spooky 값 비교: 앞에 놈이 작으면 패스 26 17 ? 
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # spooky 값 비교: 앞에 놈이 작으면 패스 26 17 ?? 
                         pass
                 
-                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:    # spooky 값이 같으면 26 62
+                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:    # spooky 값이 같으면 26 62 ??
                         if deck[k].get_color() < deck[k+1].get_color():     # 검정색이 뒤로 오면,
                             deck[k+1],deck[k] = deck[k],deck[k+1]           # 흰색이 먼저오게 바꿈.
                     
