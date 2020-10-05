@@ -12,7 +12,7 @@ CARD(color,num)
 
 """
 
-
+# 의문사항 ?? 물음표 두개로 주석 달음. 검색후 답변바람.
 
 import pygame
 import math
@@ -149,7 +149,7 @@ class PLAYER():
         for i, card in enumerate(self.deck_list):
             card.draw_img(loc=(x + i*CARD_WIDTH,y)) # 같은 행에 카드 폭만큼 다른 열로 이어 붙임.
     
-    def tile_arrange(self):
+    def tile_arrange(self):                     # ?? 현재 알고리즘 파일에서 정렬방식과 다름.
         deck = self.deck_list                   # 임시 리스트 생성.
         for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
             for k in range(0,len(deck)-1):      # 모든 원소에 대해
@@ -158,17 +158,17 @@ class PLAYER():
                     pass
                 
                 elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 평균이 같다면, 
-                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # spooky 값 비교: 앞에 놈이 작으면 패스 26 17 ?? 
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # ?? 
                         pass
                 
-                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:    # spooky 값이 같으면 26 62 ??
+                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:    # 2 ??
                         if deck[k].get_color() < deck[k+1].get_color():     # 검정색이 뒤로 오면,
                             deck[k+1],deck[k] = deck[k],deck[k+1]           # 흰색이 먼저오게 바꿈.
                     
                     else:
                         deck[k+1],deck[k] = deck[k],deck[k+1]
                 
-                else:                                       # 앞에 놈이 크먼 타일 바꿈
+                else:                                       # 앞에 놈이 크면 타일 바꿈
                     deck[k+1],deck[k] = deck[k],deck[k+1] 
                     self.deck_list = deck                   # 저장
         
