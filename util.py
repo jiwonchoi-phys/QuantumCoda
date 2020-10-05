@@ -154,21 +154,23 @@ class PLAYER():
         for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
             for k in range(0,len(deck)-1):      # 모든 원소에 대해
                 
-                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()): # spooky 수 합을 비교: 앞에놈이 작으면 놔둠.
+                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()): # 1) 평균 비교: 앞에놈이 작으면 놔둠.
                     pass
                 
-                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 평균이 같다면, 
-                    if deck[k].get_num()[0] < deck[k+1].get_num()[1]:    # ?? 
+                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 2) 평균이 같다면
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[0]:    # 2) spooky 값 비교. 앞에 놈이 작으면 놔둠
                         pass
                 
-                    elif deck[k].get_num()[0] == deck[k+1].get_num()[1]:    # 2 ??
-                        if deck[k].get_color() < deck[k+1].get_color():     # 검정색이 뒤로 오면,
-                            deck[k+1],deck[k] = deck[k],deck[k+1]           # 흰색이 먼저오게 바꿈.
+                    elif deck[k].get_num()[0] == deck[k+1].get_num()[0]:    # 2) spooky 값도 같다면 색상 비교
+                        if deck[k].get_color() > deck[k+1].get_color():     # 흰색이 뒤로 오면
+                            deck[k+1],deck[k] = deck[k],deck[k+1]           # 검정색이 먼저오게 바꿈.
+                            self.deck_list = deck  
                     
-                    else:
+                    else:                                       # 2) spooky 앞에 놈이 크면 자리 바꿈.
                         deck[k+1],deck[k] = deck[k],deck[k+1]
+                        self.deck_list = deck  
                 
-                else:                                       # 앞에 놈이 크면 타일 바꿈
+                else:                                       # 1) 평균값이 앞에 놈이 크면 타일 바꿈
                     deck[k+1],deck[k] = deck[k],deck[k+1] 
                     self.deck_list = deck                   # 저장
         
@@ -256,3 +258,11 @@ def make_spooky(x):
     
     return x           
 
+def spooky_arrange(t):
+    l = t
+    for k in range(0,len(l)): 
+        if l[k][1][0] < l[k][1][1]: # 두 spooky 수 고려 작으면 놔둠
+            pass
+        else:   #다르면 교환 후 저장
+            l[k][1][0], l[k][1][1] = l[k][1][1], l[k][1][0]
+            t = l

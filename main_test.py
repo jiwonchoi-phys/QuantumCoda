@@ -22,10 +22,10 @@ select_card = PRINTTEXT("Select card", 20) # msg, font 크기
 num_players = 2                 # 임시 고정.
 stn = 4                         # starting tile number
 
-players = [PLAYER() for i in range(num_players)] # ??
-#print(players)
+players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
 
-p1 = players[0]     # ?? 25번에서 생성한거 같은데 어케했누..
+
+p1 = players[0]     # 생성된 리스트의 원소를 새 이름으로 지정
 p2 = players[1]
 
 field_black = [] 
@@ -47,6 +47,7 @@ for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 �
 
 
 random.shuffle(ti)                  # 모든 타일 섞음
+spooky_arrange(ti)                  # util 참고.
 print("섞은 전체 타일: ",ti)
 
 # 생성된 카드를 클래스로 복제 ??
@@ -55,7 +56,7 @@ tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))]
 # num_players만큼 플레이어 생성
 p = [PLAYER() for i in range(num_players)]
 
-# PLAYER의 덱에 생성된 카드 랜덤으로 추가
+# PLAYER의 덱에 생성된 카드를 랜덤으로 추가
 for i in range(num_players):
     p[i].deck_list = []
     p[i].opened_deck = []
