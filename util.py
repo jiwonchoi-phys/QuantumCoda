@@ -20,7 +20,7 @@ import random
 import numpy
 
 
-pygame.init()
+pygame.init()       # # pygmae library 초기화.
 
 
 # RGB color information
@@ -58,31 +58,31 @@ class PRINTTEXT():
 
 
     def __init__(self, msg, size, font='consolas', color=BLACK, antialias=True, background=None):
-        self.msg = msg
-        self.font = font
-        self.size = size
-        self.antialias = antialias
-        self.color = color
-        self.background = background 
-        texts = pygame.font.SysFont(self.font, self.size)
-        self.text = texts.render(self.msg, self.antialias, self.color, self.background)
+        self.msg = msg                  # 메세지
+        self.font = font                # font 지정 (기본 conslas)
+        self.size = size                # size 지정
+        self.antialias = antialias      # AA 지정 (기본 true)
+        self.color = color              # 색상 지정 (기본 검정)
+        self.background = background    # 바탕 지정 (기본 없음)
+        texts = pygame.font.SysFont(self.font, self.size)   # texts는 지정한 폰트와 사이즈 사용
+        self.text = texts.render(self.msg, self.antialias, self.color, self.background) # 렌더링.
     
-    def _blit_(self, loc=(0,0), loc_center=True):
+    def _blit_(self, loc=(0,0), loc_center=True):   # 좌표 지정 위치 0,0의 오른쪽
         
         if loc_center == True:
             if loc == 'top center': 
-                text_rect = self.text.get_rect()
-                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
-                screen.blit(self.text,text_rect)
+                text_rect = self.text.get_rect()                                # 사각형 텍스트
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)      # 중간 위에서 1/4 지점(= top)
+                screen.blit(self.text,text_rect)                                # 텍스트를 지정 위치에 블럭전송
             
             elif loc == 'center':
                 text_rect = self.text.get_rect()
-                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)      # 위치 중간
                 screen.blit(self.text,text_rect)
             
             elif loc == 'bottom center':
                 text_rect = self.text.get_rect()
-                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)    # 위치 아래
                 screen.blit(self.text,text_rect)
             
             elif loc == 'bottom left':
@@ -95,7 +95,7 @@ class PRINTTEXT():
                 text_rect.center = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
                 screen.blit(self.text,text_rect)
             
-            elif type(loc) == tuple: # User input of location
+            elif type(loc) == tuple: # User input of location 튜플이면 그 값을 위치로 받음. ex. (5,10) ?
                 text_rect = self.text.get_rect()
                 text_rect.center = loc
                 screen.blit(self.text,text_rect)        
@@ -115,8 +115,8 @@ class CARD():
             self.font_color = BLACK
         
         self.card_num = num
-        self.width, self.height = CARD_SIZE
-        self.opened = True
+        self.width, self.height = CARD_SIZE         # 밑에서 지정.
+        self.opened = True                          # 전체 공개여부.
         self.number = PRINTTEXT("%s" % self.card_num, 15, color=self.font_color)
 
     def is_opened(self):
@@ -128,12 +128,12 @@ class CARD():
     def get_num(self):
         return self.card_num
 
-    def out(self):
+    def out(self):      # 아직 추가 안한거 ?
         pass
     
     def draw_img(self, loc=(0,0)):
-        x, y = loc[0:2]
-        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
+        x, y = loc[0:2]0    # ?
+        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height]) # 사각형 그림 (왼쪽, 위, 너비, 높이)
         pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
@@ -141,18 +141,18 @@ class CARD():
 
 class PLAYER():
     def __init__(self):
-        self.deck_list = []
+        self.deck_list = []         # 덱 리스트
         self.closed_deck = []
-        self.opened_deck = []
+        self.opened_deck = []       # 오픈덱 리스트
     
     def draw_card(self,x,y):
         for i, card in enumerate(self.deck_list):
-            card.draw_img(loc=(x + i*CARD_WIDTH,y))
+            card.draw_img(loc=(x + i*CARD_WIDTH,y)) # 같은 행에 카드 폭만큼 다른 열로 이어 붙임.
     
     def tile_arrange(self):
-        deck = self.deck_list    #임시 리스트 생성
-        for q in range(len(deck)):
-            for k in range(0,len(deck)-1):
+        deck = self.deck_list                   # 임시 리스트 생성.
+        for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
+            for k in range(0,len(deck)-1):      # 모든 원소에 대해
                 
                 if sum(deck[k].get_num()) < sum(deck[k+1].get_num()):
                     pass
