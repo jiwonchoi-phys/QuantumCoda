@@ -15,7 +15,7 @@ pygame.display.update()                         # 화면 업데이트.
 
 
 select_card = PRINTTEXT("Select card", 20) # msg, font 크기
-
+button_sample = BUTTON("test")             # button sample
 
 
 #========== 카드 생성 및 배분 ==========
@@ -86,6 +86,8 @@ while not done:
         # 덱 그리기
         p[0].draw_card(300, 400)
         p[1].draw_card(300, 100)        
+        
+        button_sample._draw_(loc=(100,100))
         
         # 카드 지목
         select_card._blit_(loc=(5,30),loc_center=False)
