@@ -115,8 +115,8 @@ class CARD():
             self.font_color = BLACK
         
         self.card_num = num
-        self.width, self.height = CARD_SIZE         # 밑에서 지정.
-        self.opened = True                          # 전체 공개여부.
+        self.width, self.height = CARD_SIZE
+        self.opened = True
         self.number = PRINTTEXT("%s" % self.card_num, 15, color=self.font_color)
 
     def is_opened(self):
@@ -128,13 +128,20 @@ class CARD():
     def get_num(self):
         return self.card_num
 
-    def out(self):      # 아직 추가 안한거 ??
+    def out(self):
         pass
     
     def draw_img(self, loc=(0,0)):
-        x, y = loc[0:2]    # ?
-        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height]) # 사각형 그림 (왼쪽, 위, 너비, 높이)
+        x, y = loc[0:2]
+        mouse_pos = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()        
+        
+        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
         pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
+        
+        if x < mouse_pos[0] < x + self.width and y < mouse_pos[1] < y + self.height:    
+            pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
+        
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
         
