@@ -1,14 +1,16 @@
-# QuantumCoda
+# QuantumCoda: GUI Branch
+
+Wecome to visit our repository! This repository is for QuantumCoda (양자 다빈치 코드) development. Our goal is making a new game including physics phenomenon on Capstone Design I Class at 2020 fall semester.
 
 2020 PKNU Capstone Design
 Team "Explorer" repository
-Project: Quantum da vinci code game
+Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
+Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
-200916
-지원
-- screen_test.py : 시작 메뉴 구현(다음에 player 수를 숫자로 받아서 입력 받고 게임 화면으로 넘어가는 코드 짤 예정)
-- util.py : 색깔 RGB 정보, Obj 크기 정보
+This branch is GUI branch for development. If you want to watch all process of our game, see master branch.
 
-200917 종희
-- making_card_복사본.py : 색깔 구분 제외한, 카드 생성
--> 이후 색깔 구분을 포함한 카드 생성 (19:52분경 )
+We'll write our tasks here. 
+
+## 201007 용
+- util.py의 printtext를 이용해서 턴넘기기 버튼을 작동하게 할 위치 GUI 생성하기
+- 생성완료되면 Button Class 작동여부 확인해서 집어넣기
