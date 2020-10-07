@@ -131,7 +131,7 @@ class CARD():
     def out(self):
         pass
     
-    def draw_img(self, loc=(0,0)):
+    def draw_img(self, loc=(0,0), action=None):
         x, y = loc[0:2]
         mouse_pos = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()        
@@ -139,8 +139,13 @@ class CARD():
         pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
         pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
         
-        if x < mouse_pos[0] < x + self.width and y < mouse_pos[1] < y + self.height:    
+        if x < mouse_pos[0] < x + self.width and \
+            y < mouse_pos[1] < y + self.height:    
             pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
+            
+            if click[0] == 1:
+                if action == "choose card":     # action 추가해줘야 함
+                    pass
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
