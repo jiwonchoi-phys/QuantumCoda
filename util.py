@@ -202,25 +202,24 @@ class BUTTON():
         self.fs = font_size
         self.action = action
 
-    def _draw_(self):
+    def _draw_(self,loc=(0,0),size=(60,40),action=None):
+        x,y = loc
+        w,h = size
         mouse_pos = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if self.x + self.w > mouse_pos[0] > self.x and \
-            self.y + self.h > mouse_pos[1]> self.y:
+       
+        if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
+            pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
-            pygame.draw.rect(screen,self.ac,(self.x,self.y,self.w,self.h))
-
-            if click[0] == 1 and self.action != None:
-                action()
+            if click[0] == 1 and self.action:   # action 추가해야함
+                pass
         
         else:
-            pygame.draw.rect(screen, self.ic, (self.x,self.y,self.w,self.h))
+            pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
         
-        text = pygame.font.SysFont(self.f, self.fs)
-        textSurf = text.render(self.msg,True,self.fc)
-        textRect = textSurf.get_rect()
-        textRect.center = (self.x + self.w/2, self.y + self.h/2)
-        screen.blit(textSurf,textRect)
+        text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
+                         antialias=True, background=None)
+        text._blit_(loc=(x,y))         
 
 
 
