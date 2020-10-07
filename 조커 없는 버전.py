@@ -63,18 +63,21 @@ def make_spooky(x): # x라는 리스트를 넣으면 스포키 카드를 생성�
             cut2 = cut.pop()
             if max_card_num + 1 - sum(cut) < 3:         # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
                 cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
+                break
             else:
+                cut2 = max_card_num + 1 - sum(cut)
                 cut.append(cut2)          # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.
-                cut[len(cut)-1] = max_card_num + 1 - sum(cut)    
+                break  
     card_num = list(numpy.zeros(len(cut)))       # 루프 수만큼 방을 생성
-    add_card_s = -cut[0] 
-    add_card_f = 0
-    for i in range(0,len(cut)):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
+    cut.append(0)
+    add_card_s = 0 
+    add_card_f = cut[0]
+    for i in range(0,len(cut)-1):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
         card_num[i] = []
-        add_card_s += cut[i] 
-        add_card_f += cut[i]                   
         for k in range(add_card_s,add_card_f): 
             card_num[i].append(card_list[k])
+        add_card_s += cut[i] 
+        add_card_f += cut[i+1]                   
     for i in range(0,len(card_num)):                # 각 방에 배정받은 숫자를 짝지어 spooky 카드를 만들도록 함
         for k in range(0,len(card_num[i])):   
             spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
