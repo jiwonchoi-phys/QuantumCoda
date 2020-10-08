@@ -4,17 +4,6 @@
 # 2. 유추한 숫자가 있을 경우 무조건 그 숫자로만 붕괴
 # 3. 상대방에게 침묵을 걸어 아이템 or 능력 및 카드 지목을 못하게함
 
-############# 2020 09 24 패치노트 ######################
-
-# 1. 아웃된 플레이어를 제외하고 턴을 넘기게 변경
-# 2. 1을 하는 과정중 의도치 않게 승리 코드를 넣음
-# 3. 2를 넣어서 플레이 했을 때 패가 다 까지면 컴퓨터 오토붕괴에서 오류가 나던 현상을 수정
-# 4. 연속해서 맞추려고 할 때 컴퓨터 오토붕괴가 이루어 지지 않고 배열도 다시 진행되지 않던 문제를 수정
-# 5. 조커카드 추가, 조커카드 인식을 위해 숫자 100을 조커로 함 조커카드를 뽑은 처음에만 위치를 정할 수 있게함 이후에는 컨트롤 불가
-#    ㄴ조커카드는 배열을 무시하도록 해야함
-
-########################################################
-
 ############# 2020 09 27 패치노트 ######################
 
 # 1. 조커는 배열에서 무시하도록 추가
@@ -37,11 +26,17 @@
 # 1. 컴퓨터 오토 붕괴에서 인덱스 아웃 오브 레인지가 일어나던 현상을 수정
 # 2. 공개필드와 실제 패가 안맞는 현상을 수정
 
+########################################################
 
 ############# 2020 10 07 패치노트 ######################
 
-# 1. 카드 생성시 카드 수를 늘리면 무한 루프와 에러가 뜨는 현상 수정
+# 1. 카드 생성에서 카드수를 늘리면 무한루프와 에러뜨던 현상을 수정하였습니다.
 
+########################################################
+
+############# 2020 10 08 패치노트 ######################
+
+# 1. 확률성분을 넣고 그 확률을 보여주며 확률에따라 붕괴하도록 함
 
 ########################################################
 
@@ -56,7 +51,7 @@ def make_spooky(x): # x라는 리스트를 넣으면 스포키 카드를 생성�
     global max_card_num # 패의 최대 숫자 전역변수
     max_card_num = 5
     min_loop_num = 2 # 최소 루프 개수
-    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # [0,1] # math.ceil함수는 숫자 올림
+    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
     cut = []                     # cut1을 보관하는 장소
     card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
     random.shuffle(card_list) # 섞는다 (shuffle 함수 기능)
@@ -70,25 +65,43 @@ def make_spooky(x): # x라는 리스트를 넣으면 스포키 카드를 생성�
             if max_card_num + 1 - sum(cut) < 3:         # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
                 cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
                 break
-            else:
-                cut2 = max_card_num + 1 - sum(cut)
-                cut.append(cut2)          # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.
-                break  
+            else:                                       # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.          
+                cut2 = max_card_num + 1 - sum(cut)   
+                cut.append(cut2)
+                break
     card_num = list(numpy.zeros(len(cut)))       # 루프 수만큼 방을 생성
     cut.append(0)
-    add_card_s = 0 
+    add_card_s = 0
     add_card_f = cut[0]
     for i in range(0,len(cut)-1):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
         card_num[i] = []
         for k in range(add_card_s,add_card_f): 
             card_num[i].append(card_list[k])
-        add_card_s += cut[i] 
-        add_card_f += cut[i+1]                   
+        add_card_s += cut[i]
+        add_card_f += cut[i+1]
     for i in range(0,len(card_num)):                # 각 방에 배정받은 숫자를 짝지어 spooky 카드를 만들도록 함
         for k in range(0,len(card_num[i])):   
-            spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
-            x.append(spooky_card_num)
+            if k == 0:
+                spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
+                alpha = max(spooky_card_num)
+                spooky_card_num.append(int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100))
+                beta = 100 - int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100)
+                spooky_card_num.append(beta)
+                x.append(spooky_card_num)
+            else:
+                gama = int(x[len(x)-1][3]+random.random()*20-10)
+                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama]
+                x.append(spooky_card_num)
     return x           
+
+def player_p(x): # x는 알고자 하는 플레이어 번호
+    global p_p
+    p_p = []
+    for i in range(0,len(p[x-1])):
+        if p[x-1][i][1][0] == p[x-1][i][1][1]:
+            p_p.append([i+1,[100,100]])
+        else:
+            p_p.append([i+1,pro[ti_p.index(p[x-1][i])]])
 
 ############################################################################   게임 진행을 위한 함수지정
 #   1) 정렬===============================================================
@@ -253,8 +266,8 @@ def c_card():
                     public(turn,p[turn-1].index(recent_card)+1)
                 break
             elif choice_num == p[choice_player-1][choice_card-1][1][0] or choice_num == p[choice_player-1][choice_card-1][1][1]:
-                print("그런 숫자가 있습니다 룰에 따라 지목받은 플레이어는 카드를 붕괴합니다") #스포키 숫자 한개라도 맞춰서
-                collapse(choice_player,choice_card)                                       # 상대가 어떻게 붕괴시킬지 고름
+                print("그런 숫자가 있습니다 룰에 따라 확률로 카드를 붕괴합니다")            #스포키 숫자 한개라도 맞춰서
+                collapse(choice_player,choice_card)                                       # 컴퓨터가 확률로 붕괴
                 before_choice_card[turn-1][choice_player-1][1][0] = collapse_num          # 이 또한 미리 짜놓은 코드를 사용
                 before_choice_card[turn-1][choice_player-1][1][1] = collapse_num
                 if choice_num == collapse_num:                                            
@@ -282,26 +295,19 @@ def c_card():
 
 # 카드 1개 붕괴 함수
 
-def collapse(x,y): # x는 붕괴 권한이 있는 플레이어, y는 붕괴시킬 카드 번호
+def collapse(x,y): # x는 붕괴 되려는 플레이어, y는 붕괴시킬 카드 번호
     global recent_collapse_num, collapse_num, recent_collapse_color
-    while 1:
-        print("플레이어",x,"는 붕괴시킬 숫자를 골라주세요")
-        print("붕괴시킬 카드 :",p[x-1][y-1])
-        print("나의 패 :",p[x-1])
-        collapse_num = float(input("붕괴 숫자:"))       #붕괴 숫자를 받아서 붕괴시키고자 하는 카드의 번호와 비교 후 알맞는 숫자를 
-        collapse_num = int(collapse_num)                #붕괴시킴
-        if collapse_num == p[x-1][y-1][1][0]:
-            p[x-1][y-1][1][1] = p[x-1][y-1][1][0]
-            recent_collapse_num = p[x-1][y-1][1][0]     #최근 붕괴 숫자는 나중 연쇄 붕괴를 위해 가져옴
-            recent_collapse_color = p[x-1][y-1][0]
-            break
-        elif collapse_num == p[x-1][y-1][1][1]:
-            p[x-1][y-1][1][0] = p[x-1][y-1][1][1] 
-            recent_collapse_num = p[x-1][y-1][1][1]
-            recent_collapse_color = p[x-1][y-1][0]
-            break
-        else:
-            print("입력오류")
+    collapse_num = numpy.random.choice(p[x-1][y-1][1],p=[pro[ti_p.index(p[x-1][y-1])][0]/100,pro[ti_p.index(p[x-1][y-1])][1]/100])
+    qaz = ti_p.index(p[x-1][y-1])
+    if collapse_num == p[x-1][y-1][1][0]:
+        p[x-1][y-1][1][1] = p[x-1][y-1][1][0]
+        recent_collapse_num = p[x-1][y-1][1][0]     #최근 붕괴 숫자는 나중 연쇄 붕괴를 위해 가져옴
+        recent_collapse_color = p[x-1][y-1][0]
+    elif collapse_num == p[x-1][y-1][1][1]:
+        p[x-1][y-1][1][0] = p[x-1][y-1][1][1] 
+        recent_collapse_num = p[x-1][y-1][1][1]
+        recent_collapse_color = p[x-1][y-1][0]
+    ti_p[qaz] = copy.deepcopy(p[x-1][y-1])
 
 # 전체적인 카드 붕괴
 
@@ -320,14 +326,18 @@ def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관
            omg += 1                                     #면 omg 숫자에 해당되는 플레이어 패를 검토중임
        elif p[omg][public_check1[omg].index("?")][0] == y:   # 붕괴한 숫자와 색깔을 가져와서 플레이어 패를 하나하나 비교
            if p[omg][public_check1[omg].index("?")][1][0] == x:      #그래서 붕괴될께 있으면 붕괴하고 최근 붕괴 숫자를 최신화하고 
+               wsx = ti_p.index(p[omg][public_check1[omg].index("?")])    
                p[omg][public_check1[omg].index("?")][1][0] = p[omg][public_check1[omg].index("?")][1][1] #처음부터 다시 스캔
                x = p[omg][public_check1[omg].index("?")][1][1]                                           # 반복
+               ti_p[wsx] = copy.deepcopy(p[omg][public_check1[omg].index("?")])
                public_check2[omg][public_check1[omg].index("?")] = "E"   # check 2,1 의 차이는 check1이 확인하면서 아닌거는 
                public_check1 = copy.deepcopy(public_check2)             # E로 표현하는데 붕괴 해야할 카드를 찾아버리면
                omg = 0                                                  # 처음부터 다시 스캔해야 하기 때문에 백업용으로
            elif p[omg][public_check1[omg].index("?")][1][1] == x:       # check2를 놔둠 그리고 붕괴한 카드는 check2에 E로 
+               wsx = ti_p.index(p[omg][public_check1[omg].index("?")])    
                p[omg][public_check1[omg].index("?")][1][1] = p[omg][public_check1[omg].index("?")][1][0] #표현되어 다시 체크 할 일이 없음
                x = p[omg][public_check1[omg].index("?")][1][0]
+               ti_p[wsx] = copy.deepcopy(p[omg][public_check1[omg].index("?")])
                public_check2[omg][public_check1[omg].index("?")] = "E"
                public_check1 = copy.deepcopy(public_check2)
                omg = 0
@@ -351,14 +361,18 @@ def overall_collapse(x,y): # 붕괴 숫자 x와 색깔 y를 넣으면 그와 관
               while 1:
                   if ti[ti_c][0] == y:
                       if ti[ti_c][1][0] == x and field_count[ti_c] != "E":
+                          wsx = ti_p.index(ti[ti_c])
                           ti[ti_c][1][0] = ti[ti_c][1][1]
                           x = ti[ti_c][1][1]
+                          ti_p[wsx] = copy.deepcopy(ti[ti_c])
                           omg = 0
                           field_count[ti_c] = "E"
                           break
                       elif ti[ti_c][1][1] == x and field_count[ti_c] != "E":
+                          wsx = ti_p.index(ti[ti_c])
                           ti[ti_c][1][1] = ti[ti_c][1][0]
                           x =ti[ti_c][1][0]
+                          ti_p[wsx] = copy.deepcopy(ti[ti_c])
                           omg = 0
                           field_count[ti_c] = "E"
                           break
@@ -397,11 +411,11 @@ def public_arrange():
                 
 ################################################################################# 게임 진행
 
+
 field_black = []
 field_white = []
 make_spooky(field_black)            # 검,흰 타일 만듬
 make_spooky(field_white)
-
 fcn=(max_card_num+1)*2              # full card number
 
 ti = []                             # 전체 타일 묶음
@@ -414,12 +428,21 @@ for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 �
     ti.append(tb[i])
     ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
 
+pro = [] # 확률을 저장하는 리스트
+for i in range(0,len(ti)):
+    pro.append([ti[i][1][2],ti[i][1][3]])
+    ti[i][1].pop()
+    ti[i][1].pop()
+ti_p = copy.deepcopy(ti) # 저장된 확률에 매치되는 카드
+for i in range(0,len(ti_p)):    
+    if ti_p[i][1][0] > ti_p[i][1][1]:
+        ti_p[i][1] = [ti_p[i][1][1],ti_p[i][1][0]]
 
 random.shuffle(ti)                  # 모든 타일 섞음
+ 
 # 아래 ti는 테스트를 위한 임시 타일묶음으로 지우지 말아주세요!!
 # ti = [[1, [3, 5]], [1, [1, 0]], [1, [4, 1]], [1, [2, 5]], [0, [1, 0]], [1, [2, 3]], [0, [3, 0]], [0, [2, 5]], [0, [4, 5]], [0, [3, 2]], [1, [0, 4]], [0, [4, 1]]]
 print("섞은 전체 타일: ",ti)
-
 
 #   3) 플레이어 수와 시작 타일 수 지정 및 배포===============================
 
@@ -439,6 +462,7 @@ while 1:
         break
     else:
         print("입력오류")
+
 p = list(range(0,pn))   # 플레이어 묶음 생성
 public_field = list(range(0,pn))  # 공개된 카드 필드
 before_choice_card = list(range(0,pn)) # 이전에 어떤 카드를 픽 했는지 알려주기 위한 리스트
@@ -501,8 +525,12 @@ turn_count = 0 # Turn Count
 while 1:
     print("플레이어",turn,"차례 입니다")
     print("나의 패:",p[turn-1]) # turn-1은 단순하게 list가 0부터 시작하므로 -1을 넣은 것
+    player_p(turn)
+    print("패 확률:",p_p)
     c_color() # 검정, 흰색 색깔 결정 후 가져오는 것까지의 함수
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
+    player_p(turn)
+    print("패 확률:",p_p)
     while 1:
         one_more = 0 # one_more 는 연속해서 카드를 맞출껀지에 대한 변수로 1이면 연속해서 맞추겠다는 뜻
         rcn = 0
