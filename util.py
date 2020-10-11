@@ -1,6 +1,5 @@
 """
 Some discription for util.py
-
                     CLASS
 ===========================================
 PRINTTEXT(msg,size,font,color,antialias = True,background=None)
@@ -8,8 +7,6 @@ PRINTTEXT(msg,size,font,color,antialias = True,background=None)
     
 CARD(color,num)
 카드 클래스
-
-
 """
 
 # 의문사항 ?? 물음표 두개로 주석 달음. 검색후 답변바람.
@@ -36,6 +33,7 @@ MAGENTA = (255,  0,255)
 ORANGE  = (255, 94,  0)
 PURPLE  = (217, 65,197)
 GRAY    = (201,201,201)
+GRAY_2  = (169,169,169)
 
 
 # Object size
@@ -188,30 +186,30 @@ class PLAYER():
         
 
 class BUTTON():
-    def __init__(self, msg, x, y, width, height, inactive_color, active_color,\
-        font_color=BLACK, font="consolas", font_size=30, action=None):
+    def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
+        font_color=BLACK, font="consolas", font_size=20, action=None):
         self.msg = msg
-        self.x = x
-        self.y = y
-        self.w = width
-        self.h = height
         self.ic = inactive_color
         self.ac = active_color
         self.f = font
         self.fc = font_color
         self.fs = font_size
         self.action = action
+        self.active = active_color
+        self.inactive = inactive_color
 
     def _draw_(self,loc=(0,0),size=(60,40),action=None):
         x,y = loc
         w,h = size
         mouse_pos = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-       
+        
+        
+        
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
-            if click[0] == 1 and self.action:   # action 추가해야함
+            if click[0] == 1 and self.action:
                 pass
         
         else:
@@ -219,7 +217,7 @@ class BUTTON():
         
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
-        text._blit_(loc=(x,y))         
+        text._blit_(loc=(x,y))                
 
 
 
