@@ -530,12 +530,13 @@ while 1:
     player_p(turn)
     print("패 확률:",p_p)
     c_color() # 검정, 흰색 색깔 결정 후 가져오는 것까지의 함수
+    arrange(turn-1) # 재배열
     print("뽑은 후 플레이어",turn,"의 패:",p[turn-1])
-    player_p(turn)
+    player_p(turn) # turn플레이어의 패에 있는 숫자에 맞는 확률을 가져옴
     print("패 확률:",p_p)
     while 1:
         one_more = 0 # one_more 는 연속해서 카드를 맞출껀지에 대한 변수로 1이면 연속해서 맞추겠다는 뜻
-        rcn = 0
+        rcn = 0 # 붕괴가 일어났는지 유무 판단 변수
         c_p() # 플레이어 지목
         c_card() # 카드 숫자 유추
         if rcn != 1:
