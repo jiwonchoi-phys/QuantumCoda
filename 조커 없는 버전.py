@@ -49,8 +49,8 @@ import math
 
 def make_spooky(x): # x라는 리스트를 넣으면 스포키 카드를 생성해서 x에 추가하고  x를 리턴 
     global max_card_num # 패의 최대 숫자 전역변수
-    max_card_num = 5
-    min_loop_num = 2 # 최소 루프 개수
+    max_card_num = 13
+    min_loop_num = 3 # 최소 루프 개수
     cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
     cut = []                     # cut1을 보관하는 장소
     card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
@@ -433,10 +433,12 @@ for i in range(0,len(ti)):
     pro.append([ti[i][1][2],ti[i][1][3]])
     ti[i][1].pop()
     ti[i][1].pop()
+
+for i in range(0,len(ti)):    
+    if ti[i][1][0] > ti[i][1][1]:
+        ti[i][1] = [ti[i][1][1],ti[i][1][0]]
+        
 ti_p = copy.deepcopy(ti) # 저장된 확률에 매치되는 카드
-for i in range(0,len(ti_p)):    
-    if ti_p[i][1][0] > ti_p[i][1][1]:
-        ti_p[i][1] = [ti_p[i][1][1],ti_p[i][1][0]]
 
 random.shuffle(ti)                  # 모든 타일 섞음
  
