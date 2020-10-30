@@ -71,3 +71,9 @@ GUI branch, util.py
 
 ## 8th Week (10.19~10.25)
 Midterm Exam Week
+
+## 9th Week (10.26~11.01)
+
+### 201030 용 패치노트
+GUI branch, Button_(참고용).py
+- 현재 버튼 클래스에 대해서 테스트 중이며 마우스 클릭에 대한 입력을 인식하는 코드를 Forking하여 분석중
