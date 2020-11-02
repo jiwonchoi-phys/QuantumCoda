@@ -9,8 +9,6 @@ CARD(color,num)
 카드 클래스
 """
 
-# 의문사항 ?? 물음표 두개로 주석 달음. 검색후 답변바람.
-
 import pygame
 import math
 import random
@@ -35,16 +33,16 @@ PURPLE  = (217, 65,197)
 GRAY    = (201,201,201)
 GRAY_2  = (169,169,169)
 
-
+#======== Initialize pygame ==========
 # Object size
 SCREEN_WIDTH  = 900
 SCREEN_HEIGHT = 600
 SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
+screen = pygame.display.set_mode(SCREEN_SIZE)
+pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
-
-screen = pygame.display.set_mode(SCREEN_SIZE)
 
 first_handcard_num = 3
 max_card_num = 5
@@ -159,7 +157,7 @@ class PLAYER():
         for i, card in enumerate(self.deck_list):
             card.draw_img(loc=(x + i*CARD_WIDTH,y)) # 같은 행에 카드 폭만큼 다른 열로 이어 붙임.
     
-    def tile_arrange(self):                     # ?? 현재 알고리즘 파일에서 정렬방식과 다름.
+    def tile_arrange(self):
         deck = self.deck_list                   # 임시 리스트 생성.
         for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
             for k in range(0,len(deck)-1):      # 모든 원소에 대해
@@ -266,6 +264,21 @@ def make_spooky(x):
             x.append(spooky_card_num)
     
     return x           
+
+#def next_turn(i):
+    global turn, win
+    turn = i+1 # 턴을 다음 플레이어에게 넘김.
+    win = 0
+    if turn == pn+1:
+        turn = 1
+    while 1:
+        if count_qm(public_field[turn-1]) == 0:
+            turn += 1
+            win += 1
+            if turn == pn+1:
+                turn = 1
+        else:
+            break
 
 def spooky_arrange(t):
     l = t
