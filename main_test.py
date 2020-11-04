@@ -1,21 +1,12 @@
 import pygame
 from util import *
 
-#======== Initialize pygame ==========
-pygame.init()                               # pygmae library 초기화.
-clock = pygame.time.Clock()                 # create an object to help track time.
-done = False
-clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
-
-screen.fill(WHITE)
-pygame.display.update()                         # 화면 업데이트.
-
-
-select_card = PRINTTEXT("Select card", 20) # msg, font 크기
-button_sample = BUTTON("test")             # button sample
-button_turn = BUTTON("Next")
-button_sh = BUTTON("SH")
-
+'''
+코드 순서도 일람 (나중에 더 괜찮은 배치가 있으면 수정바람)
+- 카드 생성 및 배분 (알고리즘)
+- pygame 진행에 필요한 함수들 (장면 추가시 함수추가바람.)
+- 기본 pygame 실행 순서
+'''
 
 #========== 카드 생성 및 배분 ==========
 num_players = 2                 # 임시 고정.
@@ -69,17 +60,67 @@ turn = 1
 
 pl_turn = PRINTTEXT("Turn of player"+str(turn),20)
 
+#========== functions for pygame ==========#
+def game_intro():       # Game intro scene
+    intro = False       # while문 돌리기 위함
+    # Title Texts
+    title = PRINTTEXT("Quantum Coda", size = 50)
+    new_p2 = PRINTTEXT("2 Player", size=30)
+    new_p3 = PRINTTEXT("3 Player", size=30)
+    new_p4 = PRINTTEXT("4 Player", size=30)
 
+    # Button Texts
+    new_p2 = BUTTON("new_p2")
+    new_p3 = BUTTON("new_p3")
+    new_p4 = BUTTON("new_p4")
 
-#============ MAIN LOOP ============
-while not done:
+    while not intro:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+        
+        # text positions
+        title._blit_(loc='top center')
+        
+        new_p2._draw_(loc = (200,300), size = (60,30), action=how_to_play)
+        new_p3._draw_(loc = (100,200), size = (60,30), action=main_loop)
+        new_p4._draw_(loc = (50,50), size = (60,30))
 
-    for event in pygame.event.get():        # 닫기 전까지 계속 실행.
-        if event.type == pygame.QUIT:
-            done = True
+        pygame.display.update()
+        clock.tick(15)
+
+def how_to_play(): # scene for game description # 장면 테스트 중
+    screen.fill(WHITE)
+    dp = PRINTTEXT("Quantum", size = 50)
+    play = False
+    while not play:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+        
+        # text positions
+        dp._blit_(loc='top center')
+
+        pygame.display.flip()
+
+def main_loop(): # Game main loop scene
+    screen.fill(WHITE)
+    done = False
+
+    select_card = PRINTTEXT("Select card", 20) # msg, font 크기
+    button_sample = BUTTON("test")             # button sample
+    button_turn = BUTTON("Next")
+
+    while not done:
+        for event in pygame.event.get():        # 닫기 전까지 계속 실행.
+            if event.type == pygame.QUIT:       # 종료 if문
+                pygame.quit()
+                quit()
         
         # 덱의 카드 정렬
-        p[0].tile_arrange()       
+        p[0].tile_arrange()
         p[1].tile_arrange()
         
         # 덱 그리기
@@ -88,15 +129,25 @@ while not done:
         
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30))
-        button_sh._draw_(loc = (100,200))
         
         # 카드 지목
         select_card._blit_(loc=(5,30),loc_center=False)
         pl_turn._blit_(loc=(5,5),loc_center=False)        
         
-        pygame.display.flip()
-        
-        
-pygame.quit()
+        pygame.display.update()
+
+#======== Initialize pygame ==========
+pygame.init()                               # pygame library 초기화.
+clock = pygame.time.Clock()                 # create an object to help track time.
+clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
+
+screen.fill(WHITE)                          # 화면 흰색으로 채움
+pygame.display.update()                     # 화면 업데이트.
+
+game_intro()                                # 실행 장면을 위한 함수들
+how_to_play()
+main_loop()
+
+pygame.quit()                               # pygame 종료
 
 
