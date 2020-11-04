@@ -209,15 +209,15 @@ class BUTTON():
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
-            if click[0] == 1 and self.action:
-                pass
+            if click[0] == 1: #('and self.action:'까지 있었으나 삭제함)
+                print("클릭됨")
         
         else:
             pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
         
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
-        text._blit_(loc=(x,y))                
+        text._blit_(loc=(x,y))        
 
 
 
