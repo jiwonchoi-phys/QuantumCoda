@@ -196,7 +196,7 @@ class BUTTON():
         self.active = active_color
         self.inactive = inactive_color
 
-    def _draw_(self,loc=(0,0),size=(60,40),action=None):
+    def _draw_(self,loc=(0,0),size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
         x,y = loc
         w,h = size
         mouse_pos = pygame.mouse.get_pos()
@@ -207,8 +207,9 @@ class BUTTON():
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
-            if click[0] == 1: #('and self.action:'까지 있었으나 삭제함)
-                print("클릭됨")
+            if click[0] == 1 and action != True:
+                #print("클릭됨") # 확인용ㅁ
+                action()
         
         else:
             pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
