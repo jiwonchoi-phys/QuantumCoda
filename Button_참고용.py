@@ -48,11 +48,11 @@ greenButton = button((0,255,0), 150, 255, 250, 100, 'Click Me')
 while run:
     redrawWindow()
     pygame.display.update()
-
+    
     for event in pygame.event.get():
         pos = pygame.mouse.get_pos()
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONUP:
             if greenButton.isOver(pos):
                 print('You Clicked the Button')
 
