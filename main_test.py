@@ -3,13 +3,10 @@ from util import *
 
 #======== Initialize pygame ==========
 pygame.init()                               # pygmae library 초기화.
-pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 clock = pygame.time.Clock()                 # create an object to help track time.
 done = False
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
 
-
-screen = pygame.display.set_mode(SCREEN_SIZE)   # util에서 정의.
 screen.fill(WHITE)
 pygame.display.update()                         # 화면 업데이트.
 
@@ -17,6 +14,7 @@ pygame.display.update()                         # 화면 업데이트.
 select_card = PRINTTEXT("Select card", 20) # msg, font 크기
 button_sample = BUTTON("test")             # button sample
 button_turn = BUTTON("Next")
+button_sh = BUTTON("SH")
 
 
 #========== 카드 생성 및 배분 ==========
@@ -90,6 +88,7 @@ while not done:
         
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30))
+        button_sh._draw_(loc = (100,200))
         
         # 카드 지목
         select_card._blit_(loc=(5,30),loc_center=False)
