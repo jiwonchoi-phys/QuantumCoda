@@ -1,5 +1,10 @@
 import pygame
 from util import *
+#======건들지 마시오=====
+from shtest import *
+from tkinter import *
+#=======================
+
 
 '''
 코드 순서도 일람 (나중에 더 괜찮은 배치가 있으면 수정바람)
@@ -73,6 +78,7 @@ def game_intro():       # Game intro scene
     new_p2 = BUTTON("new_p2")
     new_p3 = BUTTON("new_p3")
     new_p4 = BUTTON("new_p4")
+    sh = BUTTON("sehyoung test")
 
     while not intro:
         for event in pygame.event.get():        # 기본 event loop
@@ -86,6 +92,7 @@ def game_intro():       # Game intro scene
         new_p2._draw_(loc = (200,300), size = (60,30), action=how_to_play)
         new_p3._draw_(loc = (100,200), size = (60,30), action=main_loop)
         new_p4._draw_(loc = (50,50), size = (60,30))
+        sh._draw_(loc = (800,550), size = (180,30), action=shtestroom)
 
         pygame.display.update()
         clock.tick(15)
@@ -104,6 +111,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         dp._blit_(loc='top center')
 
         pygame.display.flip()
+
 
 def main_loop(): # Game main loop scene
     screen.fill(WHITE)
@@ -145,8 +153,10 @@ screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
 
 game_intro()                                # 실행 장면을 위한 함수들
+shtestroom()
 how_to_play()
 main_loop()
+
 
 pygame.quit()                               # pygame 종료
 
