@@ -304,3 +304,7 @@ def spooky_arrange(t):
         else:   #다르면 교환 후 저장
             l[k][1][0], l[k][1][1] = l[k][1][1], l[k][1][0]
             t = l
+
+def all_arrange(players):
+    for p in players:
+        p.tile_arrange()
