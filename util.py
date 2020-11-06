@@ -64,6 +64,73 @@ class PRINTTEXT():
         texts = pygame.font.SysFont(self.font, self.size)   # texts는 지정한 폰트와 사이즈 사용
         self.text = texts.render(self.msg, self.antialias, self.color, self.background) # 렌더링.
     
+"""
+Some discription for util.py
+                    CLASS
+===========================================
+PRINTTEXT(msg,size,font,color,antialias = True,background=None)
+디스플레이에 문자열 출력
+    
+CARD(color,num)
+카드 클래스
+"""
+
+import pygame
+import math
+import random
+import numpy
+from shtest import *
+
+pygame.init()       # # pygmae library 초기화.
+
+
+# RGB color information
+BLACK   = (  0,  0,  0)
+WHITE   = (255,255,255)
+RED     = (255,  0,  0)
+GREEN   = (  0,255,  0)
+BLUE    = (0  ,  0,255)
+YELLOW  = (255,255,  0)
+CYAN    = (  0,255,255)
+MAGENTA = (255,  0,255)
+
+ORANGE  = (255, 94,  0)
+PURPLE  = (217, 65,197)
+GRAY    = (201,201,201)
+GRAY_2  = (169,169,169)
+
+#======== Initialize pygame ==========
+# Object size
+SCREEN_WIDTH  = 900
+SCREEN_HEIGHT = 600
+SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
+screen = pygame.display.set_mode(SCREEN_SIZE)
+pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
+
+CARD_WIDTH = 60
+CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
+
+first_handcard_num = 3
+max_card_num = 5
+min_loop_num = 2
+
+turn=1
+num_players = 2                 # 임시 고정.
+
+
+class PRINTTEXT():
+
+
+    def __init__(self, msg, size, font='consolas', color=BLACK, antialias=True, background=None):
+        self.msg = msg                  # 메세지
+        self.font = font                # font 지정 (기본 conslas)
+        self.size = size                # size 지정
+        self.antialias = antialias      # AA 지정 (기본 true)
+        self.color = color              # 색상 지정 (기본 검정)
+        self.background = background    # 바탕 지정 (기본 없음)
+        texts = pygame.font.SysFont(self.font, self.size)   # texts는 지정한 폰트와 사이즈 사용
+        self.text = texts.render(self.msg, self.antialias, self.color, self.background) # 렌더링.
+    
     def _blit_(self, loc=(0,0), loc_center=True):   # 좌표 지정 위치 0,0의 오른쪽
         
         if loc_center == True:
@@ -128,7 +195,7 @@ class CARD():
     def out(self):
         pass
     
-    def draw_img(self, loc=(0,0), action=None):
+    def draw_img(self, loc=(0,0), action=acb2):
         x, y = loc[0:2]
         mouse_pos = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()        
@@ -141,8 +208,10 @@ class CARD():
             pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
             
             if click[0] == 1:
-                if action == "choose card":     # action 추가해줘야 함
+                if action == None:
                     pass
+                else: #print("클릭됨") # 확인용ㅁ
+                    action()
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
@@ -224,9 +293,11 @@ class BUTTON():
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
-            if click[0] == 1 and action != True:
-                #print("클릭됨") # 확인용ㅁ
-                action()
+            if click[0] == 1:
+                if action == None:
+                    pass
+                else: #print("클릭됨") # 확인용ㅁ
+                    action()
         
         else:
             pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
@@ -283,6 +354,7 @@ def make_spooky(x):
     
     return x           
 
+
 def next_turn():
     global turn,num_players
     turn += 1
@@ -300,3 +372,4 @@ def spooky_arrange(t):
         else:   #다르면 교환 후 저장
             l[k][1][0], l[k][1][1] = l[k][1][1], l[k][1][0]
             t = l
+
