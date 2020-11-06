@@ -48,7 +48,8 @@ first_handcard_num = 3
 max_card_num = 5
 min_loop_num = 2
 
-
+turn=1
+num_players = 2                 # 임시 고정.
 
 class PRINTTEXT():
 
@@ -282,20 +283,14 @@ def make_spooky(x):
     
     return x           
 
-#def next_turn(i):
-#    global turn, win
-#    turn = i+1 # 턴을 다음 플레이어에게 넘김.
-#    win = 0
-#    if turn == pn+1:
-#        turn = 1
-#    while 1:
-#        if count_qm(public_field[turn-1]) == 0:
-#            turn += 1
-#            win += 1
-#            if turn == pn+1:
-#                turn = 1
-#        else:
-#            break
+def next_turn():
+    global turn,num_players
+    turn += 1
+    win = 0
+    if turn == num_players+1:
+        turn = 1
+    print(turn)
+
 
 def spooky_arrange(t):
     l = t
