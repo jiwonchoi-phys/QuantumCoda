@@ -83,9 +83,9 @@ def game_intro():       # Game intro scene
         # text positions
         title._blit_(loc='top center')
         
-        new_p2._draw_(loc = (200,300), size = (60,30), action=how_to_play)
-        new_p3._draw_(loc = (100,200), size = (60,30), action=main_loop)
-        new_p4._draw_(loc = (50,50), size = (60,30))
+        new_p2._draw_(loc = 'bottom left', size = (60,30), action=how_to_play)
+        new_p3._draw_(loc = 'bottom center', size = (60,30), action=main_loop)
+        new_p4._draw_(loc = 'bottom right', size = (60,30))
 
         pygame.display.update()
         clock.tick(15)
