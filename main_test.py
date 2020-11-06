@@ -70,15 +70,17 @@ def game_intro():       # Game intro scene
     intro = False       # while문 돌리기 위함
     # Title Texts
     title = PRINTTEXT("Quantum Coda", size = 50)
-    new_p2 = PRINTTEXT("2 Player", size=30)
-    new_p3 = PRINTTEXT("3 Player", size=30)
-    new_p4 = PRINTTEXT("4 Player", size=30)
+    credits_title = PRINTTEXT("Credits", size = 50)
+    credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 30)
+    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi", size = 20)
 
     # Button Texts
-    new_p2 = BUTTON("new_p2")
-    new_p3 = BUTTON("new_p3")
-    new_p4 = BUTTON("new_p4")
+    new_p2 = BUTTON("2 Player")
+    new_p4 = BUTTON("4 Player")
     sh = BUTTON("sehyoung test")
+    exit_button = BUTTON("Exit")
+    play_button = BUTTON("Play!")
+    how_button = BUTTON("How to Play?")
 
     while not intro:
         for event in pygame.event.get():        # 기본 event loop
@@ -87,11 +89,17 @@ def game_intro():       # Game intro scene
         
         # text positions
         title._blit_(loc='top center')
+        credits_title._blit_(loc=(SCREEN_WIDTH*1 // 8, SCREEN_HEIGHT*4 // 8))
+        credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 8, SCREEN_HEIGHT*5 // 8))
+        credits_name._blit_(loc=(SCREEN_WIDTH*1 // 8, SCREEN_HEIGHT*6 // 8))
         
-        new_p2._draw_(loc = 'bottom left', size = (60,30), action=how_to_play)
-        new_p3._draw_(loc = 'bottom center', size = (60,30), action=main_loop)
+        new_p2._draw_(loc = 'bottom left', size = (60,30), action=main_loop)
         new_p4._draw_(loc = 'bottom right', size = (60,30),action=next_turn)
         sh._draw_(loc = (800,550), size = (180,30), action=shtestroom)
+        
+        play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=None)
+        how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=None)
+        exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*6 // 8), size = (140,60),action=pygame.quit)
 
         pygame.display.update()
         clock.tick(15)
