@@ -14,14 +14,14 @@ from tkinter import *
 '''
 
 #========== 카드 생성 및 배분 ==========
-num_players = 2                 # 임시 고정.
-stn = 4                         # starting tile number
 
+stn = 4                         # starting tile number
+num_players = 2                 # 임시 고정.
 players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
 
 
-p1 = players[0]     # 생성된 리스트의 원소를 새 이름으로 지정
-p2 = players[1]
+for i in range(num_players):
+    globals()['p{}'.format(i+1)] = players[i]
 
 field_black = [] 
 field_white = []
@@ -84,7 +84,6 @@ def game_intro():       # Game intro scene
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
-                quit()
         
         # text positions
         title._blit_(loc='top center')
@@ -105,7 +104,6 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
-                quit()
         
         # text positions
         dp._blit_(loc='top center')
@@ -128,12 +126,12 @@ def main_loop(): # Game main loop scene
                 quit()
         
         # 덱의 카드 정렬
-        p[0].tile_arrange()
-        p[1].tile_arrange()
+        p1.tile_arrange()
+        p2.tile_arrange()
         
         # 덱 그리기
-        p[0].draw_card(300, 400)
-        p[1].draw_card(300, 100)        
+        p2.draw_card(300, 400)
+        p1.draw_card(300, 100)        
         
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30))
