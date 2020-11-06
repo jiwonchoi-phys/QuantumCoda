@@ -196,14 +196,28 @@ class BUTTON():
         self.active = active_color
         self.inactive = inactive_color
 
-    def _draw_(self,loc=(0,0),size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
+    def _draw_(self,loc=(0,0),loc_center=True,size=(60,40),action=None,): # 각각 self, 위치, 버튼 크기, 실행함수
+        # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
+        if loc_center == True:
+            if loc == 'top center':
+                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
+            elif loc == 'center':
+                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            elif loc == 'bottom center':
+                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
+            elif loc == 'bottom left':
+                loc = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
+            elif loc == 'bottom right':
+                loc = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
+        else:
+            if type(loc) == tuple: # User input of location
+                return loc
+        
         x,y = loc
         w,h = size
         mouse_pos = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        
-        
-        
+
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
