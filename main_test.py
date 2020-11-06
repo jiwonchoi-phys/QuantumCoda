@@ -126,8 +126,7 @@ def main_loop(): # Game main loop scene
                 quit()
         
         # 덱의 카드 정렬
-        p[0].tile_arrange()
-        p[1].tile_arrange()
+        all_arrange(p)
         
         # 덱 그리기
         p[1].draw_card(300, 400)
