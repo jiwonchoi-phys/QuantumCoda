@@ -19,7 +19,7 @@ def shtestroom(): # 조세형 실험실
 
         shb1._draw_(loc = (100,300), size = (150,30), action=acb1)
         shb2._draw_(loc = (400,300), size = (150,30), action=acb2)
-        shb3._draw_(loc = (700,300), size = (150,30))
+        shb3._draw_(loc = (700,300), size = (150,30), action=acb3)
         # text positions
         dp._blit_(loc='top center')
 
@@ -69,3 +69,13 @@ def acb2():
     label.pack(pady = 10)
 
     window.mainloop()
+
+def acb3():
+    acb3 = Tk()                              # 윈도우 창을 생성
+    acb3.title("버튼 테스트")                 # 타이틀
+    acb3.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
+    label = Label(acb3, text="이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론")         # 라벨 등록
+
+    label.pack()
+
+    acb3.mainloop()
