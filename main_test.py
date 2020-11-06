@@ -16,7 +16,7 @@ from tkinter import *
 #========== 카드 생성 및 배분 ==========
 
 stn = 4                         # starting tile number
-num_players = 2                 # 임시 고정.
+
 players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
 
 
@@ -90,7 +90,7 @@ def game_intro():       # Game intro scene
         
         new_p2._draw_(loc = 'bottom left', size = (60,30), action=how_to_play)
         new_p3._draw_(loc = 'bottom center', size = (60,30), action=main_loop)
-        new_p4._draw_(loc = 'bottom right', size = (60,30))
+        new_p4._draw_(loc = 'bottom right', size = (60,30),action=next_turn)
         sh._draw_(loc = (800,550), size = (180,30), action=shtestroom)
 
         pygame.display.update()
@@ -126,12 +126,12 @@ def main_loop(): # Game main loop scene
                 quit()
         
         # 덱의 카드 정렬
-        p1.tile_arrange()
-        p2.tile_arrange()
+        p[0].tile_arrange()
+        p[1].tile_arrange()
         
         # 덱 그리기
-        p2.draw_card(300, 400)
-        p1.draw_card(300, 100)        
+        p[1].draw_card(300, 400)
+        p[0].draw_card(300, 100)    
         
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30))
