@@ -48,7 +48,8 @@ first_handcard_num = 3
 max_card_num = 5
 min_loop_num = 2
 
-
+turn=1
+num_players = 2                 # 임시 고정.
 
 class PRINTTEXT():
 
@@ -140,11 +141,14 @@ class CARD():
             pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
             
             if click[0] == 1:
-                if action == "choose card":     # action 추가해줘야 함
+                if action == None:
                     pass
+                else: #print("클릭됨") # 확인용ㅁ
+                    action()
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+        
         
 
 class PLAYER():
@@ -223,16 +227,18 @@ class BUTTON():
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
             
-            if click[0] == 1 and action != True:
-                #print("클릭됨") # 확인용ㅁ
-                action()
+            if click[0] == 1:
+                if action == None:
+                    pass
+                else: #print("클릭됨") # 확인용ㅁ
+                    action()
         
         else:
             pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
         
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
-        text._blit_(loc=(x,y))        
+        text._blit_(loc=(x,y))  
 
 
 
@@ -282,21 +288,14 @@ def make_spooky(x):
     
     return x           
 
-#def next_turn(i):
-#    global turn, win
-#    turn = i+1 # 턴을 다음 플레이어에게 넘김.
-#    win = 0
-#    if turn == pn+1:
-#        turn = 1
-#    while 1:
-#        if count_qm(public_field[turn-1]) == 0:
-#            turn += 1
-#            win += 1
-#            if turn == pn+1:
-#                turn = 1
-#        else:
-#            break
-
+def next_turn():
+    global turn,num_players
+    turn += 1
+    win = 0
+    if turn == num_players+1:
+        turn = 1
+    print(turn)
+    
 def spooky_arrange(t):
     l = t
     for k in range(0,len(l)): 
