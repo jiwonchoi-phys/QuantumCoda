@@ -9,6 +9,7 @@ def shtestroom(): # 조세형 실험실
     shb1 = BUTTON("button test")
     shb2 = BUTTON("input test")
     shb3 = BUTTON("yet")
+    shbb = BUTTON("back")
 
     play = False
     while not play:
@@ -20,6 +21,7 @@ def shtestroom(): # 조세형 실험실
         shb1._draw_(loc = (100,300), size = (150,30), action=acb1)
         shb2._draw_(loc = (400,300), size = (150,30), action=acb2)
         shb3._draw_(loc = (700,300), size = (150,30), action=acb3)
+        shbb._draw_(loc = (800,550), size = (150,30))
         # text positions
         dp._blit_(loc='top center')
 
@@ -62,7 +64,7 @@ def acb2():
         label.config(text="결과="+str(eval(entry.get()))) # 라벨 수정
         print(str(eval(entry.get())))                     # 기입값 출력
 
-    entry=Entry(window, bd = 30)      # 기입창, 크기 기본 위아래폭의 30배
+    entry=Entry(window, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", calc)      # 리턴값 calc 함수에 사용
     entry.pack(pady = 10)             # 위아래 간격 10
 
@@ -71,10 +73,11 @@ def acb2():
     window.mainloop()
 
 def acb3():
-    acb3 = Tk()                              # 윈도우 창을 생성
-    acb3.title("버튼 테스트")                 # 타이틀
-    acb3.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
-    label = Label(acb3, text="이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론이론")         # 라벨 등록
+    acb3 = Tk()
+    acb3.title("버튼 테스트")
+    acb3.geometry()
+    image=PhotoImage(file="a.png") 
+    label = Label(acb3, image=image)         # 라벨 등록
 
     label.pack()
 
