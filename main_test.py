@@ -10,64 +10,11 @@ from tkinter import *
 #=======================
 
 '''
-코드 순서도 일람 (나중에 더 괜찮은 배치가 있으면 수정바람)
+코드 순서도 일람 (나중에 더 괜찮은 배치가 있으면 수정바람) >>>>>>>>fcn, 플레이어수 타일 수 등에서 충돌로 코드 순서 수정.
 - 카드 생성 및 배분 (알고리즘)
 - pygame 진행에 필요한 함수들 (장면 추가시 함수추가바람.)
 - 기본 pygame 실행 순서
 '''
-
-#========== 카드 생성 및 배분 ==========
-
-stn = 4                         # starting tile number
-
-players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
-
-
-for i in range(num_players):
-    globals()['p{}'.format(i+1)] = players[i]
-
-field_black = [] 
-field_white = []
-make_spooky(field_black)
-make_spooky(field_white)
-
-fcn=(max_card_num+1)*2              # full card number
-
-ti = []                             # 전체 타일 묶음
-tb = []                             # Tile Black
-tw = []                             # Tile White
-
-for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 으로 구분하는 for문)
-    tb.append([1,field_black[i]])
-    tw.append([0,field_white[i]])
-    ti.append(tb[i])
-    ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
-
-
-random.shuffle(ti)                  # 모든 타일 섞음
-spooky_arrange(ti)                  # util 참고.
-#print("섞은 전체 타일: ",ti)
-
-# 생성된 카드를 클래스로 복제 ??
-tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))]
-
-# num_players만큼 플레이어 생성
-p = [PLAYER() for i in range(num_players)]
-
-# PLAYER의 덱에 생성된 카드를 랜덤으로 추가
-for i in range(num_players):
-    p[i].deck_list = []
-    p[i].opened_deck = []
-    for k in range(0,stn):
-        qwer = random.choice(tii)
-        p[i].deck_list.append(qwer)
-        tii.pop(tii.index(qwer))
-
-        
-turn = 1
-
-pl_turn = PRINTTEXT("Turn of player"+str(turn),20)
-
 #========== functions for pygame ==========#
 def game_intro():       # Game intro scene
     intro = False       # while문 돌리기 위함
@@ -126,9 +73,16 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 
 def main_loop(): # Game main loop scene
+    global num_players, stn
     screen.fill(WHITE)
     done = False
-    pn()
+    num_players = f_pn()
+    print(num_players)
+    stn = tn(num_players)
+    print(stn)
+    make_card(num_players, stn)
+    print(p)
+
     select_card = PRINTTEXT("Select card", 20) # msg, font 크기
     button_sample = BUTTON("test")             # button sample
     button_turn = BUTTON("Next")
@@ -155,7 +109,53 @@ def main_loop(): # Game main loop scene
         
         pygame.display.update()
 
-#======== Initialize pygame ==========
+#========== 카드 생성 및 배분 ========== 
+def make_card(num_players, stn):
+    global p
+    players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
+
+    for i in range(num_players):
+        globals()['p{}'.format(i+1)] = players[i]
+
+    field_black = [] 
+    field_white = []
+    make_spooky(field_black)
+    make_spooky(field_white)
+
+
+    ti = []                             # 전체 타일 묶음
+    tb = []                             # Tile Black
+    tw = []                             # Tile White
+
+    for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 으로 구분하는 for문)
+        tb.append([1,field_black[i]])
+        tw.append([0,field_white[i]])
+        ti.append(tb[i])
+        ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
+
+
+    random.shuffle(ti)                  # 모든 타일 섞음
+    spooky_arrange(ti)                  # util 참고.
+    #print("섞은 전체 타일: ",ti)
+
+    tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
+
+    # num_players만큼 플레이어 생성
+    p = [PLAYER() for i in range(num_players)]
+
+    # PLAYER의 덱에 생성된 카드를 랜덤으로 추가
+    for i in range(num_players):
+        p[i].deck_list = []
+        p[i].opened_deck = []
+        for k in range(0,stn):
+            qwer = random.choice(tii)
+            p[i].deck_list.append(qwer)
+            tii.pop(tii.index(qwer))
+
+turn = 1
+pl_turn = PRINTTEXT("Turn of player"+str(turn),20)
+
+#======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
@@ -170,5 +170,4 @@ main_loop()
 
 
 pygame.quit()                               # pygame 종료
-
 

@@ -49,7 +49,6 @@ max_card_num = 5
 min_loop_num = 2
 
 turn=1
-num_players = 2                 # 임시 고정.
 
 class PRINTTEXT():
 
@@ -230,7 +229,7 @@ class BUTTON():
             if click[0] == 1:
                 if action == None:
                     pass
-                else: #print("클릭됨") # 확인용ㅁ
+                else: #print("클릭됨") # 확인용
                     action()
         
         else:
@@ -289,7 +288,7 @@ def make_spooky(x):
     return x           
 
 def next_turn():
-    global turn,num_players
+    global turn, num_players
     turn += 1
     win = 0
     if turn == num_players+1:

@@ -80,18 +80,18 @@ def acb3():
 
     acb3.mainloop()
 
-def pn():
-    global plabel
-    global num_players
+def f_pn():
+    global plabel, num_players
     player_num_max = 4  #게임 가능 플레이어 수 제한
 
     pn_tk=Tk()
-    pn_tk.title("입력 테스트")
+    pn_tk.title("플레이어 수 입력")
     pn_tk.geometry("480x300+100+100")
     pn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
     plabel = Label(pn_tk, text="위의 창에 플레이어 숫자를 입력하세요.\n플레이 최소 인원은 2명이고 최대 인원은 "+str(player_num_max)+"명 입니다.")
     
-    def calc(event):
+    def pcalc(event):
+        global num_players
         pn = int(entry.get())
         if pn > player_num_max:
             plabel.config(text="플레이어 수가 너무 많습니다 다시 입력해주세요")
@@ -100,16 +100,52 @@ def pn():
         elif pn >=2 and pn <= player_num_max:
             plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
             num_players = pn
-
+            print("함수내",num_players,type(num_players))
+            
             pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
 
     def pnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
         pn_tk.destroy()
 
     entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
-    entry.bind("<Return>", calc)      # 리턴값 calc 함수에 사용
+    entry.bind("<Return>", pcalc)      # 리턴값 calc 함수에 사용
     entry.pack(pady = 10)             # 위아래 간격 10
 
     plabel.pack(pady = 10)
 
     pn_tk.mainloop()
+    return num_players
+
+def tn(num_players):
+    global tlabel, stn, fcn, max_card_num
+
+    fcn=(max_card_num+1)*2              # full card number
+    tn_tk=Tk()
+    tn_tk.title("스타팅 타일 수 입력")
+    tn_tk.geometry("480x300+100+100")
+    tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+    tlabel = Label(tn_tk, text="시작시 가져갈 초기 타일 수를 결정해 주세요(3 권장).")
+    
+    def tcalc(event):
+        global num_players, stn
+        stn = int(entry.get())
+        if stn > fcn/num_players:
+            tlabel.config(text="패를 나누기 위한 전체 타일 수가 부족합니다. 작은 수로 다시 입력해주세요.")
+        elif stn < 2:
+            tlabel.config(text="타일 수가 너무 적습니다. 다시 입력해주세요.")
+        elif stn >= 2 and stn <= fcn/num_players:
+            tlabel.config(text="플레이어가 받는 타일 수가"+str(stn)+"개로 결정되었습니다.")
+
+            tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
+
+    def tnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+        tn_tk.destroy()
+
+    entry=Entry(tn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", tcalc)      # 리턴값 calc 함수에 사용
+    entry.pack(pady = 10)             # 위아래 간격 10
+
+    tlabel.pack(pady = 10)
+
+    tn_tk.mainloop()
+    return stn
