@@ -113,7 +113,7 @@ class CARD():
         self.card_num = num
         self.width, self.height = CARD_SIZE
         self.opened = True
-        self.number = PRINTTEXT("%s" % self.card_num, 15, color=self.font_color)
+        self.number = PRINTTEXT("%s" % self.card_num, 20, color=self.font_color)
 
     def is_opened(self):
         self.opened = True

@@ -136,7 +136,7 @@ def f_tn(num_players):
         elif stn < 2:
             tlabel.config(text="타일 수가 너무 적습니다. 다시 입력해주세요.")
         elif stn >= 2 and stn <= fcn/num_players:
-            tlabel.config(text="플레이어가 받는 타일 수가"+str(stn)+"개로 결정되었습니다.")
+            tlabel.config(text="플레이어가 받는 타일 수가 "+str(stn)+"개로 결정되었습니다.")
 
             tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
 

@@ -108,8 +108,8 @@ def main_loop(): # Game main loop scene
                 pygame.quit()
                 quit()
 
-        pl_turn_i = PRINTTEXT("Turn of player "+str(turn), 20, color = WHITE) # 같은 위치에 흰색으로 이전 정보를 덮음.
-        pl_turn_f = PRINTTEXT("Turn of player "+str(turn+1), 20)
+        pl_turn_i = PRINTTEXT("Turn of player "+str(turn), 25, color = WHITE) # 같은 위치에 흰색으로 이전 정보를 덮음.
+        pl_turn_f = PRINTTEXT("Turn of player "+str(turn+1), 25)
         
         # 덱의 카드 정렬
         all_arrange(p)
