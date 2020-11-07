@@ -98,14 +98,17 @@ def main_loop(): # Game main loop scene
         turn += 1
         time.sleep(3)   # 임시 5초 딜레이
         win = 0
-        if turn == num_players+1:
-            turn = 1
+        if turn == num_players:
+            turn = 0
+        print(turn)
 
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
                 pygame.quit()
                 quit()
+        
+        pygame.init()
         
         pl_turn = PRINTTEXT("Turn of player"+str(turn+1),20)   
 
@@ -114,9 +117,14 @@ def main_loop(): # Game main loop scene
         
         # 덱 그리기
         
-        for i in range(num_players-1):  # 임시 값. 수정 예정. 대신 해주면 ㄱㅅ
-            p[i+1].draw_card(SCREEN_WIDTH/num_players+i*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
-        p[0].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
+        for i in range(1,num_players):
+            
+            if i+turn < num_players:
+                p[i+turn].draw_card(SCREEN_WIDTH/num_players+(i-1)*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
+            
+            elif i+turn >= num_players:
+                p[i+turn-num_players].draw_card(SCREEN_WIDTH/num_players+(i-1)*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
+        p[turn].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
         
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)

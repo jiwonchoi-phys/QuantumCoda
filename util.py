@@ -287,14 +287,6 @@ def make_spooky(x):
     
     return x           
 
-def next_turn():
-    global turn, num_players
-    turn += 1
-    win = 0
-    if turn == num_players+1:
-        turn = 1
-    print(turn)
-    
 def spooky_arrange(t):
     l = t
     for k in range(0,len(l)): 
