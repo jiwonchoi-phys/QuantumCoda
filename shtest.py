@@ -35,8 +35,6 @@ def acb1():
 
     label.pack()
 
-
-
     def b1event():                      # 버튼 함수
         if(b1['text'] == 'hello'):
             b1['text'] = 'world'
@@ -51,7 +49,6 @@ def acb1():
     b1.pack()
 
     window.mainloop()   # 닫기 까지 이게 메인
-
 
 def acb2():
     window=Tk()
@@ -103,9 +100,12 @@ def pn():
         elif pn >=2 and pn <= player_num_max:
             plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
             num_players = pn
-            pn_tk.destroy()
-            
-        
+
+            pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
+
+    def pnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+        pn_tk.destroy()
+
     entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", calc)      # 리턴값 calc 함수에 사용
     entry.pack(pady = 10)             # 위아래 간격 10
