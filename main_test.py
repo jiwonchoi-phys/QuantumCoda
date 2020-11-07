@@ -100,7 +100,6 @@ def main_loop(): # Game main loop scene
         win = 0
         if turn == num_players:
             turn = 0
-        print(turn)
 
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
@@ -108,14 +107,13 @@ def main_loop(): # Game main loop scene
                 pygame.quit()
                 quit()
 
-        pl_turn_i = PRINTTEXT("Turn of player "+str(turn), 25, color = WHITE) # 같은 위치에 흰색으로 이전 정보를 덮음.
-        pl_turn_f = PRINTTEXT("Turn of player "+str(turn+1), 25)
+        pygame.draw.rect(screen, WHITE, [145,0,30,30])          # 삭제금지.
+        pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
         
         # 덱의 카드 정렬
         all_arrange(p)
         
         # 덱 그리기
-        
         for i in range(1,num_players):
             
             if i+turn < num_players:
@@ -124,14 +122,13 @@ def main_loop(): # Game main loop scene
             elif i+turn >= num_players:
                 p[i+turn-num_players].draw_card(SCREEN_WIDTH/num_players+(i-1)*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
         p[turn].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
-        
+
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
         
         # 카드 지목
         select_card._blit_(loc=(5,30),loc_center=False)
-        pl_turn_i._blit_(loc=(5,5),loc_center=False)
-        pl_turn_f._blit_(loc=(5,5),loc_center=False)       
+        pl_turn._blit_(loc=(5,5),loc_center=False)       
         
         pygame.display.update()
 
