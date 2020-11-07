@@ -8,8 +8,8 @@ def shtestroom(): # 조세형 실험실
     dp = PRINTTEXT("sh testroom", size = 50)
     shb1 = BUTTON("button test")
     shb2 = BUTTON("input test")
-    shb3 = BUTTON("yet")
-    shbb = BUTTON("back")
+    shb3 = BUTTON("theory test")
+    shbb = BUTTON("back test")
 
     play = False
     while not play:
@@ -100,7 +100,6 @@ def f_pn():
         elif pn >=2 and pn <= player_num_max:
             plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
             num_players = pn
-            print("함수내",num_players,type(num_players))
             
             pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
 
@@ -116,7 +115,7 @@ def f_pn():
     pn_tk.mainloop()
     return num_players
 
-def tn(num_players):
+def f_tn(num_players):
     global tlabel, stn, fcn, max_card_num
 
     fcn=(max_card_num+1)*2              # full card number
@@ -149,3 +148,9 @@ def tn(num_players):
 
     tn_tk.mainloop()
     return stn
+
+def f_cp(x, num_players):
+    global p
+    x[0].draw_card(SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
+    for i in num_players-1:
+        x[i+1].draw_card(SCREEN_WIDTH // 2 + (num_players-1)*i, SCREEN_HEIGHT // 4)

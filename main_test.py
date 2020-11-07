@@ -10,10 +10,12 @@ from tkinter import *
 #=======================
 
 '''
-코드 순서도 일람 (나중에 더 괜찮은 배치가 있으면 수정바람) >>>>>>>>fcn, 플레이어수 타일 수 등에서 충돌로 코드 순서 수정.
-- 카드 생성 및 배분 (알고리즘)
-- pygame 진행에 필요한 함수들 (장면 추가시 함수추가바람.)
-- 기본 pygame 실행 순서
+=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=
+
+fcn, num_players, stn 등에서 충돌로 코드 순서 수정.
+functions for pygame > Initialize pygame 순서 고정 바람. 변동시 에러 가능성 높음.
+
+=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=
 '''
 #========== functions for pygame ==========#
 def game_intro():       # Game intro scene
@@ -77,11 +79,8 @@ def main_loop(): # Game main loop scene
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
-    print(num_players)
-    stn = tn(num_players)
-    print(stn)
+    stn = f_tn(num_players)
     make_card(num_players, stn)
-    print(p)
 
     select_card = PRINTTEXT("Select card", 20) # msg, font 크기
     button_sample = BUTTON("test")             # button sample
@@ -97,8 +96,9 @@ def main_loop(): # Game main loop scene
         all_arrange(p)
         
         # 덱 그리기
-        p[1].draw_card(300, 400)
-        p[0].draw_card(300, 100)    
+        for i in range(num_players-1):  # 임시 값 수정 예정 대신 해주면 ㄱㅅ
+            p[i+1].draw_card(SCREEN_WIDTH/num_players+i*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
+        p[0].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
         
         button_sample._draw_(loc=(100,100))
         button_turn._draw_(loc = (800,550), size = (60,30))
@@ -109,7 +109,6 @@ def main_loop(): # Game main loop scene
         
         pygame.display.update()
 
-#========== 카드 생성 및 배분 ========== 
 def make_card(num_players, stn):
     global p
     players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
