@@ -53,7 +53,7 @@ turn=1
 class PRINTTEXT():
 
 
-    def __init__(self, msg, size, font='consolas', color=BLACK, antialias=True, background=None):
+    def __init__(self, msg, size, font='calibri', color=BLACK, antialias=True, background=None):
         self.msg = msg                  # 메세지
         self.font = font                # font 지정 (기본 conslas)
         self.size = size                # size 지정

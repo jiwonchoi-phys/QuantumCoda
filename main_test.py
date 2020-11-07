@@ -51,7 +51,7 @@ def game_intro():       # Game intro scene
         
         # text positions
         title._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
-        credits_title._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-120))
+        credits_title._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-100))
         credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-70))
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
@@ -94,9 +94,9 @@ def main_loop(): # Game main loop scene
     button_turn = BUTTON("Next")
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
-        global turn
+        global turn, pl_turn
         turn += 1
-        time.sleep(3)   # 임시 5초 딜레이
+        time.sleep(2)   # 임시 2초 딜레이
         win = 0
         if turn == num_players:
             turn = 0
@@ -107,11 +107,10 @@ def main_loop(): # Game main loop scene
             if event.type == pygame.QUIT:       # 종료 if문
                 pygame.quit()
                 quit()
-        
-        pygame.init()
-        
-        pl_turn = PRINTTEXT("Turn of player"+str(turn+1),20)   
 
+        pl_turn_i = PRINTTEXT("Turn of player "+str(turn), 20, color = WHITE) # 같은 위치에 흰색으로 이전 정보를 덮음.
+        pl_turn_f = PRINTTEXT("Turn of player "+str(turn+1), 20)
+        
         # 덱의 카드 정렬
         all_arrange(p)
         
@@ -131,7 +130,8 @@ def main_loop(): # Game main loop scene
         
         # 카드 지목
         select_card._blit_(loc=(5,30),loc_center=False)
-        pl_turn._blit_(loc=(5,5),loc_center=False)     
+        pl_turn_i._blit_(loc=(5,5),loc_center=False)
+        pl_turn_f._blit_(loc=(5,5),loc_center=False)       
         
         pygame.display.update()
 
