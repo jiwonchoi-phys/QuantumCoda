@@ -37,3 +37,12 @@ GUI branch: util.py, shtesr.py, main_test.py
 - 가시성 강화
     > 폰트 글씨체 변경 consolas >> calibri
     > class CARD 폰트 크기 키움 15 >> 20
+
+- 이론창의 이미지 삽입 정상 작동 확인.
+
+TODO) 턴 관련 모든 것
+    - 1. 누가 첫 턴(생략)
+    - 2. 카드 휙득
+    - 3. 지목 (플레이어를 지목 x. 바로 특정 플레이어의 카드 지목)
+    - 4. 유추
+    - 5. 붕괴
