@@ -152,3 +152,33 @@ def f_tn(num_players):
     tn_tk.mainloop()
     return stn
 
+def f_guess(max_card_num): # 제작중
+    global plabel, num_players
+
+    guess_tk=Tk()
+    guess_tk.title("추측하는 카드 수 입력")
+    guess_tk.geometry("480x300+100+100")
+    guess_tk.resizable(False, False)
+    plabel = Label(guess_tk, text="위의 창에 추측하는 카드 수 입력")
+    
+    def sf_guess(event):
+        gn = int(entry.get())
+        if gn >=0 and pn <= max_card_num:
+            glabel.config(text="-")
+            pn_tk.after(1000, guessd)          # 1000ms 이후 pnd 함수 연결
+
+        else:
+            glabel.config(text="-")
+
+    def guessd():
+        guess_tk.destroy()
+
+    entry=Entry(guess_tk, bd = 20)
+    entry.bind("<Return>", gcalc)
+    entry.pack(pady = 10)
+
+    glabel.pack(pady = 10)
+
+    guess_tk.mainloop()
+    return num_players
+
