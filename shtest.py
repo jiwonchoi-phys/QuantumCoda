@@ -82,3 +82,34 @@ def acb3():
     label.pack()
 
     acb3.mainloop()
+
+def pn():
+    global plabel
+    global num_players
+    player_num_max = 4  #게임 가능 플레이어 수 제한
+
+    pn_tk=Tk()
+    pn_tk.title("입력 테스트")
+    pn_tk.geometry("480x300+100+100")
+    pn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+    plabel = Label(pn_tk, text="위의 창에 플레이어 숫자를 입력하세요.\n플레이 최소 인원은 2명이고 최대 인원은 "+str(player_num_max)+"명 입니다.")
+    
+    def calc(event):
+        pn = int(entry.get())
+        if pn > player_num_max:
+            plabel.config(text="플레이어 수가 너무 많습니다 다시 입력해주세요")
+        elif pn < 2:
+            plabel.config(text="플레이어 수가 너무 적습니다 다시 입력해주세요")
+        elif pn >=2 and pn <= player_num_max:
+            plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
+            num_players = pn
+            pn_tk.destroy()
+            
+        
+    entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", calc)      # 리턴값 calc 함수에 사용
+    entry.pack(pady = 10)             # 위아래 간격 10
+
+    plabel.pack(pady = 10)
+
+    pn_tk.mainloop()

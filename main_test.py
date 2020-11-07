@@ -1,10 +1,13 @@
-import pygame
+'''
+- TO-DO) 시간상 플레이에 플레이어수 입력받는 것으로 처리.
+- 이후 붕괴까지 구현시 시간 남으면, 다시 버튼에 숫자를 심는 형태로 바꿀 예정.
+'''
+# import pygame
 from util import *
 #======건들지 마시오=====
 from shtest import *
 from tkinter import *
 #=======================
-
 
 '''
 코드 순서도 일람 (나중에 더 괜찮은 배치가 있으면 수정바람)
@@ -43,7 +46,7 @@ for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 �
 
 random.shuffle(ti)                  # 모든 타일 섞음
 spooky_arrange(ti)                  # util 참고.
-print("섞은 전체 타일: ",ti)
+#print("섞은 전체 타일: ",ti)
 
 # 생성된 카드를 클래스로 복제 ??
 tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))]
@@ -70,14 +73,17 @@ def game_intro():       # Game intro scene
     intro = False       # while문 돌리기 위함
     # Title Texts
     title = PRINTTEXT("Quantum Coda", size = 50)
+
     credits_title = PRINTTEXT("Credits", size = 50)
-    credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 30)
-    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi", size = 20)
+    credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
+    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Sea hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
     new_p2 = BUTTON("2 Player")
     new_p4 = BUTTON("4 Player")
+
     sh = BUTTON("sehyoung test")
+
     exit_button = BUTTON("Exit")
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
@@ -88,18 +94,18 @@ def game_intro():       # Game intro scene
                 pygame.quit()
         
         # text positions
-        title._blit_(loc='top center')
-        credits_title._blit_(loc=(SCREEN_WIDTH*1 // 8, SCREEN_HEIGHT*4 // 8))
-        credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 8, SCREEN_HEIGHT*5 // 8))
-        credits_name._blit_(loc=(SCREEN_WIDTH*1 // 8, SCREEN_HEIGHT*6 // 8))
+        title._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
+        credits_title._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-120))
+        credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-70))
+        credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
-        new_p2._draw_(loc = 'bottom left', size = (60,30), action=main_loop)
+        new_p2._draw_(loc = 'bottom left', size = (60,30), action=None)
         new_p4._draw_(loc = 'bottom right', size = (60,30),action=next_turn)
-        sh._draw_(loc = (800,550), size = (180,30), action=shtestroom)
+        sh._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=shtestroom)
         
-        play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=None)
-        how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=None)
-        exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*6 // 8), size = (140,60),action=pygame.quit)
+        play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
+        how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=None)
+        exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
 
         pygame.display.update()
         clock.tick(15)
@@ -122,7 +128,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 def main_loop(): # Game main loop scene
     screen.fill(WHITE)
     done = False
-
+    pn()
     select_card = PRINTTEXT("Select card", 20) # msg, font 크기
     button_sample = BUTTON("test")             # button sample
     button_turn = BUTTON("Next")
