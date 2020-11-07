@@ -2,6 +2,9 @@ import pygame
 from util import *
 from tkinter import *
 from math import *
+import time
+
+# 아래 내용들은 완성되면 util에 추가 될 것.
 
 def shtestroom(): # 조세형 실험실
     screen.fill(WHITE)
@@ -149,8 +152,3 @@ def f_tn(num_players):
     tn_tk.mainloop()
     return stn
 
-def f_cp(x, num_players):
-    global p
-    x[0].draw_card(SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
-    for i in num_players-1:
-        x[i+1].draw_card(SCREEN_WIDTH // 2 + (num_players-1)*i, SCREEN_HEIGHT // 4)

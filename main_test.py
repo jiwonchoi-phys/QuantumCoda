@@ -1,6 +1,13 @@
 '''
-- TO-DO) 시간상 플레이에 플레이어수 입력받는 것으로 처리.
+- 시간상 플레이에 플레이어수 입력받는 것으로 처리.
 - 이후 붕괴까지 구현시 시간 남으면, 다시 버튼에 숫자를 심는 형태로 바꿀 예정.
+- TO-DO) 턴 관련 모든 것
+- 1. 누구의 턴인가
+- 2. 카드 휙득
+- 3. 정렬
+- 4. 지목 (플레이어를 지목 x. 바로 특정 플레이어의 카드 지목)
+- 5. 유추
+- 6. 붕괴
 '''
 # import pygame
 from util import *
@@ -23,7 +30,7 @@ def game_intro():       # Game intro scene
     # Title Texts
     title = PRINTTEXT("Quantum Coda", size = 50)
 
-    credits_title = PRINTTEXT("Credits", size = 50)
+    credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Sea hyoung Jo, Ji won Choi", size = 20)
 
@@ -49,7 +56,7 @@ def game_intro():       # Game intro scene
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
         new_p2._draw_(loc = 'bottom left', size = (60,30), action=None)
-        new_p4._draw_(loc = 'bottom right', size = (60,30),action=next_turn)
+        new_p4._draw_(loc = 'bottom right', size = (60,30),action=None)
         sh._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=shtestroom)
         
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
@@ -75,7 +82,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 
 def main_loop(): # Game main loop scene
-    global num_players, stn
+    global num_players, stn, turn
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
@@ -86,26 +93,37 @@ def main_loop(): # Game main loop scene
     button_sample = BUTTON("test")             # button sample
     button_turn = BUTTON("Next")
 
+    def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
+        global turn
+        turn += 1
+        time.sleep(3)   # 임시 5초 딜레이
+        win = 0
+        if turn == num_players+1:
+            turn = 1
+
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
                 pygame.quit()
                 quit()
         
+        pl_turn = PRINTTEXT("Turn of player"+str(turn+1),20)   
+
         # 덱의 카드 정렬
         all_arrange(p)
         
         # 덱 그리기
-        for i in range(num_players-1):  # 임시 값 수정 예정 대신 해주면 ㄱㅅ
+        
+        for i in range(num_players-1):  # 임시 값. 수정 예정. 대신 해주면 ㄱㅅ
             p[i+1].draw_card(SCREEN_WIDTH/num_players+i*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
         p[0].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
         
         button_sample._draw_(loc=(100,100))
-        button_turn._draw_(loc = (800,550), size = (60,30))
+        button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
         
         # 카드 지목
         select_card._blit_(loc=(5,30),loc_center=False)
-        pl_turn._blit_(loc=(5,5),loc_center=False)        
+        pl_turn._blit_(loc=(5,5),loc_center=False)     
         
         pygame.display.update()
 
@@ -151,13 +169,11 @@ def make_card(num_players, stn):
             p[i].deck_list.append(qwer)
             tii.pop(tii.index(qwer))
 
-turn = 1
-pl_turn = PRINTTEXT("Turn of player"+str(turn),20)
-
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
+turn = 0    # 첫값 0. 수정 금지.
 
 screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
@@ -165,6 +181,7 @@ pygame.display.update()                     # 화면 업데이트.
 game_intro()                                # 실행 장면을 위한 함수들
 shtestroom()
 how_to_play()
+
 main_loop()
 
 
