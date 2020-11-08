@@ -91,6 +91,7 @@ def main_loop(): # Game main loop scene
     num_players = f_pn()
     stn = f_tn(num_players)
     make_card(num_players, stn)
+    play_music()
 
     select_card = PRINTTEXT("Select card", 20) # msg, font 크기
     button_sample = BUTTON("test")             # button sample

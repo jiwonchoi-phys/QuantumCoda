@@ -35,8 +35,7 @@ def acb1():
     window.title("버튼 테스트")                 # 타이틀
     window.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
     label1 = Label(window, text="아이 씻팔 왜 안되는거야")         # 라벨 등록
-    label1.grid(row = 0, column = 0)
-    #label1.pack(pady = 20)
+    label1.pack(pady = 30)
 
     def b1event():                      # 버튼 함수
         if(b1['text'] == 'hello'):
@@ -48,16 +47,13 @@ def acb1():
             b1['fg'] = 'yellow'
             b1['bg'] = 'red'
         
-    bb = Button(window, text='검은색 가져오기', command = NONE, fg = 'yellow', width = 10 , height = 10)
-    #bb.pack() #(side = LEFT, anchor = "w", padx = 40)
-    bb.grid(row = 1, column = 0)
-    bw = Button(window, text='흰색 가져오기', command = NONE, fg = 'yellow', width = 10 , height = 10)
-    #bw.pack() #side = RIGHT, anchor = "e", padx = 40)
-    bb.grid(row = 1, column = 1)
+    bb = Button(window, text='검은색 가져오기', command = NONE, fg = 'yellow', width = 20 , height = 10)
+    bw = Button(window, text='흰색 가져오기', command = NONE, fg = 'yellow', width = 20 , height = 10)
+    bb.pack(side = LEFT, padx = 0)
+    bw.pack(side = LEFT, padx = 0)
 
     label2 = Label(window, text="선넘네..")         # 라벨 등록
-    #label2.pack(side = BOTTOM, anchor = "s", pady = 20)
-    label2.grid(row = 3, column = 0)
+    label2.pack(side = BOTTOM, pady = 30)
 
     window.mainloop()   # 닫기 까지 이게 메인
 
@@ -207,4 +203,13 @@ def c_color(turn):
             else:
                 #print("입력오류")
                 pass
+
+def play_music():
+    
+    main_music = "White River - Aakash Gandhi.mp3"
+
+    pygame.mixer.init()
+    pygame.mixer.music.load(main_music)
+    pygame.mixer.music.set_volume(0.8)
+    pygame.mixer.music.play(-1) # 무한재생.
 
