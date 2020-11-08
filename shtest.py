@@ -34,9 +34,9 @@ def acb1():
     window = Tk()                              # 윈도우 창을 생성
     window.title("버튼 테스트")                 # 타이틀
     window.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
-    label = Label(window, text="test")         # 라벨 등록
-
-    label.pack()
+    label1 = Label(window, text="아이 씻팔 왜 안되는거야")         # 라벨 등록
+    label1.grid(row = 0, column = 0)
+    #label1.pack(pady = 20)
 
     def b1event():                      # 버튼 함수
         if(b1['text'] == 'hello'):
@@ -48,8 +48,16 @@ def acb1():
             b1['fg'] = 'yellow'
             b1['bg'] = 'red'
         
-    b1 = Button(window, text='hello',command = b1event, fg = 'yellow', bg = 'red')
-    b1.pack()
+    bb = Button(window, text='검은색 가져오기', command = NONE, fg = 'yellow', width = 10 , height = 10)
+    #bb.pack() #(side = LEFT, anchor = "w", padx = 40)
+    bb.grid(row = 1, column = 0)
+    bw = Button(window, text='흰색 가져오기', command = NONE, fg = 'yellow', width = 10 , height = 10)
+    #bw.pack() #side = RIGHT, anchor = "e", padx = 40)
+    bb.grid(row = 1, column = 1)
+
+    label2 = Label(window, text="선넘네..")         # 라벨 등록
+    #label2.pack(side = BOTTOM, anchor = "s", pady = 20)
+    label2.grid(row = 3, column = 0)
 
     window.mainloop()   # 닫기 까지 이게 메인
 
@@ -66,9 +74,9 @@ def acb2():
 
     entry=Entry(window, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", calc)      # 리턴값 calc 함수에 사용
-    entry.pack(pady = 10)             # 위아래 간격 10
+    entry.pack(pady = 50)             # 위아래 간격 50
 
-    label.pack(pady = 10)
+    label.pack()
 
     window.mainloop()
 
@@ -111,9 +119,9 @@ def f_pn():
 
     entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", pcalc)      # 리턴값 calc 함수에 사용
-    entry.pack(pady = 10)             # 위아래 간격 10
+    entry.pack(pady = 50)             # 위아래 간격 50
 
-    plabel.pack(pady = 10)
+    plabel.pack()
 
     pn_tk.mainloop()
     return num_players
@@ -145,40 +153,58 @@ def f_tn(num_players):
 
     entry=Entry(tn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", tcalc)      # 리턴값 calc 함수에 사용
-    entry.pack(pady = 10)             # 위아래 간격 10
+    entry.pack(pady = 50)             # 위아래 간격 50
 
-    tlabel.pack(pady = 10)
+    tlabel.pack()
 
     tn_tk.mainloop()
     return stn
 
-def f_guess(max_card_num): # 제작중
-    global plabel, num_players
-
-    guess_tk=Tk()
-    guess_tk.title("추측하는 카드 수 입력")
-    guess_tk.geometry("480x300+100+100")
-    guess_tk.resizable(False, False)
-    plabel = Label(guess_tk, text="위의 창에 추측하는 카드 수 입력")
-    
-    def sf_guess(event):
-        gn = int(entry.get())
-        if gn >=0 and pn <= max_card_num:
-            glabel.config(text="-")
-            pn_tk.after(1000, guessd)          # 1000ms 이후 pnd 함수 연결
+def c_color(turn):           
+    global choice_color, recent_card, c_color_e
+    c_color_e = 0
+    ti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
+    ti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
+    for i in range(len(ti)-1):  # 검은색 흰색 그룹에 색에 맞게 넣음
+        if tii[i][0] == 1:
+            ti_b.append(ti[i])
+        elif tii[i][0] == 0:
+            ti_w.append(ti[i])
+    while 1:
+        if len(ti_b) == 0 and len(ti_w) == 0:
+            #print("더 이상 뽑을 카드가 없습니다 플레이어 지목 단계로 넘어갑니다.")
+            c_color_e = 1
+            break
 
         else:
-            glabel.config(text="-")
+            #choice_color = input("가져갈 카드의 색깔을 골라주세요 (b,w):")    # 검은색이면 검은색 뽑고 흰색이면 흰색 뽑게함
+            if choice_color == "b" and len(ti_b) != 0:                      # 입력받은 색깔이 b,w에 따라 그에 맞는 색카드를
+                recent_card = random.choice(ti_b)                           # 뽑고 패에 추가 최근 카드는 이후 틀렸을 때
+                p[turn].append(recent_card)                               # 카드를 넘기기 위해 가져옴
+                #public_field[turn].append([1,"?"])
+                #field_count.pop(ti.index(recent_card))
+                tii.pop(ti.index(recent_card))   # 뽑은 카드를 다시 뽑으면 안되니 뽑은 카드는 필드에서 삭제함
+                #arrange(turn-1)          # 뽑았으니 재배열함
+                break
 
-    def guessd():
-        guess_tk.destroy()
+            elif choice_color =="b" and len(ti_b) == 0:
+                #print("검은색 카드가 없습니다")
+                pass
 
-    entry=Entry(guess_tk, bd = 20)
-    entry.bind("<Return>", gcalc)
-    entry.pack(pady = 10)
+            elif choice_color == "w"and len(ti_w) != 0:
+                recent_card = random.choice(ti_w)
+                p[turn].append(recent_card)
+                #public_field[turn-1].append([0,"?"])
+                #field_count.pop(ti.index(recent_card))
+                tii.pop(ti.index(recent_card))   # 뽑은 카드를 다시 뽑으면 안되니 뽑은 카드는 필드에서 삭제함
+                #arrange(turn-1)          # 뽑았으니 재배열함
+                break
 
-    glabel.pack(pady = 10)
+            elif choice_color =="w" and len(ti_w) == 0:
+                #print("흰색 카드가 없습니다")
+                pass
 
-    guess_tk.mainloop()
-    return num_players
+            else:
+                #print("입력오류")
+                pass
 
