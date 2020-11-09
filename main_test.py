@@ -117,12 +117,12 @@ def main_loop(): # Game main loop scene
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
         global fti_b, fti_w, YETT
         wtt = Tk()                              # 윈도우 창을 생성
-        wtt.title("패 먹기 테스트")                 # 타이틀
+        wtt.title("가져올 타일을 선택하세요")     # 타이틀
         wtt.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
 
-        label1 = Label(wtt, text="아이 씻팔 아직 구현중..")         # 라벨 등록
+        label1 = Label(wtt, text="1차 완성")         # 라벨 등록
         label1.pack(pady=10)
-        label2 = Label(wtt, text="구현중..")         # 라벨 등록
+        label2 = Label(wtt, text="가져올 타일을 선택하세요")         # 라벨 등록
         label2.pack(pady=10)
         
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
