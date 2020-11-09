@@ -93,12 +93,16 @@ def main_loop(): # Game main loop scene
     make_card(num_players, stn)
     play_music()
     
-    select_card = PRINTTEXT("Select card", 20) # msg, font 크기
+    print("필드 타일 수", len(tii)) # 테스트 용
+    f_ftile_color_arrnage(tii)
+
+    select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn
+
         turn += 1
         time.sleep(2)   # 임시 2초 딜레이
         win = 0
@@ -130,14 +134,14 @@ def main_loop(): # Game main loop scene
         p[turn].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
 
         # 버튼 및 텍스트 그리기
-        button_take._draw_(loc=(800,100), size = (120,30), action = f_take_tile)
+        button_take._draw_(loc=(800,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()
 
 def make_card(num_players, stn):
-    global p
+    global p, tii
     players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
 
     for i in range(num_players):
@@ -177,6 +181,8 @@ def make_card(num_players, stn):
             qwer = random.choice(tii)
             p[i].deck_list.append(qwer)
             tii.pop(tii.index(qwer))
+
+
 
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
