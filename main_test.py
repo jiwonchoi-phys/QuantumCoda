@@ -108,6 +108,56 @@ def main_loop(): # Game main loop scene
         win = 0
         if turn == num_players:
             turn = 0
+            
+    def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
+        global fti_b, fti_w
+        wtt = Tk()                              # 윈도우 창을 생성
+        wtt.title("패 먹기 테스트")                 # 타이틀
+        wtt.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
+
+        label1 = Label(wtt, text="아이 씻팔 아직 구현중..")         # 라벨 등록
+        label1.pack()
+        label2 = Label(wtt, text="구현중..")         # 라벨 등록
+        label2.pack()
+        print('3차',turn)
+        #print(p)
+        pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
+
+        def sf_bb():
+            global fti_b, p
+
+            if len(fti_b) == 0:
+                label2.config(text="새캬 없는거 왜 눌러.")
+            else:
+                qwer = random.choice(fti_b)
+                p[turn].deck_list.append(qwer)
+                fti_b.pop(fti_b.index(qwer))
+
+                wtt.after(1000, wttd)          # 1000ms 이후 pnd 함수 연결
+
+        def sf_bw():
+            global fti_w, p
+        
+            if len(fti_w) == 0:
+                label2.config(text="새캬 없는거 왜 눌러.")
+            else:
+                qwer = random.choice(fti_w)
+                p[turn].deck_list.append(qwer)
+                fti_w.pop(fti_w.index(qwer))
+
+                wtt.after(1000, wttd)          # 1000ms 이후 pnd 함수 연결
+    
+        bb = Button(wtt, text='검정색 가져오기\n'+'남은 타일 수: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
+                    image=pixelVirtual, width=100, height=160, compound="c")                # 크기 텍스트 기준이 아닌 기준 픽셀 기준, 텍스트는 중앙표기.
+        bw = Button(wtt, text='하양색 가져오기\n'+'남은 타일 수: '+str(len(fti_w)), command = sf_bw, fg = 'black', bg = "ghost white",
+                    image=pixelVirtual, width=100, height=160, compound="c")
+        bb.pack(side = LEFT, padx = 50)
+        bw.pack(side = RIGHT, padx = 50)
+
+        def wttd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+            wtt.destroy()
+
+        wtt.mainloop()
 
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
@@ -182,8 +232,17 @@ def make_card(num_players, stn):
             p[i].deck_list.append(qwer)
             tii.pop(tii.index(qwer))
 
+def f_ftile_color_arrnage(tii):           
+    global fti_b, fti_w
+    fti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
+    fti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
 
-
+    for i in range(len(tii)):  # 검은색 흰색 그룹에 색에 맞게 넣음
+        if tii[i].get_color() == 1:
+            fti_b.append(tii[i].get_color())
+        elif tii[i].get_color() == 0:
+            fti_w.append(tii[i].get_color)
+            
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
