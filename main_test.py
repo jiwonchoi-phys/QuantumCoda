@@ -92,13 +92,14 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     play_music()
-
+    
     select_card = PRINTTEXT("Select card", 20) # msg, font 크기
     button_sample = BUTTON("test")             # button sample
     button_turn = BUTTON("Next")
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn
+        f_take_tile()
         turn += 1
         time.sleep(2)   # 임시 2초 딜레이
         win = 0

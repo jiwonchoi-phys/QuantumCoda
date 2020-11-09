@@ -34,28 +34,22 @@ def acb1():
     window = Tk()                              # 윈도우 창을 생성
     window.title("버튼 테스트")                 # 타이틀
     window.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
+
     label1 = Label(window, text="아이 씻팔 왜 안되는거야")         # 라벨 등록
-    label1.pack(pady = 30)
-
-    def b1event():                      # 버튼 함수
-        if(b1['text'] == 'hello'):
-            b1['text'] = 'world'
-            b1['fg'] = 'red'
-            b1['bg'] = 'yellow'
-        else:
-            b1['text'] = 'hello'
-            b1['fg'] = 'yellow'
-            b1['bg'] = 'red'
-        
-    bb = Button(window, text='검은색 가져오기', command = NONE, fg = 'yellow', width = 20 , height = 10)
-    bw = Button(window, text='흰색 가져오기', command = NONE, fg = 'yellow', width = 20 , height = 10)
-    bb.pack(side = LEFT, padx = 0)
-    bw.pack(side = LEFT, padx = 0)
-
+    label1.pack()
     label2 = Label(window, text="선넘네..")         # 라벨 등록
-    label2.pack(side = BOTTOM, pady = 30)
+    label2.pack()
+    
+    pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
+    
+    bb = Button(window, text='검정색 가져오기', command = NONE, fg = 'white', bg = "black",
+                image=pixelVirtual, width=100, height=160, compound="c")                # 크기 텍스트 기준이 아닌 기준 픽셀 기준, 텍스트는 중앙표기.
+    bw = Button(window, text='하양색 가져오기', command = NONE, fg = 'black', bg = "ghost white",
+                image=pixelVirtual, width=100, height=160, compound="c")
+    bb.pack(side = LEFT, padx = 50)
+    bw.pack(side = RIGHT, padx = 50)
 
-    window.mainloop()   # 닫기 까지 이게 메인
+    window.mainloop()
 
 def acb2():
     window=Tk()
