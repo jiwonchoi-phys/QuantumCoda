@@ -109,6 +109,7 @@ class CARD():
             self.card_color = GRAY
             self.font_color = BLACK
         
+        self.color = color
         self.card_num = num
         self.width, self.height = CARD_SIZE
         self.opened = True
@@ -118,7 +119,7 @@ class CARD():
         self.opened = True
     
     def get_color(self):
-        return self.card_color
+        return self.color
 
     def get_num(self):
         return self.card_num
