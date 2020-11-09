@@ -45,7 +45,7 @@ def game_intro():       # Game intro scene
 
     sh = BUTTON("sehyoung test")
 
-    exit_button = BUTTON("Exit")
+    title_exit_button = BUTTON("Exit")
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
 
@@ -66,7 +66,7 @@ def game_intro():       # Game intro scene
         
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=None)
-        exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
+        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
 
         pygame.display.update()
         clock.tick(15)
@@ -101,6 +101,7 @@ def main_loop(): # Game main loop scene
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
+    button_exit = BUTTON("Exit")
 
     YETT = 0
 
@@ -174,6 +175,7 @@ def main_loop(): # Game main loop scene
 
         wtt.mainloop()
 
+    #========== main loop 창 실행 ==========#
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
@@ -203,8 +205,9 @@ def main_loop(): # Game main loop scene
         p[turn].draw_card(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
 
         # 버튼 및 텍스트 그리기
-        button_take._draw_(loc=(800,100), size = (130,30), action = f_take_tile)
+        button_take._draw_(loc = (800,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
+        button_exit._draw_(loc = (800,200), size = (130,30), action = pygame.quit)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()
