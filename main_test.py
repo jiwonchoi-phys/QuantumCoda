@@ -94,12 +94,11 @@ def main_loop(): # Game main loop scene
     play_music()
     
     select_card = PRINTTEXT("Select card", 20) # msg, font 크기
-    button_sample = BUTTON("test")             # button sample
+    button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn
-        f_take_tile()
         turn += 1
         time.sleep(2)   # 임시 2초 딜레이
         win = 0
@@ -131,7 +130,7 @@ def main_loop(): # Game main loop scene
         p[turn].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
 
         # 버튼 및 텍스트 그리기
-        button_sample._draw_(loc=(100,100))
+        button_take._draw_(loc=(800,100), size = (120,30), action = f_take_tile)
         button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
