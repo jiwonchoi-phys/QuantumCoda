@@ -91,11 +91,11 @@ def main_loop(): # Game main loop scene
     num_players = f_pn()
     stn = f_tn(num_players)
     make_card(num_players, stn)
+    
     play_music()
     
-    print("필드 타일 수", len(tii)) # 테스트 용
     f_ftile_color_arrnage(tii)
-
+    print("1차",p)
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
@@ -119,7 +119,7 @@ def main_loop(): # Game main loop scene
         pygame.draw.rect(screen, WHITE, [145,0,30,30])          # 삭제금지.
         pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
         pl_turn._blit_(loc=(5,5),loc_center=False)  
-        
+        #print("2차",turn)
         # 덱의 카드 정렬
         all_arrange(p)
         
