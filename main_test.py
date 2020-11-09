@@ -133,7 +133,7 @@ def main_loop(): # Game main loop scene
                 p[turn].deck_list.append(qwer)
                 fti_b.pop(fti_b.index(qwer))
 
-                wtt.after(1000, wttd)          # 1000ms 이후 pnd 함수 연결
+                wtt.after(1000, wttd)
 
         def sf_bw():
             global fti_w, p
@@ -145,7 +145,7 @@ def main_loop(): # Game main loop scene
                 p[turn].deck_list.append(qwer)
                 fti_w.pop(fti_w.index(qwer))
 
-                wtt.after(1000, wttd)          # 1000ms 이후 pnd 함수 연결
+                wtt.after(1000, wttd)
     
         bb = Button(wtt, text='검정색 가져오기\n'+'남은 타일 수: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
                     image=pixelVirtual, width=100, height=160, compound="c")                # 크기 텍스트 기준이 아닌 기준 픽셀 기준, 텍스트는 중앙표기.
@@ -239,10 +239,10 @@ def f_ftile_color_arrnage(tii):
 
     for i in range(len(tii)):  # 검은색 흰색 그룹에 색에 맞게 넣음
         if tii[i].get_color() == 1:
-            fti_b.append(tii[i].get_color())
+            fti_b.append(tii[i])
         elif tii[i].get_color() == 0:
-            fti_w.append(tii[i].get_color)
-            
+            fti_w.append(tii[i])
+
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
