@@ -38,8 +38,8 @@ def game_intro():       # Game intro scene
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Sea hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
-    new_p2 = BUTTON("2 Player")
-    new_p4 = BUTTON("4 Player")
+    new_test1 = BUTTON("test 1")
+    new_test2 = BUTTON("test 2")
 
     sh = BUTTON("sehyoung test")
 
@@ -58,8 +58,8 @@ def game_intro():       # Game intro scene
         credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-70))
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
-        new_p2._draw_(loc = 'bottom left', size = (60,30), action=None)
-        new_p4._draw_(loc = 'bottom right', size = (60,30),action=None)
+        new_test1._draw_(loc = 'bottom left', size = (60,30), action=None)
+        new_test2._draw_(loc = 'bottom right', size = (60,30),action=None)
         sh._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=shtestroom)
         
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
@@ -85,7 +85,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn
+    global num_players, stn, turn, YETT
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
@@ -95,56 +95,58 @@ def main_loop(): # Game main loop scene
     play_music()
     
     f_ftile_color_arrnage(tii)
-    print("1차",p)
+
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
 
+    YETT = 0
+
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
-        global turn, pl_turn
+        global turn, pl_turn, YETT
 
         turn += 1
+        YETT = 0
         time.sleep(2)   # 임시 2초 딜레이
         win = 0
         if turn == num_players:
             turn = 0
             
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
-        global fti_b, fti_w
+        global fti_b, fti_w, YETT
         wtt = Tk()                              # 윈도우 창을 생성
         wtt.title("패 먹기 테스트")                 # 타이틀
         wtt.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
 
         label1 = Label(wtt, text="아이 씻팔 아직 구현중..")         # 라벨 등록
-        label1.pack()
+        label1.pack(pady=10)
         label2 = Label(wtt, text="구현중..")         # 라벨 등록
-        label2.pack()
-        print('3차',turn)
-        #print(p)
+        label2.pack(pady=10)
+        
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
 
         def sf_bb():
-            global fti_b, p
+            global fti_b, p, YETT
 
             if len(fti_b) == 0:
-                label2.config(text="새캬 없는거 왜 눌러.")
+                label2.config(text="새캬 없는걸 왜 눌러.")
             else:
                 qwer = random.choice(fti_b)
                 p[turn].deck_list.append(qwer)
                 fti_b.pop(fti_b.index(qwer))
-
+                YETT += 1
                 wtt.after(1000, wttd)
 
         def sf_bw():
-            global fti_w, p
+            global fti_w, p, YETT
         
             if len(fti_w) == 0:
-                label2.config(text="새캬 없는거 왜 눌러.")
+                label2.config(text="새캬 없는걸 왜 눌러.")
             else:
                 qwer = random.choice(fti_w)
                 p[turn].deck_list.append(qwer)
                 fti_w.pop(fti_w.index(qwer))
-
+                YETT += 1
                 wtt.after(1000, wttd)
     
         bb = Button(wtt, text='검정색 가져오기\n'+'남은 타일 수: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
@@ -157,6 +159,17 @@ def main_loop(): # Game main loop scene
         def wttd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
             wtt.destroy()
 
+        if len(fti_b) == 0 and len(fti_w) == 0:
+            label2.config(text="더 이상 타일이 없습니다.")
+            
+            wtt.after(1000, wttd)
+        
+        if YETT == 1:
+            label2.config(text="이번 턴에 이미 패를 먹었습니다.")
+            bb.destroy()
+            bw.destroy()
+            wtt.after(1000, wttd)
+
         wtt.mainloop()
 
     while not done:
@@ -166,7 +179,7 @@ def main_loop(): # Game main loop scene
                 quit()
 
         # 턴 관련
-        pygame.draw.rect(screen, WHITE, [145,0,30,30])          # 삭제금지.
+        pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
         pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
         pl_turn._blit_(loc=(5,5),loc_center=False)  
         #print("2차",turn)
@@ -177,11 +190,15 @@ def main_loop(): # Game main loop scene
         for i in range(1,num_players):
             
             if i+turn < num_players:
-                p[i+turn].draw_card(SCREEN_WIDTH/num_players+(i-1)*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
-            
+                p[i+turn].draw_card(
+                    CARD_WIDTH + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)].deck_list)),
+                    SCREEN_HEIGHT//4)
             elif i+turn >= num_players:
-                p[i+turn-num_players].draw_card(SCREEN_WIDTH/num_players+(i-1)*CARD_WIDTH*(stn+1)-stn/2*CARD_WIDTH, SCREEN_HEIGHT//4)
-        p[turn].draw_card(SCREEN_WIDTH//2-stn/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
+                p[i+turn-num_players].draw_card(
+                    CARD_WIDTH + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)-num_players].deck_list)),
+                    SCREEN_HEIGHT//4)
+
+        p[turn].draw_card(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
 
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc=(800,100), size = (130,30), action = f_take_tile)
