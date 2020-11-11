@@ -141,3 +141,33 @@ def play_music():
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
 
+def f_draw_card(p, turn, Ttext):
+    T = list(range(turn,turn+num_players))
+    p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
+    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4),loc_center=False)
+
+    for i in range(num_players):
+        if T[i] >= num_players:
+            T[i] = T[i]-num_players
+    
+    if num_players == 2:
+        p[T[1]].draw_card(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
+        Ttext[1]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)
+
+    if num_players == 3:
+        p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4)
+        Ttext[1]._blit_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4-15),loc_center=False)
+        p[T[2]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4)
+        Ttext[2]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4-15),loc_center=False)
+            
+    if num_players == 4:
+        p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
+        Ttext[1]._blit_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+        p[T[2]].draw_card(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
+        Ttext[2]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)    
+        p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
+        Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+        
+
+
+
