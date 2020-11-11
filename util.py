@@ -43,8 +43,7 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 
-max_card_num = 5
-min_loop_num = 2
+max_card_num = 10 # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 
 class PRINTTEXT():
 
@@ -107,10 +106,12 @@ class CARD():
             self.font_color = BLACK
         
         self.color = color
-        self.card_num = num
+        self.card_num = [num[0],num[1]]
+        self.card_probability = [num[2],num[3]]
         self.width, self.height = CARD_SIZE
         self.opened = True
-        self.number = PRINTTEXT("%s" % self.card_num, 20, color=self.font_color)
+        self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+        self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
 
     def is_opened(self):
         self.opened = True
@@ -144,6 +145,7 @@ class CARD():
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
         
 
@@ -238,51 +240,60 @@ class BUTTON():
 
 
 
-def make_spooky(x):
-    global max_card_num     # 패의 최대 숫자 전역변수
-    global min_loop_num     # 최소 루프 개수
-    
-    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # [0,1] # math.ceil함수는 숫자 올림
-    cut = []                                    # cut1을 보관하는 장소
-    card_list = list(range(0,max_card_num+1))   # 0~5 총 6개
-    random.shuffle(card_list)                   # 섞는다 (shuffle 함수 기능)
-    
+def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 따라 변하지 않음.
+    global max_card_num # 패의 최대 숫자 전역변수
+
+    min_loop_num = 2 # 최소 루프 개수
+    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
+    cut = []                     # cut1을 보관하는 장소
+    card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
+    random.shuffle(card_list) # 섞는다 (shuffle 함수 기능)
+
     while 1:  # 얽힐 숫자들을 정하는 코드
         cut1 = 3+random.choice(cut_num) # cut_num의 임의 원소 선택, 루프 안에 들어가는 숫자의 개수, 3+가 있는 이유는 최소 루프 안에 들어있는 카드 숫자가 3이상이어야 하기 때문에. cut_num에서 숫자를 가져오는 이유는 루프 안에 있는 숫자의 개수를 다양화하기 위해 가져옴.
         cut.append(cut1) # 3 아님 4 추가
-    
+
         if sum(cut) == max_card_num + 1:         # 총 얽힘수가 총 카드수랑 같으면 멈춤
             break
-    
-        elif sum(cut) > max_card_num + 1:           # cut수가 총 카드수보다 크면 마지막 cut1을 cut에서 뺀 후 뺀 것을 cut2라고 지정
+
+        elif sum(cut) > max_card_num + 1:            # cut수가 총 카드수보다 크면 마지막 cut1을 cut에서 뺀 후 뺀 것을 cut2라고 지정
             cut2 = cut.pop()
-    
-            if max_card_num + 1 - sum(cut) < 3:     # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
+
+            if max_card_num + 1 - sum(cut) < 3:         # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
                 cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
-    
-            else:
-                cut.append(cut2)          # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.
-                cut[len(cut)-1] = max_card_num + 1 - sum(cut)    
-    
+                break
+            else:                                       # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.          
+                cut2 = max_card_num + 1 - sum(cut)   
+                cut.append(cut2)
+                break
+
     card_num = list(numpy.zeros(len(cut)))       # 루프 수만큼 방을 생성
-    add_card_s = -cut[0] 
-    add_card_f = 0
-    
-    for i in range(0,len(cut)):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
+    cut.append(0)
+    add_card_s = 0
+    add_card_f = cut[0]
+
+    for i in range(0,len(cut)-1):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
         card_num[i] = []
-        add_card_s += cut[i] 
-        add_card_f += cut[i]                   
-    
+
         for k in range(add_card_s,add_card_f): 
             card_num[i].append(card_list[k])
-    
+        add_card_s += cut[i]
+        add_card_f += cut[i+1]
+
     for i in range(0,len(card_num)):                # 각 방에 배정받은 숫자를 짝지어 spooky 카드를 만들도록 함
-    
         for k in range(0,len(card_num[i])):   
-            spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
-            x.append(spooky_card_num)
-    
-    return x           
+            if k == 0:
+                spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
+                alpha = max(spooky_card_num)
+                spooky_card_num.append(int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100))
+                beta = 100 - int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100)
+                spooky_card_num.append(beta)
+                x.append(spooky_card_num)
+            else:
+                gama = int(x[len(x)-1][3]+random.random()*20-10)
+                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama]
+                x.append(spooky_card_num)
+    return x      
 
 def spooky_arrange(t):
     l = t

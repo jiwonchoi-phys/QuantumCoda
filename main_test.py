@@ -195,11 +195,11 @@ def main_loop(): # Game main loop scene
             
             if i+turn < num_players:
                 p[i+turn].draw_card(
-                    CARD_WIDTH + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)].deck_list)),
+                    CARD_WIDTH/2 + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)].deck_list)),
                     SCREEN_HEIGHT//4)
             elif i+turn >= num_players:
                 p[i+turn-num_players].draw_card(
-                    CARD_WIDTH + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)-num_players].deck_list)),
+                    CARD_WIDTH/2 + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)-num_players].deck_list)),
                     SCREEN_HEIGHT//4)
 
         p[turn].draw_card(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
@@ -207,7 +207,7 @@ def main_loop(): # Game main loop scene
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (800,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
-        button_exit._draw_(loc = (800,200), size = (130,30), action = pygame.quit)
+        button_exit._draw_(loc = (800,50), size = (130,30), action = pygame.quit)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()
@@ -223,8 +223,7 @@ def make_card(num_players, stn):
     field_white = []
     make_spooky(field_black)
     make_spooky(field_white)
-
-
+    
     ti = []                             # 전체 타일 묶음
     tb = []                             # Tile Black
     tw = []                             # Tile White
