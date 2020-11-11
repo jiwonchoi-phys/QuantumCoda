@@ -43,11 +43,8 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 
-first_handcard_num = 3
 max_card_num = 5
 min_loop_num = 2
-
-turn=1
 
 class PRINTTEXT():
 
