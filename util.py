@@ -96,7 +96,7 @@ class PRINTTEXT():
                 screen.blit(self.text,loc)
 
 class CARD():
-    def __init__(self,color,num):
+    def __init__(self,color,num):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
         # Set card&font color
         if color == 1: # Black
             self.card_color = BLACK

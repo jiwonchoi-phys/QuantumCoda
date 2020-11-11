@@ -16,7 +16,7 @@ We'll write our tasks here.
 - 생성완료되면 Button Class 작동여부 확인해서 집어넣기
 
 ### 201107(09:10~19:15) 세형 패치노트
-GUI branch: util.py, shtesr.py, main_test.py
+GUI branch: util.py, shtest.py, main_test.py
 
 - main_test.py fcn, num_players, stn 등에서 충돌로 코드 순서 수정.
     > functions for pygame >> Initialize pygame 순서 고정 바람. 변동시 에러 발생.
@@ -41,7 +41,7 @@ GUI branch: util.py, shtesr.py, main_test.py
 - 이론창의 이미지 삽입 정상 작동 확인.
 
 ### 201108~201109(15:00) 세형 패치노트
-GUI branch: util.py, shtesr.py, main_test.py
+GUI branch: util.py, shtest.py, main_test.py
 
 - util.py; CARD.get_color가 타일 그림색상을 출력하는 문제 해결. [ex. 회색 (201,201,201)]
     > 타일의 색상 숫자를 출력하게 수정 및 추가. [ex. 흰색: 0, 검정: 1]
@@ -63,7 +63,19 @@ GUI branch: util.py, shtesr.py, main_test.py
 - 게임 플레이시 메인음악 재생 추가.
     > 게임 끌때까지 반복.
     > 파일 다운 받을 것.
-    
+
+### 201108~201109(15:00) 세형 패치노트
+GUI branch: util.py, main_test.py
+
+- 나가는 버튼 카드 위치와 곂쳐 위로 올림. y값 200 > 50
+    > 카드 최적의 위치 구상중..
+
+- util.py; mak_spooky 함수 최신화
+    > 따라서 CARD 클래스 확률 표기 추가.
+    > 두 spooky 숫자가 모두 2자리 수일 때 카드 밖으로 텍스트 이탈.
+        > 폰트 크기 수정 20 > 18
+        > max_card_num = 13까지 문제 없으나 gui는 완성까지 10 고정 할 것.
+        
 TODO) 붕괴 관련 모든 것.
 - 0. 처음 턴 누구(일단 생략. 플레이어 1고정.)
     > 생략.
