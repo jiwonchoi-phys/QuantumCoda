@@ -190,23 +190,18 @@ def main_loop(): # Game main loop scene
         # 덱의 카드 정렬
         all_arrange(p)
         
-        # 덱 그리기
+        # 덱 그리기(플러이어 텍스트 포함)
+        Ttext = list(range(num_players))
+        Ttext[0] = PRINTTEXT('Yours:', size= 20)
         for i in range(1,num_players):
-            
-            if i+turn < num_players:
-                p[i+turn].draw_card(
-                    CARD_WIDTH/2 + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)].deck_list)),
-                    SCREEN_HEIGHT//4)
-            elif i+turn >= num_players:
-                p[i+turn-num_players].draw_card(
-                    CARD_WIDTH/2 + (i-1)*CARD_WIDTH*(1+len(p[turn+(i-1)-num_players].deck_list)),
-                    SCREEN_HEIGHT//4)
-
-        p[turn].draw_card(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3//4)
-
+            Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1), size= 15)
+            if i+turn+1 > num_players:
+                Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1-num_players), size= 15)
+        f_draw_card(p, turn, Ttext)
+        
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (800,100), size = (130,30), action = f_take_tile)
-        button_turn._draw_(loc = (800,550), size = (60,30), action = next_turn)
+        button_turn._draw_(loc = (800,570), size = (60,30), action = next_turn)
         button_exit._draw_(loc = (800,50), size = (130,30), action = pygame.quit)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
