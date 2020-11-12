@@ -31,6 +31,7 @@ functions for pygame > Initialize pygame 순서 고정 바람. 변동시 에러 
 '''
 #========== functions for pygame ==========#
 def game_intro():       # Game intro scene
+    screen.fill(WHITE)
     intro = False       # while문 돌리기 위함
     # Title Texts
     title = PRINTTEXT("Quantum Coda", size = 50)
@@ -65,7 +66,7 @@ def game_intro():       # Game intro scene
         sh._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=shtestroom)
         
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
-        how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=None)
+        how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
         title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
 
         pygame.display.update()
@@ -73,17 +74,26 @@ def game_intro():       # Game intro scene
 
 def how_to_play(): # scene for game description # 장면 테스트 중
     screen.fill(WHITE)
-    dp = PRINTTEXT("Quantum", size = 50)
     play = False
+
+    dp = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적 현상을 접목시켜 만든 게임입니다.", size = 20)
+    
+    back_button = BUTTON("Back to Title")
+    exit_button = BUTTON("Exit")
+
     while not play:
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
-        
+
         # text positions
         dp._blit_(loc='top center')
+        
+        back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
+        exit_button._draw_(loc = (800,100), size = (130,30), action = pygame.quit)
 
         pygame.display.flip()
+        clock.tick(15)
 
 
 def main_loop(): # Game main loop scene
