@@ -45,7 +45,7 @@ def game_intro():       # Game intro scene
 
     sh = BUTTON("sehyoung test")
 
-    title_exit_button = BUTTON("Exit")
+    title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
 
@@ -101,7 +101,7 @@ def main_loop(): # Game main loop scene
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
-    button_exit = BUTTON("Exit")
+    button_exit = BUTTON("Exit",active_color=RED)
 
     YETT = 0
 
