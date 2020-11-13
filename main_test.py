@@ -44,7 +44,7 @@ def game_intro():       # Game intro scene
     new_test1 = BUTTON("test 1")
     new_test2 = BUTTON("test 2")
 
-    sh = BUTTON("sehyoung test")
+    sh = BUTTON("(option) test")
 
     title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
@@ -104,7 +104,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    play_music()
+    #play_music() # 임시 주석처리.
     
     f_ftile_color_arrnage(tii)
 
@@ -219,11 +219,7 @@ def main_loop(): # Game main loop scene
 
 def make_card(num_players, stn):
     global p, tii
-    players = [PLAYER() for i in range(num_players)] # 플레이어 수만큼 PLAYER()인스턴스로 players 객체 생성 & 이것은 리스트
-
-    for i in range(num_players):
-        globals()['p{}'.format(i+1)] = players[i]
-
+    
     field_black = [] 
     field_white = []
     make_spooky(field_black)
