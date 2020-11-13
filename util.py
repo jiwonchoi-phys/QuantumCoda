@@ -8,7 +8,7 @@ PRINTTEXT(msg,size,font,color,antialias = True,background=None)
 CARD(color,num)
 카드 클래스
 """
-
+from tkinter import *
 import pygame
 import math
 import random
@@ -125,7 +125,7 @@ class CARD():
     def out(self):
         pass
     
-    def draw_img(self, loc=(0,0), action=None):
+    def draw_img(self, loc=(0,0), action=True):
         x, y = loc[0:2]
         mouse_pos = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()        
@@ -140,12 +140,73 @@ class CARD():
             if click[0] == 1:
                 if action == None:
                     pass
-                else: #print("클릭됨") # 확인용ㅁ
-                    action()
+                else: #print("클릭됨") # 확인용
+                    self.f_click_tile()
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+        
+    def f_click_tile(self):
+
+        ct_tk=Tk()
+        ct_tk.title("유추 수 입력")
+        ct_tk.geometry("480x300+100+100")
+        ct_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+
+        t_num = self.card_num
+        t_probability = self.card_probability
+
+        label1 = Label(ct_tk, text=str(t_num))
+        label2 = Label(ct_tk, text=str(t_probability))
+
+        def sf_p(number, probability):
+            x = random.randint(1,101)
+            print(x)
+            
+            if x <= probability[0]:
+                del number[number.index(number[1])]
+
+            else:
+                del number[number.index(number[0])]
+            
+            return number
+            
+        def ctcalc(event):
+            
+            PGN = int(entry.get())
+            
+            if PGN in self.card_num:
+                #plabel.config(text="플레이어 수가 너무 많습니다 다시 입력해주세요")
+                self.card_num = sf_p(self.card_num, self.card_probability)
+
+                label1.config(text=str(t_num))
+                
+            else:                                                                           #plabel.config(text="플레이어 수가 너무 적습니다 다시 입력해주세요")
+                #sf_p(먹었던 타일의 수, 먹었던 타일의 확률)
+                # 지원이 함수 연결
+                pass
+
+
+            #elif pn >=2 and pn <= player_num_max:
+            #plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
+            #num_players = pn
+                
+            #ct_tk.after(1000, ctd)          # 1000ms 이후 pnd 함수 연결
+
+        def ctd():
+            ct_tk.destroy()
+
+        entry=Entry(ct_tk, bd = 20)
+        entry.bind("<Return>", ctcalc)
+        entry.pack(pady = 50)
+
+        label1.pack()
+        label2.pack()
+
+        ct_tk.mainloop()
+        #return
+    
         
         
 
