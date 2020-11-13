@@ -97,7 +97,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn, YETT
+    global num_players, stn, turn, YATT
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
@@ -113,20 +113,20 @@ def main_loop(): # Game main loop scene
     button_turn = BUTTON("Next")
     button_exit = BUTTON("Exit",active_color=RED)
 
-    YETT = 0
+    YATT = 0
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
-        global turn, pl_turn, YETT
+        global turn, pl_turn, YATT
 
         turn += 1
-        YETT = 0
+        YATT = 0
         time.sleep(2)   # 임시 2초 딜레이
         win = 0
         if turn == num_players:
             turn = 0
             
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
-        global fti_b, fti_w, YETT
+        global fti_b, fti_w, YATT
         wtt = Tk()                              # 윈도우 창을 생성
         wtt.title("타일 가져오기")     # 타이틀
         wtt.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
@@ -139,7 +139,7 @@ def main_loop(): # Game main loop scene
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
 
         def sf_bb():
-            global fti_b, p, YETT
+            global fti_b, p, YATT
 
             if len(fti_b) == 0:
                 label2.config(text="새캬 없는걸 왜 눌러.")
@@ -147,11 +147,11 @@ def main_loop(): # Game main loop scene
                 qwer = random.choice(fti_b)
                 p[turn].deck_list.append(qwer)
                 fti_b.pop(fti_b.index(qwer))
-                YETT += 1
+                YATT += 1
                 wtt.after(1000, wttd)
 
         def sf_bw():
-            global fti_w, p, YETT
+            global fti_w, p, YATT
         
             if len(fti_w) == 0:
                 label2.config(text="새캬 없는걸 왜 눌러.")
@@ -159,7 +159,7 @@ def main_loop(): # Game main loop scene
                 qwer = random.choice(fti_w)
                 p[turn].deck_list.append(qwer)
                 fti_w.pop(fti_w.index(qwer))
-                YETT += 1
+                YATT += 1
                 wtt.after(1000, wttd)
     
         bb = Button(wtt, text='검정색 가져오기\n'+'남은 타일 수: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
@@ -177,7 +177,7 @@ def main_loop(): # Game main loop scene
             
             wtt.after(1000, wttd)
         
-        if YETT == 1:
+        if YATT == 1:
             label2.config(text="이번 턴에 이미 패를 먹었습니다.")
             bb.destroy()
             bw.destroy()

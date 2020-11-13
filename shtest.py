@@ -53,13 +53,31 @@ def acb2():
     window.mainloop()
 
 def acb3():
+    global page
     acb3 = Tk()
-    acb3.title("버튼 테스트")
+    acb3.title("이론 설명창 테스트")
     acb3.geometry()
-    image=PhotoImage(file="a.png") 
-    label = Label(acb3, image=image)         # 라벨 등록
+    #image=PhotoImage(file="a.png") 
+    #label = Label(acb3, image=image)         # 라벨 등록
 
+    page=0
+    label = Label(acb3, text="0")
     label.pack()
+    
+    def pageUP():
+        global page
+        page +=1
+        label.config(text=str(page))
+        
+    def pageDOWN():
+        global page
+        page -=1
+        label.config(text=str(page))
+
+    buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+    buttonN.pack(side = RIGHT, padx = 50)
+    buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+    buttonP.pack(side = LEFT, padx = 50)
 
     acb3.mainloop()
 
