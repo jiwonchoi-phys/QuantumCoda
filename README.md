@@ -68,7 +68,7 @@ GUI branch: util.py, shtest.py, main_test.py
 GUI branch: util.py, main_test.py
 
 - 나가는 버튼 카드 위치와 곂쳐 위로 올림. y값 200 > 50
-    > 카드 최적의 위치 구상중..
+    > 카드 최적의 위치 구상 완.
 
 - util.py; make_spooky 함수 최신화
     > 따라서 CARD 클래스 확률 표기 추가.
@@ -76,8 +76,8 @@ GUI branch: util.py, main_test.py
         > 폰트 크기 수정 20 > 18
     > max_card_num = 13까지 문제 없으나 gui는 완성까지 10 고정 할 것.
 
-- 플레이어 수에 따른 타일 위치 지정 함수 생성 및 적용.
-    > 플레이어 텍스트 위치 추가 중..
+- 플레이어 수에 따른 타일 위치 지정 함수 생성 및 적용 완.
+    > 플레이어 텍스트 위치 추가 완.
 
 ### 201113(15:00) 세형, 지원 패치노트
 GUI branch: util.py, main_test.py
