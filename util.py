@@ -145,7 +145,8 @@ class CARD():
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
-            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+            if len(self.get_num()) == 2:
+                self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
     def f_click_tile(self):
 
@@ -162,37 +163,29 @@ class CARD():
 
         def sf_p(number, probability):
             x = random.randint(1,101)
-            print(x)
-            
             if x <= probability[0]:
                 del number[number.index(number[1])]
+                del probability
 
             else:
                 del number[number.index(number[0])]
-            
+                del probability
             return number
             
         def ctcalc(event):
-            
-            PGN = int(entry.get())
-            
+            PGN = int(entry.get()) # The player's guess number.
             if PGN in self.card_num:
-                #plabel.config(text="플레이어 수가 너무 많습니다 다시 입력해주세요")
                 self.card_num = sf_p(self.card_num, self.card_probability)
-
-                label1.config(text=str(t_num))
+                self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
                 
+                label1.config(text=str(t_num)+"로 붕괴 되었습니다.")
+                
+                ct_tk.after(1000, ctd)
+
             else:                                                                           #plabel.config(text="플레이어 수가 너무 적습니다 다시 입력해주세요")
                 #sf_p(먹었던 타일의 수, 먹었던 타일의 확률)
                 # 지원이 함수 연결
                 pass
-
-
-            #elif pn >=2 and pn <= player_num_max:
-            #plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
-            #num_players = pn
-                
-            #ct_tk.after(1000, ctd)          # 1000ms 이후 pnd 함수 연결
 
         def ctd():
             ct_tk.destroy()
@@ -225,10 +218,10 @@ class PLAYER():
         for q in range(len(deck)):              # 총 길이만큼 교환을 반복.
             for k in range(0,len(deck)-1):      # 모든 원소에 대해
                 
-                if sum(deck[k].get_num()) < sum(deck[k+1].get_num()): # 1) 평균 비교: 앞에놈이 작으면 놔둠.
+                if sum(deck[k].get_num())/len(deck[k].get_num()) < sum(deck[k+1].get_num())/len(deck[k+1].get_num()): # 1) 평균 비교: 앞에놈이 작으면 놔둠.
                     pass
                 
-                elif sum(deck[k].get_num()) == sum(deck[k+1].get_num()): # 2) 평균이 같다면
+                elif sum(deck[k].get_num())/len(deck[k].get_num()) == sum(deck[k+1].get_num())/len(deck[k+1].get_num()): # 2) 평균이 같다면
                     if deck[k].get_num()[0] < deck[k+1].get_num()[0]:    # 2) spooky 값 비교. 앞에 놈이 작으면 놔둠
                         pass
                 
