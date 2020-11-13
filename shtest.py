@@ -31,6 +31,7 @@ def shtestroom(): # 조세형 실험실
         pygame.display.update()
 
 def acb1():
+    print("kkkkkkkkkkkkkkkkkkkkk")
     pass
 
 def acb2():
