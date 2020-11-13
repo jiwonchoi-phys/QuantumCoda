@@ -210,9 +210,9 @@ def main_loop(): # Game main loop scene
         f_draw_card(p, turn, Ttext)
         
         # 버튼 및 텍스트 그리기
-        button_take._draw_(loc = (800,100), size = (130,30), action = f_take_tile)
-        button_turn._draw_(loc = (800,570), size = (60,30), action = next_turn)
-        button_exit._draw_(loc = (800,50), size = (130,30), action = pygame.quit)
+        button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
+        button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (60,30), action = next_turn)
+        button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()

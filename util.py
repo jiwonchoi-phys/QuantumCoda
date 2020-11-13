@@ -34,7 +34,7 @@ GRAY_2  = (169,169,169)
 
 #======== Initialize pygame ==========
 # Object size
-SCREEN_WIDTH  = 900
+SCREEN_WIDTH  = 1100
 SCREEN_HEIGHT = 600
 SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
 screen = pygame.display.set_mode(SCREEN_SIZE)
