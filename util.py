@@ -364,3 +364,10 @@ def all_arrange(players):
     for p in players:
         p.tile_arrange()
 
+def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
+    for player in p:
+        for card in player.deck_list: # 모든 플레이어의 모든 카드에 대해
+
+            if card.card_loop == x.card_loop: # x와 카드 루프가 같고
+                if x.card_num in card.card_num: # x의 숫자가 있으면
+                    del card.card_num[index(x.card_num)] # 다른 숫자로 붕괴
