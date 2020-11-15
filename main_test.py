@@ -295,5 +295,6 @@ how_to_play()
 main_loop()
 
 
+
 pygame.quit()                               # pygame 종료
 
