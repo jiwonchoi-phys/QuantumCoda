@@ -11,6 +11,13 @@ This branch is GUI branch for development. If you want to watch all process of o
 
 We'll write our tasks here. 
 
+----
+Module Requirements 
+- tkinter (If you use in Ubuntu, just input 'sudo apt install python3-tk' on Terminal.)
+- pygame
+- numpy
+----
+
 ## 201007 용
 - util.py의 printtext를 이용해서 턴넘기기 버튼을 작동하게 할 위치 GUI 생성하기
 - 생성완료되면 Button Class 작동여부 확인해서 집어넣기
