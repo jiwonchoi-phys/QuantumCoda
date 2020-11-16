@@ -189,6 +189,15 @@ def play_music():
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
 
+def button_sound():
+    
+    b_s = "18V Cordless Drill Switch.mp3"
+
+    pygame.mixer.init()
+    pygame.mixer.music.load(b_s)
+    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.play(1)
+
 def f_draw_card(p, turn, Ttext):
     T = list(range(turn,turn+num_players))
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
