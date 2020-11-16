@@ -188,7 +188,7 @@ def game_intro():       # Game intro scene
     new_test1 = BUTTON("test 1")
     new_test2 = BUTTON("test 2")
 
-    sh = BUTTON("(option) test")
+    option = BUTTON("Option test")
 
     title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
@@ -207,7 +207,7 @@ def game_intro():       # Game intro scene
         
         new_test1._draw_(loc = 'bottom left', size = (60,30), action=None)
         new_test2._draw_(loc = 'bottom right', size = (60,30),action=None)
-        sh._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=shtestroom)
+        option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_option_room)
         
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
@@ -256,14 +256,13 @@ def main_loop(): # Game main loop scene
     button_turn = BUTTON("Next")
     button_exit = BUTTON("Exit",active_color=RED)
 
-    YATT = 0
+    YATT = 0    # You already took the tile. [먹기전: 0, 먹음: 1]
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn, YATT
-
         turn += 1
-        YATT = 0        # You already took the tile. [먹기전: 0, 먹음: 1]
-        time.sleep(2)   # 임시 2초 딜레이
+        YATT = 0
+        time.sleep(1.6)   # 임시 1.6초 딜레이
         win = 0
         if turn == num_players:
             turn = 0
@@ -274,9 +273,9 @@ def main_loop(): # Game main loop scene
         wtt.title("타일 가져오기")              # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
 
-        label1 = Label(wtt, text="1차 완성")         # 라벨 등록
+        label1 = Label(wtt, text="1차 완성")    # 라벨 등록
         label1.pack(pady=10)
-        label2 = Label(wtt, text="가져올 타일을 선택하세요.")         # 라벨 등록
+        label2 = Label(wtt, text="가져올 타일을 선택하세요.")   # 라벨 등록
         label2.pack(pady=10)
         
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가

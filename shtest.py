@@ -6,13 +6,13 @@ import time
 
 # 아래 내용들은 완성되면 util에 추가 될 것.
 
-def shtestroom(): # 조세형 실험실
-    screen.fill(WHITE)
-    dp = PRINTTEXT("sh testroom", size = 50)
+def f_option_room(): # 옵션 설정 방
+    screen.fill([207, 216, 220])
+    dp = PRINTTEXT("option testroom", size = 50)
     shb1 = BUTTON("button test")
-    shb2 = BUTTON("input test")
+    shb2 = BUTTON("Level Setting")
     shb3 = BUTTON("theory test")
-    shbb = BUTTON("back test")
+    shbb = BUTTON("back test(main 이동 필요)")
 
     play = False
     while not play:
@@ -39,47 +39,76 @@ def acb2():
     window.title("입력 테스트")
     window.geometry("480x300+100+100")
     window.resizable(False, False)                  # 창 크기 조절 가능 여부 거부
-    label = Label(window, text="흰창에 숫자 입력")
+    def flash():
+        checkbutton1.flash()
 
-    def calc(event):
-        label.config(text="결과="+str(eval(entry.get()))) # 라벨 수정
-        print(str(eval(entry.get())))                     # 기입값 출력
+    CheckVariety_1=IntVar()
+    CheckVariety_2=IntVar()
 
-    entry=Entry(window, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
-    entry.bind("<Return>", calc)      # 리턴값 calc 함수에 사용
-    entry.pack(pady = 50)             # 위아래 간격 50
+    checkbutton1=Checkbutton(window, text="O", variable=CheckVariety_1)
+    checkbutton2=Checkbutton(window, text="△", variable=CheckVariety_2)
+    checkbutton3=Checkbutton(window, text="X", variable=CheckVariety_2, command=flash)
 
-    label.pack()
+    checkbutton1.pack()
+    checkbutton2.pack()
+    checkbutton3.pack()
 
     window.mainloop()
 
-def acb3():
+def acb3(): # 아 존나 귀찮다.
     global page
+    
     acb3 = Tk()
     acb3.title("이론 설명창 테스트")
-    acb3.geometry()
+    acb3.geometry("600x300+100+100")
+
+    page=0
+    mpage = 3
     #image=PhotoImage(file="a.png") 
     #label = Label(acb3, image=image)         # 라벨 등록
 
-    page=0
-    label = Label(acb3, text="0")
-    label.pack()
-    
+    label1 = Label(acb3, text="intro")
+    label2 = Label(acb3, text="~")
+    label1.pack()
+    label2.pack()
+
+    Tbox = ["superposition:","entanglement:","collapse:"]
+    Sbox = ["the ability of quantum objects to be in two places at once.",
+            "the phenomenon where distant parts of a quantum system display correlations\nthat cannot be explained by either timelike causality or common cause.",
+            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is silent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal with the measurement problem."]
+
     def pageUP():
         global page
         page +=1
-        label.config(text=str(page))
+        if page == mpage:
+            label1.config(text=str(Tbox[page-1]))
+            label2.config(text=str(Sbox[page-1]))
+
+            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+            buttonP.pack(side = LEFT, padx = 50)
+
+        else:
+            label1.config(text=str(Tbox[page-1]))
+            label2.config(text=str(Sbox[page-1]))
+
+            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+            buttonP.pack(side = LEFT, padx = 50)
+            buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+            buttonN.pack(side = RIGHT, padx = 50)
+
         
     def pageDOWN():
         global page
         page -=1
-        label.config(text=str(page))
+
+        label1.config(text=str(Tbox[page]))
+        label2.config(text=str(Sbox[page]))
+
+        buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+        buttonN.pack(side = RIGHT, padx = 50)
 
     buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
     buttonN.pack(side = RIGHT, padx = 50)
-    buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
-    buttonP.pack(side = LEFT, padx = 50)
-
     acb3.mainloop()
 
 def f_pn():
