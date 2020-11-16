@@ -120,3 +120,15 @@ GUI branch: util.py
     
 Server
 - 서버 컴퓨터를 수령하였고 서버 - 클라이언트간 따로 테스트 중.
+
+### 201116 용,세형,지원 패치노트
+util.py와 main_test.py간 상호 불러와야 하는데 그 작업이 되지 않아서 New_main.py에 모두 합침.
+
+### 201117 용 패치노트
+GUI branch: New_main.py
+
+- 각종 사운드 추가 완료.
+    > 기존 게임 메인루프 사운드, 클릭 사운드 추가됨. 앞으로 사운드는 **'.wav','.ogg'**파일 사용바람
+- OS별 한글 출력 글꼴 자동 변화
+    > Windows는 '맑은 고딕', macOS는 'Apple SD Gothic Neo', Linux는 'notosanscjkkr'이 기본 글꼴이 됨. 이들 글꼴은 모두 한글글꼴을 담고 있으며
+    만약 OS가 이것 이외이거나, 없는 경우에는 네이버의 '나눔고딕'이 기본임.

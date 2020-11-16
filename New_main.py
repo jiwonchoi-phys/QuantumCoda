@@ -5,6 +5,7 @@ import math
 import random
 import numpy
 import time
+import platform # OS Environment module
 #=======================
 
 '''
@@ -47,7 +48,17 @@ idx=0
     ====================<<<     Util    >>>====================
 """
 class PRINTTEXT():
-    def __init__(self, msg, size, font='notosanscjkkr', color=BLACK, antialias=True, background=None):
+    def __init__(self, msg, size, font=None, color=BLACK, antialias=True, background=None):
+        if font == None:                # OS별 폰트 문제 체크
+            if platform.system() == 'Windows':
+                font = 'malgungothic'
+            elif platform.system() == 'Darwin':
+                font = 'applesdgothicneo'
+            elif platform.system() == 'Linux':
+                font = 'notosanscjkkr'
+            else:
+                font = 'nanumgothic'
+    
         self.msg = msg                  # 메세지
         self.font = font                # font 지정 (기본 conslas)
         self.size = size                # size 지정
@@ -264,7 +275,17 @@ class CARD():
 
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
-        font_color=BLACK, font="consolas", font_size=20, action=None):
+        font_color=BLACK, font=None, font_size=20, action=None):
+        if font == None:                # OS별 폰트 문제 체크
+            if platform.system() == 'Windows':
+                font = 'malgungothic'
+            elif platform.system() == 'Darwin':
+                font = 'applesdgothicneo'
+            elif platform.system() == 'Linux':
+                font = 'notosanscjkkr'
+            else:
+                font = 'consolas'
+        
         self.msg = msg
         self.ic = inactive_color
         self.ac = active_color
@@ -276,6 +297,15 @@ class BUTTON():
         self.inactive = inactive_color
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
+        
+        def button_sound():
+    
+            b_s = "18V Cordless Drill Switch.wav"
+
+            pygame.mixer.init()
+            pygame.mixer.music.load(b_s)
+            pygame.mixer.music.set_volume(1)
+            pygame.mixer.music.play(1)
 
         # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
         if loc_center == True:
@@ -305,7 +335,7 @@ class BUTTON():
                 if action == None:
                     pass
                 else: #print("클릭됨") # 확인용
-                    #button
+                    button_sound()
                     action()
         
         else:
@@ -404,7 +434,7 @@ def f_option_room(): # 옵션 설정 방
         shb1._draw_(loc = (100,300), size = (150,30), action=acb1)
         shb2._draw_(loc = (400,300), size = (150,30), action=acb2)
         shb3._draw_(loc = (700,300), size = (150,30), action=acb3)
-        shbb._draw_(loc = (800,550), size = (150,30))
+        shbb._draw_(loc = (800,550), size = (150,30), action=game_intro)
         # text positions
         dp._blit_(loc='top center')
 
@@ -596,18 +626,20 @@ def acb3():
         if page == mpage:
             label1.config(text=str(Tbox[page-1]))
             label2.config(text=str(Sbox[page-1]))
-
+            """
             buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
             buttonP.pack(side = LEFT, padx = 50)
+            """
 
         else:
             label1.config(text=str(Tbox[page-1]))
             label2.config(text=str(Sbox[page-1]))
-
+            """
             buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
             buttonP.pack(side = LEFT, padx = 50)
             buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
             buttonN.pack(side = RIGHT, padx = 50)
+            """
 
     def pageDOWN():
         global page
@@ -615,22 +647,16 @@ def acb3():
 
         label1.config(text=str(Tbox[page]))
         label2.config(text=str(Sbox[page]))
-
+        """
         buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
         buttonN.pack(side = RIGHT, padx = 50)
+        """
 
+    buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+    buttonP.pack(side = LEFT, padx = 50)    
     buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
     buttonN.pack(side = RIGHT, padx = 50)
     acb3.mainloop()
-
-def button_sound():
-    
-    b_s = "18V Cordless Drill Switch.wav"
-
-    pygame.mixer.init()
-    pygame.mixer.music.load(b_s)
-    pygame.mixer.music.set_volume(1)
-    pygame.mixer.music.play(1)
 
 """
     ====================<<<     Main    >>>====================
