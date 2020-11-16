@@ -95,6 +95,7 @@ class PRINTTEXT():
             if type(loc) == tuple: # User input of location
                 screen.blit(self.text,loc)
 
+<<<<<<< HEAD
 class CARD():
     def __init__(self,color,num):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
         # Set card&font color
@@ -204,6 +205,8 @@ class CARD():
         
         
 
+=======
+>>>>>>> f04ccd86bb082e99f4b77e12d4041d695aa4f737
 class PLAYER():
     def __init__(self):
         self.deck_list = []         # 덱 리스트
@@ -238,7 +241,6 @@ class PLAYER():
                 else:                                       # 1) 평균값이 앞에 놈이 크면 타일 바꿈
                     deck[k+1],deck[k] = deck[k],deck[k+1] 
                     self.deck_list = deck                   # 저장
-        
 
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
@@ -291,9 +293,7 @@ class BUTTON():
         
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
-        text._blit_(loc=(x,y))  
-
-
+        text._blit_(loc=(x,y))
 
 def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 따라 변하지 않음.
     global max_card_num # 패의 최대 숫자 전역변수

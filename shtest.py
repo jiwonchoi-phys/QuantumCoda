@@ -96,9 +96,9 @@ def f_pn():
         global num_players
         pn = int(entry.get())
         if pn > player_num_max:
-            plabel.config(text="플레이어 수가 너무 많습니다 다시 입력해주세요")
+            plabel.config(text="플레이어 수가 너무 많습니다. 다시 입력해주세요.")
         elif pn < 2:
-            plabel.config(text="플레이어 수가 너무 적습니다 다시 입력해주세요")
+            plabel.config(text="플레이어 수가 너무 적습니다. 다시 입력해주세요.")
         elif pn >=2 and pn <= player_num_max:
             plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
             num_players = pn
