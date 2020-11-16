@@ -5,6 +5,7 @@ import math
 import random
 import numpy
 import time
+import platform # OS Environment module
 #=======================
 
 '''
@@ -44,7 +45,17 @@ max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. m
     ====================<<<     Util    >>>====================
 """
 class PRINTTEXT():
-    def __init__(self, msg, size, font='notosanscjkkr', color=BLACK, antialias=True, background=None):
+    def __init__(self, msg, size, font=None, color=BLACK, antialias=True, background=None):
+        if font == None:                # OS별 폰트 문제 체크
+            if platform.system() == 'Windows':
+                font = 'malgungothic'
+            elif platform.system() == 'Darwin':
+                font = 'applesdgothicneo'
+            elif platform.system() == 'Linux':
+                font = 'notosanscjkkr'
+            else:
+                font = 'nanumgothic'
+    
         self.msg = msg                  # 메세지
         self.font = font                # font 지정 (기본 conslas)
         self.size = size                # size 지정
@@ -261,7 +272,17 @@ class CARD():
 
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
-        font_color=BLACK, font="consolas", font_size=20, action=None):
+        font_color=BLACK, font=None, font_size=20, action=None):
+        if font == None:                # OS별 폰트 문제 체크
+            if platform.system() == 'Windows':
+                font = 'malgungothic'
+            elif platform.system() == 'Darwin':
+                font = 'applesdgothicneo'
+            elif platform.system() == 'Linux':
+                font = 'notosanscjkkr'
+            else:
+                font = 'consolas'
+        
         self.msg = msg
         self.ic = inactive_color
         self.ac = active_color
