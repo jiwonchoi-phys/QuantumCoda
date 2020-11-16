@@ -126,7 +126,7 @@ class PLAYER():
 
 class CARD():
     global RT
-    def __init__(self,color,num):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
+    def __init__(self,color,num,prob,loop):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
         # Set card & font color
         if color == 1: # Black
             self.card_color = BLACK
@@ -136,17 +136,14 @@ class CARD():
             self.font_color = BLACK
         
         self.color = color
-        if len(num) == 5:
-            self.card_num = [num[0],num[1]]
-            self.card_probability = [num[2],num[3]]
-        elif len(num) == 2:
-            self.card_num = num
-            self.card_probability = 100
+        self.card_num = num
+        self.card_probability = prob
+        self.card_loop = loop
         self.width, self.height = CARD_SIZE
         self.opened = True
         self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
         self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
-        self.card_loop = num[-1:]
+        
 
     def is_opened(self):
         self.opened = True
@@ -818,6 +815,7 @@ def make_card(num_players, stn):
     make_spooky(field_black)
     make_spooky(field_white)
     
+    
     ti = []                             # 전체 타일 묶음
     tb = []                             # Tile Black
     tw = []                             # Tile White
@@ -830,8 +828,10 @@ def make_card(num_players, stn):
 
     random.shuffle(ti)                  # 모든 타일 섞음
     spooky_arrange(ti)                  # util 참고.
+    
 
-    tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
+    tii = [CARD(ti[i][0],ti[i][1][0:2],\
+        ti[i][1][2:4],ti[i][1][4]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
 
     # num_players만큼 플레이어 생성
     p = [PLAYER() for i in range(num_players)]
