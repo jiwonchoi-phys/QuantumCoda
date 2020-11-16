@@ -8,7 +8,7 @@ import time
 #=======================
 
 '''
-functions for pygame > Initialize pygame 순서 고정 바람. 변동시 에러 가능성 높음.
+현재 순서 고정 바람. 변동시 에러 가능성 높음.
 '''
 
 # RGB color information
@@ -374,9 +374,6 @@ def all_arrange(players):
     for p in players:
         p.tile_arrange()
 
-"""
-    ====================<<<     SH-TEST    >>>====================
-"""
 def f_option_room(): # 옵션 설정 방
     screen.fill([207, 216, 220])
     dp = PRINTTEXT("option testroom", size = 50)
@@ -400,86 +397,6 @@ def f_option_room(): # 옵션 설정 방
         dp._blit_(loc='top center')
 
         pygame.display.update()
-
-def acb1():
-    print("kkkkkkkkkkkkkkkkkkkkk")
-    pass
-
-def acb2():
-    window=Tk()
-    window.title("입력 테스트")
-    window.geometry("480x300+100+100")
-    window.resizable(False, False)                  # 창 크기 조절 가능 여부 거부
-    def flash():
-        checkbutton1.flash()
-
-    CheckVariety_1=IntVar()
-    CheckVariety_2=IntVar()
-
-    checkbutton1=Checkbutton(window, text="O", variable=CheckVariety_1)
-    checkbutton2=Checkbutton(window, text="△", variable=CheckVariety_2)
-    checkbutton3=Checkbutton(window, text="X", variable=CheckVariety_2, command=flash)
-
-    checkbutton1.pack()
-    checkbutton2.pack()
-    checkbutton3.pack()
-
-    window.mainloop()
-
-def acb3(): # 아 존나 귀찮다.
-    global page
-    
-    acb3 = Tk()
-    acb3.title("이론 설명창 테스트")
-    acb3.geometry("600x300+100+100")
-
-    page=0
-    mpage = 3
-    #image=PhotoImage(file="a.png") 
-    #label = Label(acb3, image=image)         # 라벨 등록
-
-    label1 = Label(acb3, text="intro")
-    label2 = Label(acb3, text="~")
-    label1.pack()
-    label2.pack()
-
-    Tbox = ["superposition:","entanglement:","collapse:"]
-    Sbox = ["the ability of quantum objects to be in two places at once.",
-            "the phenomenon where distant parts of a quantum system display correlations\nthat cannot be explained by either timelike causality or common cause.",
-            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is silent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal with the measurement problem."]
-
-    def pageUP():
-        global page
-        page +=1
-        if page == mpage:
-            label1.config(text=str(Tbox[page-1]))
-            label2.config(text=str(Sbox[page-1]))
-
-            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
-            buttonP.pack(side = LEFT, padx = 50)
-
-        else:
-            label1.config(text=str(Tbox[page-1]))
-            label2.config(text=str(Sbox[page-1]))
-
-            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
-            buttonP.pack(side = LEFT, padx = 50)
-            buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
-            buttonN.pack(side = RIGHT, padx = 50)
-
-    def pageDOWN():
-        global page
-        page -=1
-
-        label1.config(text=str(Tbox[page]))
-        label2.config(text=str(Sbox[page]))
-
-        buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
-        buttonN.pack(side = RIGHT, padx = 50)
-
-    buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
-    buttonN.pack(side = RIGHT, padx = 50)
-    acb3.mainloop()
 
 def f_pn():
     global plabel, num_players
@@ -559,15 +476,6 @@ def play_music():
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
 
-def button_sound():
-    
-    b_s = "18V Cordless Drill Switch.mp3"
-
-    pygame.mixer.init()
-    pygame.mixer.music.load(b_s)
-    pygame.mixer.music.set_volume(1)
-    pygame.mixer.music.play(1)
-
 def f_draw_card(p, turn, Ttext):
     T = list(range(turn,turn+num_players))
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
@@ -594,6 +502,99 @@ def f_draw_card(p, turn, Ttext):
         Ttext[2]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)    
         p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
         Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+
+"""
+    ====================<<<     SH-TEST    >>>=================
+"""
+
+def acb1():
+    print("kkkkkkkkkkkkkkkkkkkkk")
+    pass
+
+def acb2():
+    window=Tk()
+    window.title("입력 테스트")
+    window.geometry("480x300+100+100")
+    window.resizable(False, False)                  # 창 크기 조절 가능 여부 거부
+    def flash():
+        checkbutton1.flash()
+
+    CheckVariety_1=IntVar()
+    CheckVariety_2=IntVar()
+
+    checkbutton1=Checkbutton(window, text="O", variable=CheckVariety_1)
+    checkbutton2=Checkbutton(window, text="△", variable=CheckVariety_2)
+    checkbutton3=Checkbutton(window, text="X", variable=CheckVariety_2, command=flash)
+
+    checkbutton1.pack()
+    checkbutton2.pack()
+    checkbutton3.pack()
+
+    window.mainloop()
+
+def acb3():
+    global page
+    
+    acb3 = Tk()
+    acb3.title("이론 설명창 테스트")
+    acb3.geometry("600x300+100+100")
+
+    page=0
+    mpage = 3
+    #image=PhotoImage(file="a.png") 
+    #label = Label(acb3, image=image)         # 라벨 등록
+
+    label1 = Label(acb3, text="intro")
+    label2 = Label(acb3, text="~")
+    label1.pack()
+    label2.pack()
+
+    Tbox = ["superposition:","entanglement:","collapse:"]
+    Sbox = ["the ability of quantum objects to be in two places at once.",
+            "the phenomenon where distant parts of a quantum system display correlations\nthat cannot be explained by either timelike causality or common cause.",
+            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is silent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal with the measurement problem."]
+
+    def pageUP():
+        global page
+        page +=1
+        if page == mpage:
+            label1.config(text=str(Tbox[page-1]))
+            label2.config(text=str(Sbox[page-1]))
+
+            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+            buttonP.pack(side = LEFT, padx = 50)
+
+        else:
+            label1.config(text=str(Tbox[page-1]))
+            label2.config(text=str(Sbox[page-1]))
+
+            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+            buttonP.pack(side = LEFT, padx = 50)
+            buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+            buttonN.pack(side = RIGHT, padx = 50)
+
+    def pageDOWN():
+        global page
+        page -=1
+
+        label1.config(text=str(Tbox[page]))
+        label2.config(text=str(Sbox[page]))
+
+        buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+        buttonN.pack(side = RIGHT, padx = 50)
+
+    buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+    buttonN.pack(side = RIGHT, padx = 50)
+    acb3.mainloop()
+
+def button_sound():
+    
+    b_s = "18V Cordless Drill Switch.mp3"
+
+    pygame.mixer.init()
+    pygame.mixer.music.load(b_s)
+    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.play(1)
 
 """
     ====================<<<     Main    >>>====================
@@ -673,7 +674,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    play_music()
+    #play_music()
     
     f_ftile_color_arrnage(tii)
 
