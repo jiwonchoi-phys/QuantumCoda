@@ -695,10 +695,15 @@ def how_to_play(): # scene for game description # 장면 테스트 중
     screen.fill(WHITE)
     play = False
 
-    dp = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적 현상을 접목시켜 만든 게임입니다.", size = 20)
-    
+    # dp: description
+    dp1 = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
+    dp2 = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
+    dp3 = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
+
+    theorem_button = BUTTON("원리 Theorem")
+    Rule_button = BUTTON("게임규칙 Rule")
     back_button = BUTTON("Back to Title")
-    exit_button = BUTTON("Exit")
+    exit_button = BUTTON("Exit",active_color=RED)
 
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -706,10 +711,14 @@ def how_to_play(): # scene for game description # 장면 테스트 중
                 pygame.quit()
 
         # text positions
-        dp._blit_(loc='top center')
-        
+        dp1._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4))
+        dp2._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25))
+        dp3._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 50))
+
+        theorem_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = None)
+        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
         back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
-        exit_button._draw_(loc = (800,100), size = (130,30), action = pygame.quit)
+        exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
 
         pygame.display.flip()
         clock.tick(15)
@@ -721,7 +730,7 @@ def main_loop(): # Game main loop scene
     num_players = f_pn()
     stn = f_tn(num_players)
     make_card(num_players, stn)
-    
+
     play_music()
     
     f_ftile_color_arrnage(tii)
