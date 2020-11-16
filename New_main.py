@@ -137,16 +137,17 @@ class CARD():
             self.font_color = BLACK
         
         self.color = color
-        if len(num) == 4:
+        if len(num) == 5:
             self.card_num = [num[0],num[1]]
             self.card_probability = [num[2],num[3]]
-        elif len(num) == 1:
+        elif len(num) == 2:
             self.card_num = num
             self.card_probability = 100
         self.width, self.height = CARD_SIZE
         self.opened = True
         self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
         self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
+        self.card_loop = num[-1:]
 
     def is_opened(self):
         self.opened = True
@@ -159,6 +160,9 @@ class CARD():
 
     def get_pro(self):
         return self.card_probability
+
+    def get_loop(self):
+        return self.card_loop
 
     def out(self):
         pass
@@ -213,7 +217,7 @@ class CARD():
             return number
             
         def ctcalc(event):
-            global RT
+            global RT # class CARD
             PGN = int(entry.get()) # The player's guess number.
             if PGN in self.card_num:
                 self.card_num = sf_p(self.card_num, self.card_probability)
@@ -226,22 +230,25 @@ class CARD():
                 else:
                     label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
                     ct_tk.after(1000, ctd)
+                collapse_loop(self)
 
             else:
                 label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 하지 않습니다..")
                 label2.config(text="유추에 실패 하여 이번 턴에 휙득한 타일을 붕괴 후, 공개합니다.")
                 
-                NTC = RT.get_color()
-                NTN = sf_p(RT.get_num(), RT.get_pro())
+                NTC = RT.get_color() #
+                NTN = sf_p(RT.get_num(), RT.get_pro()) #
 
                 label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
                 label3.pack()
 
-                NT = CARD(NTC, NTN)
+                NT = CARD(NTC, NTN, RT.get_loop())
                 p[turn].deck_list.append(NT)
                 del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                
+                #
                 ct_tk.after(1500, ctd)
+                collapse_loop(RT)
+            print(RT.get_num(),RT.get_pro(),RT.get_loop())
 
         def ctd():
             ct_tk.destroy()
@@ -355,10 +362,11 @@ def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 
                 spooky_card_num.append(int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100))
                 beta = 100 - int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100)
                 spooky_card_num.append(beta)
+                spooky_card_num.append(i)
                 x.append(spooky_card_num)
             else:
                 gama = int(x[len(x)-1][3]+random.random()*20-10)
-                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama]
+                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama,i]
                 x.append(spooky_card_num)
     return x      
 
@@ -503,6 +511,22 @@ def f_draw_card(p, turn, Ttext):
         Ttext[2]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)    
         p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
         Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+
+def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
+    loop_num=[]
+        
+    for player in p:
+        for card in player.deck_list: # 모든 플레이어의 모든 카드에 대해
+
+            if card.card_loop == x.card_loop: # x와 카드 루프가 같고
+                if x.card_num in card.card_num: # x의 숫자가 있으면
+                    loop_num.append(x.card_num)
+                    del card.number[index(x.card_num)] # 다른 숫자로 붕괴
+                
+                for num in loop_num:
+                    if num in card.card_num:
+                        loop_num.append(num)
+                        del card.number[index(num)]
 
 """
     ====================<<<     SH-TEST    >>>=================
