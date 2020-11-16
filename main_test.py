@@ -43,6 +43,136 @@ functions for pygame > Initialize pygame 순서 고정 바람. 변동시 에러 
 
 =@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=
 '''
+class CARD():
+    global RT
+    def __init__(self,color,num):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
+        # Set card & font color
+        if color == 1: # Black
+            self.card_color = BLACK
+            self.font_color = WHITE
+        else:
+            self.card_color = GRAY
+            self.font_color = BLACK
+        
+        self.color = color
+        if len(num) == 4:
+            self.card_num = [num[0],num[1]]
+            self.card_probability = [num[2],num[3]]
+        elif len(num) == 1:
+            self.card_num = num
+            self.card_probability = 100
+        self.width, self.height = CARD_SIZE
+        self.opened = True
+        self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+        self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
+
+    def is_opened(self):
+        self.opened = True
+    
+    def get_color(self):
+        return self.color
+
+    def get_num(self):
+        return self.card_num
+
+    def get_pro(self):
+        return self.card_probability
+
+    def out(self):
+        pass
+    
+    def draw_img(self, loc=(0,0), action=True):
+        x, y = loc[0:2]
+        mouse_pos = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()        
+        
+        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
+        pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
+        
+        if x < mouse_pos[0] < x + self.width and \
+            y < mouse_pos[1] < y + self.height:    
+            pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
+            
+            if click[0] == 1:
+                if action == None or YATT == 0:
+                    if YATT == 0 and len(fti_b) == 0 and len(fti_w) == 0:
+                        self.f_click_tile()
+                    pass
+                else: #print("클릭됨") # 확인용
+                    self.f_click_tile()
+        
+        if self.opened == True:
+            self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+            if len(self.get_num()) == 2:
+                self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+        
+    def f_click_tile(self):
+        global RT
+        ct_tk=Tk()
+        ct_tk.title("유추 수 입력")
+        ct_tk.geometry("480x300+100+100")
+        ct_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+
+        t_num = self.card_num
+        t_probability = self.card_probability
+
+        label1 = Label(ct_tk, text=str(t_num))
+        label2 = Label(ct_tk, text=str(t_probability))
+
+        def sf_p(number, probability):
+            x = random.randint(1,101)
+            if x <= probability[0]:
+                del number[number.index(number[1])]
+                del probability
+
+            else:
+                del number[number.index(number[0])]
+                del probability
+            return number
+            
+        def ctcalc(event):
+            global RT
+            PGN = int(entry.get()) # The player's guess number.
+            if PGN in self.card_num:
+                self.card_num = sf_p(self.card_num, self.card_probability)
+                self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+                label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 합니다!")
+                if PGN == t_num:
+                    label2.config(text="추측 성공! 연속 추측 가능.")
+                    YATT -= 1
+                    ct_tk.after(1000, ctd)
+                else:
+                    label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
+                    ct_tk.after(1000, ctd)
+
+            else:
+                label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 하지 않습니다..")
+                label2.config(text="유추에 실패 하여 이번 턴에 휙득한 타일을 붕괴 후, 공개합니다.")
+                
+                NTC = RT.get_color()
+                NTN = sf_p(RT.get_num(), RT.get_pro())
+
+                label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
+                label3.pack()
+
+                NT = CARD(NTC, NTN)
+                p[turn].deck_list.append(NT)
+                del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                
+                ct_tk.after(1500, ctd)
+
+        def ctd():
+            ct_tk.destroy()
+
+        entry=Entry(ct_tk, bd = 20)
+        entry.bind("<Return>", ctcalc)
+        entry.pack(pady = 50)
+
+        label1.pack()
+        label2.pack()
+
+        ct_tk.mainloop()
+
 #========== functions for pygame ==========#
 def game_intro():       # Game intro scene
     screen.fill(WHITE)
@@ -109,7 +239,6 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         pygame.display.flip()
         clock.tick(15)
 
-RT = 0
 def main_loop(): # Game main loop scene
     global num_players, stn, turn, YATT, RT
     screen.fill(WHITE)
@@ -133,7 +262,7 @@ def main_loop(): # Game main loop scene
         global turn, pl_turn, YATT
 
         turn += 1
-        YATT = 0
+        YATT = 0        # You already took the tile. [먹기전: 0, 먹음: 1]
         time.sleep(2)   # 임시 2초 딜레이
         win = 0
         if turn == num_players:
@@ -141,9 +270,9 @@ def main_loop(): # Game main loop scene
             
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
         global fti_b, fti_w, YATT, RT
-        wtt = Tk()                              # 윈도우 창을 생성
-        wtt.title("타일 가져오기")     # 타이틀
-        wtt.geometry("480x300+100+100")         # "너비x높이+x좌표+y좌표"
+        wtt = Tk()                             # 윈도우 창을 생성
+        wtt.title("타일 가져오기")              # 타이틀
+        wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
 
         label1 = Label(wtt, text="1차 완성")         # 라벨 등록
         label1.pack(pady=10)
@@ -210,7 +339,7 @@ def main_loop(): # Game main loop scene
         pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
         pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
         pl_turn._blit_(loc=(5,5),loc_center=False)  
-        print(RT)
+        
         # 덱의 카드 정렬
         all_arrange(p)
         
@@ -284,7 +413,7 @@ pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
 turn = 0    # 첫값 0. 수정 금지.
-
+RT = 0      # 상동.
 screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
 

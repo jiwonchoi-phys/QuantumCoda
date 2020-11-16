@@ -95,114 +95,6 @@ class PRINTTEXT():
             if type(loc) == tuple: # User input of location
                 screen.blit(self.text,loc)
 
-class CARD():
-    def __init__(self,color,num):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
-        # Set card&font color
-        if color == 1: # Black
-            self.card_color = BLACK
-            self.font_color = WHITE
-        else:
-            self.card_color = GRAY
-            self.font_color = BLACK
-        
-        self.color = color
-        self.card_num = [num[0],num[1]]
-        self.card_probability = [num[2],num[3]]
-        self.width, self.height = CARD_SIZE
-        self.opened = True
-        self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-        self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
-
-    def is_opened(self):
-        self.opened = True
-    
-    def get_color(self):
-        return self.color
-
-    def get_num(self):
-        return self.card_num
-
-    def out(self):
-        pass
-    
-    def draw_img(self, loc=(0,0), action=True):
-        x, y = loc[0:2]
-        mouse_pos = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()        
-        
-        pygame.draw.rect(screen, self.card_color, [x,y,self.width,self.height])
-        pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
-        
-        if x < mouse_pos[0] < x + self.width and \
-            y < mouse_pos[1] < y + self.height:    
-            pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
-            
-            if click[0] == 1:
-                if action == None:
-                    pass
-                else: #print("클릭됨") # 확인용
-                    self.f_click_tile()
-        
-        if self.opened == True:
-            self.number._blit_(loc=(x + self.width/2, y + self.height/2))
-            if len(self.get_num()) == 2:
-                self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
-        
-    def f_click_tile(self):
-
-        ct_tk=Tk()
-        ct_tk.title("유추 수 입력")
-        ct_tk.geometry("480x300+100+100")
-        ct_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-
-        t_num = self.card_num
-        t_probability = self.card_probability
-
-        label1 = Label(ct_tk, text=str(t_num))
-        label2 = Label(ct_tk, text=str(t_probability))
-
-        def sf_p(number, probability):
-            x = random.randint(1,101)
-            if x <= probability[0]:
-                del number[number.index(number[1])]
-                del probability
-
-            else:
-                del number[number.index(number[0])]
-                del probability
-            return number
-            
-        def ctcalc(event):
-            PGN = int(entry.get()) # The player's guess number.
-            if PGN in self.card_num:
-                self.card_num = sf_p(self.card_num, self.card_probability)
-                self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-                
-                label1.config(text=str(t_num)+"로 붕괴 되었습니다.")
-                
-                ct_tk.after(1000, ctd)
-
-            else:                                                                           #plabel.config(text="플레이어 수가 너무 적습니다 다시 입력해주세요")
-                #sf_p(먹었던 타일의 수, 먹었던 타일의 확률)
-                # 지원이 함수 연결
-                pass
-
-        def ctd():
-            ct_tk.destroy()
-
-        entry=Entry(ct_tk, bd = 20)
-        entry.bind("<Return>", ctcalc)
-        entry.pack(pady = 50)
-
-        label1.pack()
-        label2.pack()
-
-        ct_tk.mainloop()
-        #return
-    
-        
-        
-
 class PLAYER():
     def __init__(self):
         self.deck_list = []         # 덱 리스트
@@ -237,7 +129,6 @@ class PLAYER():
                 else:                                       # 1) 평균값이 앞에 놈이 크면 타일 바꿈
                     deck[k+1],deck[k] = deck[k],deck[k+1] 
                     self.deck_list = deck                   # 저장
-        
 
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
@@ -290,9 +181,7 @@ class BUTTON():
         
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
-        text._blit_(loc=(x,y))  
-
-
+        text._blit_(loc=(x,y))
 
 def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 따라 변하지 않음.
     global max_card_num # 패의 최대 숫자 전역변수
