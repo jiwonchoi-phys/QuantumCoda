@@ -1,23 +1,15 @@
-# import pygame
 #======건들지 마시오=====
-from shtest import *
 from tkinter import *
-#=======================
-
-'''
-=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=
-
-fcn, num_players, stn 등에서 충돌로 코드 순서 수정.
-functions for pygame > Initialize pygame 순서 고정 바람. 변동시 에러 가능성 높음.
-
-=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=@=
-'''
 import pygame
 import math
 import random
 import numpy
+import time
+#=======================
 
-
+'''
+현재 순서 고정 바람. 변동시 에러 가능성 높음.
+'''
 
 # RGB color information
 BLACK   = (  0,  0,  0)
@@ -45,11 +37,12 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 
-max_card_num = 10 # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
+max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 
+"""
+    ====================<<<     Util    >>>====================
+"""
 class PRINTTEXT():
-
-
     def __init__(self, msg, size, font='notosanscjkkr', color=BLACK, antialias=True, background=None):
         self.msg = msg                  # 메세지
         self.font = font                # font 지정 (기본 conslas)
@@ -61,7 +54,6 @@ class PRINTTEXT():
         self.text = texts.render(self.msg, self.antialias, self.color, self.background) # 렌더링.
     
     def _blit_(self, loc=(0,0), loc_center=True):   # 좌표 지정 위치 0,0의 오른쪽
-        
         if loc_center == True:
             if loc == 'top center': 
                 text_rect = self.text.get_rect()                                # 사각형 텍스트
@@ -131,128 +123,6 @@ class PLAYER():
                 else:                                       # 1) 평균값이 앞에 놈이 크면 타일 바꿈
                     deck[k+1],deck[k] = deck[k],deck[k+1] 
                     self.deck_list = deck                   # 저장
-
-class BUTTON():
-    def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
-        font_color=BLACK, font="consolas", font_size=20, action=None):
-        self.msg = msg
-        self.ic = inactive_color
-        self.ac = active_color
-        self.f = font
-        self.fc = font_color
-        self.fs = font_size
-        self.action = action
-        self.active = active_color
-        self.inactive = inactive_color
-
-    def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
-
-        # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
-        if loc_center == True:
-            if loc == 'top center':
-                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
-            elif loc == 'center':
-                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-            elif loc == 'bottom center':
-                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
-            elif loc == 'bottom left':
-                loc = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
-            elif loc == 'bottom right':
-                loc = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
-        else:
-            if type(loc) == tuple: # User input of location
-                return loc
-        
-        x,y = loc
-        w,h = size
-        mouse_pos = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-        
-        
-        if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
-            pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
-            
-            if click[0] == 1:
-                if action == None:
-                    pass
-                else: #print("클릭됨") # 확인용
-                    #button
-                    action()
-        
-        else:
-            pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
-        
-        text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
-                         antialias=True, background=None)
-        text._blit_(loc=(x,y))
-
-def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 따라 변하지 않음.
-    global max_card_num # 패의 최대 숫자 전역변수
-
-    min_loop_num = 2 # 최소 루프 개수
-    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
-    cut = []                     # cut1을 보관하는 장소
-    card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
-    random.shuffle(card_list) # 섞는다 (shuffle 함수 기능)
-
-    while 1:  # 얽힐 숫자들을 정하는 코드
-        cut1 = 3+random.choice(cut_num) # cut_num의 임의 원소 선택, 루프 안에 들어가는 숫자의 개수, 3+가 있는 이유는 최소 루프 안에 들어있는 카드 숫자가 3이상이어야 하기 때문에. cut_num에서 숫자를 가져오는 이유는 루프 안에 있는 숫자의 개수를 다양화하기 위해 가져옴.
-        cut.append(cut1) # 3 아님 4 추가
-
-        if sum(cut) == max_card_num + 1:         # 총 얽힘수가 총 카드수랑 같으면 멈춤
-            break
-
-        elif sum(cut) > max_card_num + 1:            # cut수가 총 카드수보다 크면 마지막 cut1을 cut에서 뺀 후 뺀 것을 cut2라고 지정
-            cut2 = cut.pop()
-
-            if max_card_num + 1 - sum(cut) < 3:         # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
-                cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
-                break
-            else:                                       # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.          
-                cut2 = max_card_num + 1 - sum(cut)   
-                cut.append(cut2)
-                break
-
-    card_num = list(numpy.zeros(len(cut)))       # 루프 수만큼 방을 생성
-    cut.append(0)
-    add_card_s = 0
-    add_card_f = cut[0]
-
-    for i in range(0,len(cut)-1):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
-        card_num[i] = []
-
-        for k in range(add_card_s,add_card_f): 
-            card_num[i].append(card_list[k])
-        add_card_s += cut[i]
-        add_card_f += cut[i+1]
-
-    for i in range(0,len(card_num)):                # 각 방에 배정받은 숫자를 짝지어 spooky 카드를 만들도록 함
-        for k in range(0,len(card_num[i])):   
-            if k == 0:
-                spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
-                alpha = max(spooky_card_num)
-                spooky_card_num.append(int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100))
-                beta = 100 - int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100)
-                spooky_card_num.append(beta)
-                x.append(spooky_card_num)
-            else:
-                gama = int(x[len(x)-1][3]+random.random()*20-10)
-                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama]
-                x.append(spooky_card_num)
-    return x      
-
-def spooky_arrange(t):
-    l = t
-    for k in range(0,len(l)): 
-        if l[k][1][0] < l[k][1][1]: # 두 spooky 수 고려 작으면 놔둠
-            pass
-        else:   #다르면 교환 후 저장
-            l[k][1][0], l[k][1][1] = l[k][1][1], l[k][1][0]
-            t = l
-
-def all_arrange(players):
-    for p in players:
-        p.tile_arrange()
 
 class CARD():
     global RT
@@ -384,6 +254,352 @@ class CARD():
 
         ct_tk.mainloop()
 
+class BUTTON():
+    def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
+        font_color=BLACK, font="consolas", font_size=20, action=None):
+        self.msg = msg
+        self.ic = inactive_color
+        self.ac = active_color
+        self.f = font
+        self.fc = font_color
+        self.fs = font_size
+        self.action = action
+        self.active = active_color
+        self.inactive = inactive_color
+
+    def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
+
+        # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
+        if loc_center == True:
+            if loc == 'top center':
+                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)
+            elif loc == 'center':
+                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            elif loc == 'bottom center':
+                loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)
+            elif loc == 'bottom left':
+                loc = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
+            elif loc == 'bottom right':
+                loc = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
+        else:
+            if type(loc) == tuple: # User input of location
+                return loc
+        
+        x,y = loc
+        w,h = size
+        mouse_pos = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        
+        if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
+            pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
+            
+            if click[0] == 1:
+                if action == None:
+                    pass
+                else: #print("클릭됨") # 확인용
+                    #button
+                    action()
+        
+        else:
+            pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
+        
+        text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
+                         antialias=True, background=None)
+        text._blit_(loc=(x,y))
+
+def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 따라 변하지 않음.
+    global max_card_num # 패의 최대 숫자 전역변수
+    min_loop_num = 2 # 최소 루프 개수
+    cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
+    cut = []                     # cut1을 보관하는 장소
+    card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
+    random.shuffle(card_list) # 섞는다 (shuffle 함수 기능)
+
+    while 1:  # 얽힐 숫자들을 정하는 코드
+        cut1 = 3+random.choice(cut_num) # cut_num의 임의 원소 선택, 루프 안에 들어가는 숫자의 개수, 3+가 있는 이유는 최소 루프 안에 들어있는 카드 숫자가 3이상이어야 하기 때문에. cut_num에서 숫자를 가져오는 이유는 루프 안에 있는 숫자의 개수를 다양화하기 위해 가져옴.
+        cut.append(cut1) # 3 아님 4 추가
+
+        if sum(cut) == max_card_num + 1:         # 총 얽힘수가 총 카드수랑 같으면 멈춤
+            break
+
+        elif sum(cut) > max_card_num + 1:            # cut수가 총 카드수보다 크면 마지막 cut1을 cut에서 뺀 후 뺀 것을 cut2라고 지정
+            cut2 = cut.pop()
+
+            if max_card_num + 1 - sum(cut) < 3:         # 남아 있는 수가 최소 얽힘수(3)보다 작다면 이전에 있던 cut1의 숫자를 늘려서 루프에 포함시킨다.
+                cut[len(cut)-1] += max_card_num + 1 - sum(cut) 
+                break
+            else:                                       # 반대로 남아 있는 카드 수가 최소 얽힘수(3)보다 크거나 같으면 이전에 없앴던 cut1을 줄여서 남은 카드 수만큼 맞춘 다음, 다시 cut에 집어넣는다.          
+                cut2 = max_card_num + 1 - sum(cut)   
+                cut.append(cut2)
+                break
+
+    card_num = list(numpy.zeros(len(cut)))       # 루프 수만큼 방을 생성
+    cut.append(0)
+    add_card_s = 0
+    add_card_f = cut[0]
+
+    for i in range(0,len(cut)-1):          # 얽혀 있는 카드들끼리 한 방을 쓰도록 배정
+        card_num[i] = []
+
+        for k in range(add_card_s,add_card_f): 
+            card_num[i].append(card_list[k])
+        add_card_s += cut[i]
+        add_card_f += cut[i+1]
+
+    for i in range(0,len(card_num)):                # 각 방에 배정받은 숫자를 짝지어 spooky 카드를 만들도록 함
+        for k in range(0,len(card_num[i])):   
+            if k == 0:
+                spooky_card_num = [card_num[i][k-1],card_num[i][k]] 
+                alpha = max(spooky_card_num)
+                spooky_card_num.append(int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100))
+                beta = 100 - int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100)
+                spooky_card_num.append(beta)
+                x.append(spooky_card_num)
+            else:
+                gama = int(x[len(x)-1][3]+random.random()*20-10)
+                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama]
+                x.append(spooky_card_num)
+    return x      
+
+def spooky_arrange(t):
+    l = t
+    for k in range(0,len(l)): 
+        if l[k][1][0] < l[k][1][1]: # 두 spooky 수 고려 작으면 놔둠
+            pass
+        else:   #다르면 교환 후 저장
+            l[k][1][0], l[k][1][1] = l[k][1][1], l[k][1][0]
+            t = l
+
+def all_arrange(players):
+    for p in players:
+        p.tile_arrange()
+
+def f_option_room(): # 옵션 설정 방
+    screen.fill([207, 216, 220])
+    dp = PRINTTEXT("option testroom", size = 50)
+    shb1 = BUTTON("button test")
+    shb2 = BUTTON("Level Setting")
+    shb3 = BUTTON("theory test")
+    shbb = BUTTON("back test(main 이동 필요)")
+
+    play = False
+    while not play:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+
+        shb1._draw_(loc = (100,300), size = (150,30), action=acb1)
+        shb2._draw_(loc = (400,300), size = (150,30), action=acb2)
+        shb3._draw_(loc = (700,300), size = (150,30), action=acb3)
+        shbb._draw_(loc = (800,550), size = (150,30))
+        # text positions
+        dp._blit_(loc='top center')
+
+        pygame.display.update()
+
+def f_pn():
+    global plabel, num_players
+    player_num_max = 4  #게임 가능 플레이어 수 제한
+
+    pn_tk=Tk()
+    pn_tk.title("플레이어 수 입력")
+    pn_tk.geometry("480x300+100+100")
+    pn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+    plabel = Label(pn_tk, text="위의 창에 플레이어 숫자를 입력하세요.\n플레이 최소 인원은 2명이고 최대 인원은 "+str(player_num_max)+"명 입니다.")
+    
+    def pcalc(event):
+        global num_players
+        pn = int(entry.get())
+        if pn > player_num_max:
+            plabel.config(text="플레이어 수가 너무 많습니다. 다시 입력해주세요.")
+        elif pn < 2:
+            plabel.config(text="플레이어 수가 너무 적습니다. 다시 입력해주세요.")
+        elif pn >=2 and pn <= player_num_max:
+            plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
+            num_players = pn
+            
+            pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
+
+    def pnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+        pn_tk.destroy()
+
+    entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", pcalc)      # 리턴값 calc 함수에 사용
+    entry.pack(pady = 50)             # 위아래 간격 50
+
+    plabel.pack()
+
+    pn_tk.mainloop()
+    return num_players
+
+def f_tn(num_players):
+    global tlabel, stn, fcn, max_card_num
+
+    fcn=(max_card_num+1)*2              # full card number
+    tn_tk=Tk()
+    tn_tk.title("스타팅 타일 수 입력")
+    tn_tk.geometry("480x300+100+100")
+    tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+    tlabel = Label(tn_tk, text="시작시 가져갈 초기 타일 수를 결정해 주세요.")
+    
+    def tcalc(event):
+        global num_players, stn
+        stn = int(entry.get())
+        if stn > fcn/num_players:
+            tlabel.config(text="패를 나누기 위한 전체 타일 수가 부족합니다. 작은 수로 다시 입력해주세요.")
+        elif stn < 2:
+            tlabel.config(text="타일 수가 너무 적습니다. 다시 입력해주세요.")
+        elif stn >= 2 and stn <= fcn/num_players:
+            tlabel.config(text="플레이어가 받는 타일 수가 "+str(stn)+"개로 결정되었습니다.")
+
+            tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
+
+    def tnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+        tn_tk.destroy()
+
+    entry=Entry(tn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", tcalc)      # 리턴값 calc 함수에 사용
+    entry.pack(pady = 50)             # 위아래 간격 50
+
+    tlabel.pack()
+
+    tn_tk.mainloop()
+    return stn
+
+def play_music():
+    
+    main_music = "White River - Aakash Gandhi.mp3"
+
+    pygame.mixer.init()
+    pygame.mixer.music.load(main_music)
+    pygame.mixer.music.set_volume(0.8)
+    pygame.mixer.music.play(-1) # 무한재생.
+
+def f_draw_card(p, turn, Ttext):
+    T = list(range(turn,turn+num_players))
+    p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
+    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4),loc_center=False)
+
+    for i in range(num_players):
+        if T[i] >= num_players:
+            T[i] = T[i]-num_players
+    
+    if num_players == 2:
+        p[T[1]].draw_card(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
+        Ttext[1]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)
+
+    if num_players == 3:
+        p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4)
+        Ttext[1]._blit_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4-15),loc_center=False)
+        p[T[2]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4)
+        Ttext[2]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4-15),loc_center=False)
+            
+    if num_players == 4:
+        p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
+        Ttext[1]._blit_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+        p[T[2]].draw_card(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
+        Ttext[2]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)    
+        p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
+        Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+
+"""
+    ====================<<<     SH-TEST    >>>=================
+"""
+
+def acb1():
+    print("kkkkkkkkkkkkkkkkkkkkk")
+    pass
+
+def acb2():
+    window=Tk()
+    window.title("입력 테스트")
+    window.geometry("480x300+100+100")
+    window.resizable(False, False)                  # 창 크기 조절 가능 여부 거부
+    def flash():
+        checkbutton1.flash()
+
+    CheckVariety_1=IntVar()
+    CheckVariety_2=IntVar()
+
+    checkbutton1=Checkbutton(window, text="O", variable=CheckVariety_1)
+    checkbutton2=Checkbutton(window, text="△", variable=CheckVariety_2)
+    checkbutton3=Checkbutton(window, text="X", variable=CheckVariety_2, command=flash)
+
+    checkbutton1.pack()
+    checkbutton2.pack()
+    checkbutton3.pack()
+
+    window.mainloop()
+
+def acb3():
+    global page
+    
+    acb3 = Tk()
+    acb3.title("이론 설명창 테스트")
+    acb3.geometry("600x300+100+100")
+
+    page=0
+    mpage = 3
+    #image=PhotoImage(file="a.png") 
+    #label = Label(acb3, image=image)         # 라벨 등록
+
+    label1 = Label(acb3, text="intro")
+    label2 = Label(acb3, text="~")
+    label1.pack()
+    label2.pack()
+
+    Tbox = ["superposition:","entanglement:","collapse:"]
+    Sbox = ["the ability of quantum objects to be in two places at once.",
+            "the phenomenon where distant parts of a quantum system display correlations\nthat cannot be explained by either timelike causality or common cause.",
+            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is silent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal with the measurement problem."]
+
+    def pageUP():
+        global page
+        page +=1
+        if page == mpage:
+            label1.config(text=str(Tbox[page-1]))
+            label2.config(text=str(Sbox[page-1]))
+
+            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+            buttonP.pack(side = LEFT, padx = 50)
+
+        else:
+            label1.config(text=str(Tbox[page-1]))
+            label2.config(text=str(Sbox[page-1]))
+
+            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
+            buttonP.pack(side = LEFT, padx = 50)
+            buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+            buttonN.pack(side = RIGHT, padx = 50)
+
+    def pageDOWN():
+        global page
+        page -=1
+
+        label1.config(text=str(Tbox[page]))
+        label2.config(text=str(Sbox[page]))
+
+        buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+        buttonN.pack(side = RIGHT, padx = 50)
+
+    buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+    buttonN.pack(side = RIGHT, padx = 50)
+    acb3.mainloop()
+
+def button_sound():
+    
+    b_s = "18V Cordless Drill Switch.mp3"
+
+    pygame.mixer.init()
+    pygame.mixer.music.load(b_s)
+    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.play(1)
+
+"""
+    ====================<<<     Main    >>>====================
+"""
+
 #========== functions for pygame ==========#
 def game_intro():       # Game intro scene
     screen.fill(WHITE)
@@ -458,7 +674,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    #play_music() # 임시 주석처리.
+    #play_music()
     
     f_ftile_color_arrnage(tii)
 
@@ -571,7 +787,7 @@ def main_loop(): # Game main loop scene
         pygame.display.update()
 
 def make_card(num_players, stn):
-    global p, tii
+    global p, tii, max_card_num
     
     field_black = [] 
     field_white = []
@@ -588,10 +804,8 @@ def make_card(num_players, stn):
         ti.append(tb[i])
         ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
 
-
     random.shuffle(ti)                  # 모든 타일 섞음
     spooky_arrange(ti)                  # util 참고.
-    #print("섞은 전체 타일: ",ti)
 
     tii = [CARD(ti[i][0],ti[i][1]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
 
@@ -632,6 +846,5 @@ shtestroom()
 how_to_play()
 
 main_loop()
-
 
 pygame.quit()                               # pygame 종료
