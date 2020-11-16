@@ -38,7 +38,10 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 
+
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
+cut_list=[] # 첫번째 원소가 black, 두번째 원소가 white
+idx=0
 
 """
     ====================<<<     Util    >>>====================
@@ -227,7 +230,7 @@ class CARD():
                 else:
                     label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
                     ct_tk.after(1000, ctd)
-                collapse_loop(self)
+                #collapse_loop(self)
 
             else:
                 label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 하지 않습니다..")
@@ -235,17 +238,17 @@ class CARD():
                 
                 NTC = RT.get_color() #
                 NTN = sf_p(RT.get_num(), RT.get_pro()) #
-
+                
                 label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
                 label3.pack()
 
-                NT = CARD(NTC, NTN, RT.get_loop())
+                NT = CARD(NTC, NTN, None, RT.get_loop())
                 p[turn].deck_list.append(NT)
                 del p[turn].deck_list[p[turn].deck_list.index(RT)]
                 #
                 ct_tk.after(1500, ctd)
                 collapse_loop(RT)
-            print(RT.get_num(),RT.get_pro(),RT.get_loop())
+
 
         def ctd():
             ct_tk.destroy()
@@ -365,6 +368,9 @@ def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 
                 gama = int(x[len(x)-1][3]+random.random()*20-10)
                 spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama,i]
                 x.append(spooky_card_num)
+    cut_list.append(cut)
+    print(cut_list)
+
     return x      
 
 def spooky_arrange(t):
@@ -511,19 +517,27 @@ def f_draw_card(p, turn, Ttext):
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
     loop_num=[]
-        
-    for player in p:
-        for card in player.deck_list: # 모든 플레이어의 모든 카드에 대해
+    if x.card_color == BLACK:    #색깔별로 인덱스 지정(balck = 0/white = 1)
+        idx = 0
+    elif x.card_color == WHITE:
+        idx = 1
+    
+    loop_idx = x.get_loop()
+    
 
-            if card.card_loop == x.card_loop: # x와 카드 루프가 같고
-                if x.card_num in card.card_num: # x의 숫자가 있으면
-                    loop_num.append(x.card_num)
-                    del card.number[index(x.card_num)] # 다른 숫자로 붕괴
-                
-                for num in loop_num:
-                    if num in card.card_num:
-                        loop_num.append(num)
-                        del card.number[index(num)]
+    while len(loop_num) < cut_list[idx][loop_idx]-1:
+        for player in p:
+            for card in player.deck_list: # 모든 플레이어의 모든 카드에 대해
+
+                if card.card_loop == x.card_loop: # x와 카드 루프가 같고
+                    if x.card_num in card.card_num: # x의 숫자가 있으면
+                        loop_num.append(x.card_num)
+                        del card.card_num[index(x.card_num)] # 다른 숫자로 붕괴
+                    
+                    for num in loop_num:
+                        if num in card.card_num:
+                            loop_num.append(num)
+                            del card.card_num[index(num)]
 
 """
     ====================<<<     SH-TEST    >>>=================
@@ -696,7 +710,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    play_music()
+    #play_music()
     
     f_ftile_color_arrnage(tii)
 
@@ -706,6 +720,7 @@ def main_loop(): # Game main loop scene
     button_exit = BUTTON("Exit",active_color=RED)
 
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음: 1]
+    
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn, YATT
@@ -827,6 +842,9 @@ def make_card(num_players, stn):
         ti.append(tb[i])
         ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
 
+    for i in ti:
+        print(i)
+
     random.shuffle(ti)                  # 모든 타일 섞음
     spooky_arrange(ti)                  # util 참고.
     
@@ -845,6 +863,9 @@ def make_card(num_players, stn):
             qwer = random.choice(tii)
             p[i].deck_list.append(qwer)
             tii.pop(tii.index(qwer))
+
+    
+    
 
 def f_ftile_color_arrnage(tii):           
     global fti_b, fti_w
@@ -871,5 +892,6 @@ shtestroom()
 how_to_play()
 
 main_loop()
+
 
 pygame.quit()                               # pygame 종료
