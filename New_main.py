@@ -9,6 +9,7 @@ import time
 
 '''
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
+사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
 '''
 
 # RGB color information
@@ -469,7 +470,7 @@ def f_tn(num_players):
 
 def play_music():
     
-    main_music = "White River - Aakash Gandhi.mp3"
+    main_music = "White River - Aakash Gandhi.wav"
 
     pygame.mixer.init()
     pygame.mixer.music.load(main_music)
@@ -589,7 +590,7 @@ def acb3():
 
 def button_sound():
     
-    b_s = "18V Cordless Drill Switch.mp3"
+    b_s = "18V Cordless Drill Switch.wav"
 
     pygame.mixer.init()
     pygame.mixer.music.load(b_s)
@@ -674,7 +675,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    #play_music()
+    play_music()
     
     f_ftile_color_arrnage(tii)
 
