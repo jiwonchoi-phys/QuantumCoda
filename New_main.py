@@ -146,6 +146,7 @@ class CARD():
         self.opened = True
         self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
         self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
+        self.card_loop = num[-1:]
 
     def is_opened(self):
         self.opened = True
@@ -354,10 +355,11 @@ def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 
                 spooky_card_num.append(int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100))
                 beta = 100 - int((spooky_card_num[0]+alpha/2)/(spooky_card_num[0]+spooky_card_num[1]+alpha)*100)
                 spooky_card_num.append(beta)
+                spooky_card_num.append(i)
                 x.append(spooky_card_num)
             else:
                 gama = int(x[len(x)-1][3]+random.random()*20-10)
-                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama]
+                spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama,i]
                 x.append(spooky_card_num)
     return x      
 
