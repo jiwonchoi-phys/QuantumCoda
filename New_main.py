@@ -177,6 +177,10 @@ class CARD():
 
     def out(self):
         pass
+
+    def info(self):
+        print("color: {}, num: {}, prob: {}, loop: {}").format(
+            self.card_color,self.card_num,self.card_probability,self.card_loop)
     
     def draw_img(self, loc=(0,0), action=True):
         x, y = loc[0:2]
@@ -226,11 +230,9 @@ class CARD():
                 x = random.randint(1,101)
                 if x <= probability[0]:
                     del number[number.index(number[1])]
-                    del probability
 
                 else:
                     del number[number.index(number[0])]
-                    del probability
                 return number
                 
             def ctcalc(event):
@@ -245,11 +247,12 @@ class CARD():
                         YATT = 3
                         label2.config(text="추측 성공! 연속 추측 가능.")
                         ct_tk.after(1000, ctd)
+                        collapse_loop(self)
                     else:
                         YATT = 2
                         label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
                         ct_tk.after(1000, ctd)
-                    #collapse_loop(self)
+                    
 
                 else:
                     YATT = 2
@@ -264,7 +267,10 @@ class CARD():
                     NT = CARD(NTC, NTN, None, RT.get_loop())
                     p[turn].deck_list.append(NT)
                     del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                    #
+                    print(RT.card_color)
+                    print(RT.card_loop)
+                    print(RT.card_num)
+                    print(RT.card_probability)
                     ct_tk.after(1500, ctd)
                     collapse_loop(RT)
 
@@ -342,7 +348,7 @@ class BUTTON():
                 if action == None:
                     pass
                 else: #print("클릭됨") # 확인용
-                    button_sound()
+                    #button_sound()
                     action()
         
         else:
@@ -406,7 +412,16 @@ def make_spooky(x):
                 spooky_card_num = [card_num[i][k-1],card_num[i][k],gama,100-gama,i]
                 x.append(spooky_card_num)
     cut_list.append(cut)
+
+    for x in cut_list:
+        for j in range(len(x)):
+            if x[j] == 0:
+                del x[j]
+
+    
     print(cut_list)
+    
+    
 
     return x      
 
@@ -553,28 +568,17 @@ def f_draw_card(p, turn, Ttext):
         Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
-    loop_num=[]
-    if x.card_color == BLACK:    #색깔별로 인덱스 지정(balck = 0/white = 1)
-        idx = 0
-    elif x.card_color == WHITE:
-        idx = 1
-    
-    loop_idx = x.get_loop()
-    
+    for player in p:
+        for card in player.deck_list:
+            if (card.card_color == x.card_color) and (card.card_loop == x.card_loop):
+                print("-------------")
+                print(card.card_color)
+                print(card.card_loop)
+                print(card.card_num)
+                print(card.card_probability)
+                
 
-    while len(loop_num) < cut_list[idx][loop_idx]-1:
-        for player in p:
-            for card in player.deck_list: # 모든 플레이어의 모든 카드에 대해
 
-                if card.card_loop == x.card_loop: # x와 카드 루프가 같고
-                    if x.card_num in card.card_num: # x의 숫자가 있으면
-                        loop_num.append(x.card_num)
-                        del card.card_num[index(x.card_num)] # 다른 숫자로 붕괴
-                    
-                    for num in loop_num:
-                        if num in card.card_num:
-                            loop_num.append(num)
-                            del card.card_num[index(num)]
 
 """
     ====================<<<     Util-TEST    >>>=================
