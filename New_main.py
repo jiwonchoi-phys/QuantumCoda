@@ -247,12 +247,12 @@ class CARD():
                     if PGN == self.card_num[0]: # self.card_num class: list
                         YATT = 3
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
-                        ct_tk.after(1000, ctd)
+                        ct_tk.after(1700, ctd)
                         collapse_loop(self)
                     else:
                         YATT = 2
                         label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
-                        ct_tk.after(1000, ctd)
+                        ct_tk.after(1700, ctd)
                     
 
                 else:
@@ -272,7 +272,7 @@ class CARD():
                     print(RT.card_loop)
                     print(RT.card_num)
                     print(RT.card_probability)
-                    ct_tk.after(1500, ctd)
+                    ct_tk.after(2100, ctd)
                     collapse_loop(RT)
 
             def ctd():
@@ -513,7 +513,7 @@ def f_tn(num_players):
         elif stn < 2:
             tlabel.config(text="Too few tiles. Please enter again.")
         elif stn >= 2 and stn <= fcn/num_players:
-            tlabel.config(text="The number of tiles the player receives is determined as "+str(stn)+".")
+            tlabel.config(text="The number was decided as "+str(stn)+".")
 
             tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
 
@@ -830,9 +830,9 @@ def main_loop(): # Game main loop scene
                 YATT += 1
                 wtt.after(1000, wttd)
     
-        bb = Button(wtt, text='Get Black\n'+'Number of remaining tiles: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
+        bb = Button(wtt, text='Get Black\n'+'remaining tiles: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
                     image=pixelVirtual, width=100, height=160, compound="c")                # 크기 텍스트 기준이 아닌 기준 픽셀 기준, 텍스트는 중앙표기.
-        bw = Button(wtt, text='Get White\n'+'Number of remaining tiles: '+str(len(fti_w)), command = sf_bw, fg = 'black', bg = "ghost white",
+        bw = Button(wtt, text='Get White\n'+'remaining tiles: '+str(len(fti_w)), command = sf_bw, fg = 'black', bg = "ghost white",
                     image=pixelVirtual, width=100, height=160, compound="c")
         bb.pack(side = LEFT, padx = 50)
         bw.pack(side = RIGHT, padx = 50)
