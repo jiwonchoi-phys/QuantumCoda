@@ -590,7 +590,7 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
                             card.number = PRINTTEXT("%s" % card.card_num, 18, color=card.font_color)
                             if card.card_num[0] not in loop_num:
                                 loop_num.append(card.card_num[0]) #그리고 loop_num에 루프붕괴 숫자 추가
-                '''        
+                    '''        
                 print("-------------")
                 print(card.card_color)
                 print(card.card_loop)
