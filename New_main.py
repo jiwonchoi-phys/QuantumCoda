@@ -569,15 +569,37 @@ def f_draw_card(p, turn, Ttext):
         Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
+
+    loop_num=[]
+    loop_num.append(x.card_num[0])
+
     for player in p:
         for card in player.deck_list:
             if (card.card_color == x.card_color) and (card.card_loop == x.card_loop):
+                print('same loop------------')
+                print("card num: ",card.card_num)
+                print("x[0]",x.card_num[0])     
+                if x.card_num[0] in card.card_num:  #x의 숫자가 card에 있으면 붕괴(근데 loop_num을 봐야하는데)
+                    if len(card.card_num) == 2:
+                        del card.card_num[card.card_num.index(x.card_num[0])]
+                        print("survived number: ",card.card_num)
+                        if card.card_num[0] not in loop_num:
+                            loop_num.append(card.card_num[0])
+                '''
                 print("-------------")
                 print(card.card_color)
                 print(card.card_loop)
                 print(card.card_num)
                 print(card.card_probability)
+                '''
+    print("loop number: ", loop_num)
+
                 
+
+        
+    for card in fti_b and fti_w:
+        if (card.card_color == x.card_color) and (card.card_loop == x.card_loop):
+            print()
 
 
 
