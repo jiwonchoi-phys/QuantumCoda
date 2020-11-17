@@ -11,6 +11,7 @@ import platform # OS Environment module
 '''
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
+오픈 여부.
 '''
 
 # RGB color information
@@ -424,7 +425,7 @@ def all_arrange(players):
         p.tile_arrange()
 
 def f_option_room(): # 옵션 설정 방
-    screen.fill([207, 216, 220])
+    screen.fill([240, 244, 195])
     dp = PRINTTEXT("option testroom", size = 50)
     orb1 = BUTTON("button test")
     orb2 = BUTTON("Level Setting")
@@ -438,10 +439,10 @@ def f_option_room(): # 옵션 설정 방
                 pygame.quit()
                 quit()
 
-        orb1._draw_(loc = (100,300), size = (150,30))
-        orb2._draw_(loc = (SCREEN_WIDTH*2/5,300), size = (150,30), action=f_setting_button)
-        orb3._draw_(loc = (SCREEN_WIDTH*4/5,300), size = (150,30), action=f_theory_button)
-        orbb._draw_(loc = (SCREEN_WIDTH*2/5,550), size = (150,30), action=game_intro)
+        #orb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
+        orb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
+        orb3._draw_(loc = (SCREEN_WIDTH*4/5-80,300), size = (160,30), action=f_theory_button)
+        orbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
         # text positions
         dp._blit_(loc='top center')
 
@@ -667,7 +668,7 @@ def game_intro():       # Game intro scene
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
-    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Sea hyoung Jo, Ji won Choi", size = 20)
+    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
     new_test1 = BUTTON("test 1")
