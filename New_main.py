@@ -140,7 +140,7 @@ class PLAYER():
                     self.deck_list = deck                   # 저장
 
 class CARD():
-    global RT
+    global RT, YATT
     def __init__(self,color,num,prob,loop):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
         # Set card & font color
         if color == 1: # Black
@@ -149,7 +149,7 @@ class CARD():
         else:
             self.card_color = GRAY
             self.font_color = BLACK
-        
+
         self.color = color
         self.card_num = num
         self.card_probability = prob
@@ -191,11 +191,13 @@ class CARD():
             pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
             
             if click[0] == 1:
-                if action == None or YATT == 0:
-                    if YATT == 0 and len(fti_b) == 0 and len(fti_w) == 0:
+                if YATT != 1: # 카드 안먹으면 클릭 안됨. 아래 두 경우 제외
+                    if YATT == 0 and len(fti_b) == 0 and len(fti_w) == 0: # 타일이 없어 못 먹은 경우 추측 가능.
+                        self.f_click_tile()
+                    if YATT == 3:   # 추측 성공시 추가 추측 가능.
                         self.f_click_tile()
                     pass
-                else:
+                elif YATT == 1:
                     self.f_click_tile()
         
         if self.opened == True:
@@ -204,74 +206,79 @@ class CARD():
                 self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
     def f_click_tile(self):
-        global RT
-        ct_tk=Tk()
-        ct_tk.title("유추 수 입력")
-        ct_tk.geometry("480x300+100+100")
-        ct_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+        global RT, YATT
+        if self in p[turn].deck_list: # 자신의 패 선택 불가.
+            pass
+        else:   # 타인의 패 선택시
+            t_num = self.card_num
+            t_probability = self.card_probability
 
-        t_num = self.card_num
-        t_probability = self.card_probability
+            ct_tk=Tk()
+            ct_tk.title("유추 수 입력")
+            ct_tk.geometry("480x300+100+100")
+            ct_tk.resizable(False, False)
 
-        label1 = Label(ct_tk, text=str(t_num))
-        label2 = Label(ct_tk, text=str(t_probability))
 
-        def sf_p(number, probability):
-            x = random.randint(1,101)
-            if x <= probability[0]:
-                del number[number.index(number[1])]
-                del probability
+            label1 = Label(ct_tk, text=str(t_num))
+            label2 = Label(ct_tk, text=str(t_probability))
 
-            else:
-                del number[number.index(number[0])]
-                del probability
-            return number
-            
-        def ctcalc(event):
-            global RT # class CARD
-            PGN = int(entry.get()) # The player's guess number.
-            if PGN in self.card_num:
-                self.card_num = sf_p(self.card_num, self.card_probability)
-                self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-                label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 합니다!")
-                if PGN == self.card_num: # 에러 발견.
-                    label2.config(text="추측 성공! 연속 추측 가능.")
-                    YATT -= 1
-                    ct_tk.after(1000, ctd)
+            def sf_p(number, probability):
+                x = random.randint(1,101)
+                if x <= probability[0]:
+                    del number[number.index(number[1])]
+                    del probability
+
                 else:
-                    label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
-                    ct_tk.after(1000, ctd)
-                #collapse_loop(self)
-
-            else:
-                label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 하지 않습니다..")
-                label2.config(text="유추에 실패 하여 이번 턴에 휙득한 타일을 붕괴 후, 공개합니다.")
+                    del number[number.index(number[0])]
+                    del probability
+                return number
                 
-                NTC = RT.get_color() #
-                NTN = sf_p(RT.get_num(), RT.get_pro()) #
+            def ctcalc(event):
+                global RT, YATT        # RT; class: CARD
+                PGN = int(entry.get()) # The player's guess number.
+                if PGN in self.card_num:
+                    self.card_num = sf_p(self.card_num, self.card_probability)
+                    self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+                    label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 합니다!")
                 
-                label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
-                label3.pack()
+                    if PGN == self.card_num[0]: # self.card_num class: list
+                        YATT = 3
+                        label2.config(text="추측 성공! 연속 추측 가능.")
+                        ct_tk.after(1000, ctd)
+                    else:
+                        YATT = 2
+                        label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
+                        ct_tk.after(1000, ctd)
+                    #collapse_loop(self)
 
-                NT = CARD(NTC, NTN, None, RT.get_loop())
-                p[turn].deck_list.append(NT)
-                del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                #
-                ct_tk.after(1500, ctd)
-                collapse_loop(RT)
+                else:
+                    YATT = 2
+                    label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 하지 않습니다..")
+                    label2.config(text="유추에 실패 하여 이번 턴에 휙득한 타일을 붕괴 후, 공개합니다.")
+                    NTC = RT.get_color() #
+                    NTN = sf_p(RT.get_num(), RT.get_pro()) #
+                    
+                    label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
+                    label3.pack()
 
+                    NT = CARD(NTC, NTN, None, RT.get_loop())
+                    p[turn].deck_list.append(NT)
+                    del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                    #
+                    ct_tk.after(1500, ctd)
+                    collapse_loop(RT)
 
-        def ctd():
-            ct_tk.destroy()
+            def ctd():
+                ct_tk.destroy()
 
-        entry=Entry(ct_tk, bd = 20)
-        entry.bind("<Return>", ctcalc)
-        entry.pack(pady = 50)
+            entry=Entry(ct_tk, bd = 20)
+            entry.bind("<Return>", ctcalc)
+            entry.pack(pady = 50)
 
-        label1.pack()
-        label2.pack()
+            label1.pack()
+            label2.pack()
 
-        ct_tk.mainloop()
+            ct_tk.mainloop()
 
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
@@ -345,7 +352,7 @@ class BUTTON():
                          antialias=True, background=None)
         text._blit_(loc=(x,y))
 
-def make_spooky(x): # 알고리즘 에러 정리 안 됨!!) 확률이 정렬에 따라 변하지 않음.
+def make_spooky(x):
     global max_card_num # 패의 최대 숫자 전역변수
     min_loop_num = 2 # 최소 루프 개수
     cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
@@ -743,17 +750,25 @@ def main_loop(): # Game main loop scene
     button_turn = BUTTON("Next")
     button_exit = BUTTON("Exit",active_color=RED)
 
-    YATT = 0    # You already took the tile. [먹기전: 0, 먹음: 1]
+    YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
     
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn, YATT
-        turn += 1
-        YATT = 0
-        time.sleep(1.6)   # 임시 1.6초 딜레이
-        win = 0
-        if turn == num_players:
-            turn = 0
+        if YATT == 2 or YATT == 3: # 추측 이후 턴넘김 활성화
+            turn += 1
+            YATT = 0
+            time.sleep(1.6)   # 임시 1.6초 딜레이
+            win = 0
+            if turn == num_players:
+                turn = 0
+        elif YATT == 0:
+            ttftt = PRINTTEXT("Take the tile first this turn.", 20)
+            ttftt._blit_(loc=(SCREEN_WIDTH/2,50))
+        elif YATT == 1:
+            gnot = PRINTTEXT("Guess the number of tiles on your opponent.", 20)
+            gnot._blit_(loc=(SCREEN_WIDTH/2,50))
+    
             
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
         global fti_b, fti_w, YATT, RT
@@ -807,7 +822,7 @@ def main_loop(): # Game main loop scene
             
             wtt.after(1000, wttd)
         
-        if YATT == 1:
+        if YATT != 0:
             label2.config(text="이번 턴에 이미 패를 먹었습니다.")
             bb.destroy()
             bw.destroy()
@@ -872,7 +887,6 @@ def make_card(num_players, stn):
     random.shuffle(ti)                  # 모든 타일 섞음
     spooky_arrange(ti)                  # util 참고.
     
-
     tii = [CARD(ti[i][0],ti[i][1][0:2],\
         ti[i][1][2:4],ti[i][1][4]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
 
