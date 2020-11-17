@@ -42,7 +42,7 @@ CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
-cut_list=[] # 첫번째 원소가 black, 두번째 원소가 white
+cut_list=[]
 idx=0
 
 """
@@ -593,15 +593,10 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
                 print(card.card_probability)
                 '''
     print("loop number: ", loop_num)
-
-                
-
-        
+     
     for card in fti_b and fti_w:
         if (card.card_color == x.card_color) and (card.card_loop == x.card_loop):
             print()
-
-
 
 """
     ====================<<<     Util-TEST    >>>=================
@@ -652,33 +647,32 @@ def f_theory_button():
     Tbox = ["superposition:","entanglement:","collapse:"]
     Sbox = ["the ability of quantum objects to be in two places at once.",
             "the phenomenon where distant parts of a quantum system display correlations\nthat cannot be explained by either timelike causality or common cause.",
-            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is silent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal with the measurement problem."]
+            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is\nsilent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal\nwith the measurement problem."]
 
     def pageUP():
         global page
-        page +=1
         if page == mpage:
-            label1.config(text=str(Tbox[page-1]))
-            label2.config(text=str(Sbox[page-1]))
-            
-
+            pass
         else:
+            page += 1
             label1.config(text=str(Tbox[page-1]))
             label2.config(text=str(Sbox[page-1]))
-            
 
     def pageDOWN():
         global page
-        page -=1
+        if page == 0:
+            pass
+        else:
+            page -= 1
+            label1.config(text=str(Tbox[page]))
+            label2.config(text=str(Sbox[page]))
 
-        label1.config(text=str(Tbox[page]))
-        label2.config(text=str(Sbox[page]))
-        
-
-    buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
-    buttonP.pack(side = LEFT, padx = 50)    
-    buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
+    buttonP = Button(acb3, text = "이전", overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)   
+    buttonN = Button(acb3, text = "다음", overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)    
+    
+    buttonP.pack(side = LEFT, padx = 50)
     buttonN.pack(side = RIGHT, padx = 50)
+    
     acb3.mainloop()
 
 """
