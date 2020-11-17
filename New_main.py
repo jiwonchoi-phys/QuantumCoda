@@ -219,7 +219,7 @@ class CARD():
             t_probability = self.card_probability
 
             ct_tk=Tk()
-            ct_tk.title("유추 수 입력")
+            ct_tk.title("Please enter the number you are guessing.")
             ct_tk.geometry("480x300+100+100")
             ct_tk.resizable(False, False)
 
@@ -242,27 +242,27 @@ class CARD():
                 if PGN in self.card_num:
                     self.card_num = sf_p(self.card_num, self.card_probability)
                     self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-                    label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 합니다!")
+                    label1.config(text="The guessed number "+str(PGN)+" exists on the tile!")
                 
                     if PGN == self.card_num[0]: # self.card_num class: list
                         YATT = 3
-                        label2.config(text="추측 성공! 연속 추측 가능.")
+                        label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
                         ct_tk.after(1000, ctd)
                         collapse_loop(self)
                     else:
                         YATT = 2
-                        label2.config(text="붕괴는 시켰으나, 추측 수로 붕괴되지 않음.")
+                        label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
                         ct_tk.after(1000, ctd)
                     
 
                 else:
                     YATT = 2
-                    label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 하지 않습니다..")
-                    label2.config(text="유추에 실패 하여 이번 턴에 휙득한 타일을 붕괴 후, 공개합니다.")
+                    label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.")
+                    label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
                     NTC = RT.get_color() #
                     NTN = sf_p(RT.get_num(), RT.get_pro()) #
                     
-                    label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
+                    label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
                     label3.pack()
 
                     NT = CARD(NTC, NTN, None, RT.get_loop())
@@ -419,11 +419,8 @@ def make_spooky(x):
             if x[j] == 0:
                 del x[j]
 
-    
     print(cut_list)
     
-    
-
     return x      
 
 def spooky_arrange(t):
@@ -468,20 +465,20 @@ def f_pn():
     player_num_max = 4  #게임 가능 플레이어 수 제한
 
     pn_tk=Tk()
-    pn_tk.title("플레이어 수 입력")
+    pn_tk.title("Please enter the number of players.")
     pn_tk.geometry("480x300+100+100")
     pn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-    plabel = Label(pn_tk, text="위의 창에 플레이어 숫자를 입력하세요.\n플레이 최소 인원은 2명이고 최대 인원은 "+str(player_num_max)+"명 입니다.")
+    plabel = Label(pn_tk, text="Please enter the number of players in the space above.\nThe minimum playable number is 2. The maximum is 4.")
     
     def pcalc(event):
         global num_players
         pn = int(entry.get())
         if pn > player_num_max:
-            plabel.config(text="플레이어 수가 너무 많습니다. 다시 입력해주세요.")
+            plabel.config(text="Too many players. Please enter again.")
         elif pn < 2:
-            plabel.config(text="플레이어 수가 너무 적습니다. 다시 입력해주세요.")
+            plabel.config(text="Too few players. Please enter again.")
         elif pn >=2 and pn <= player_num_max:
-            plabel.config(text="플레이어 수가 "+str(eval(entry.get()))+"명으로 결정되었습니다.")
+            plabel.config(text="The number of players was determined to be "+str(eval(entry.get()))+".")
             num_players = pn
             
             pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
@@ -503,20 +500,20 @@ def f_tn(num_players):
 
     fcn=(max_card_num+1)*2              # full card number
     tn_tk=Tk()
-    tn_tk.title("스타팅 타일 수 입력")
+    tn_tk.title("Enter the number of starting tiles.")
     tn_tk.geometry("480x300+100+100")
     tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-    tlabel = Label(tn_tk, text="시작시 가져갈 초기 타일 수를 결정해 주세요.")
+    tlabel = Label(tn_tk, text="At the start of the game, please enter the number of tiles players will start with.")
     
     def tcalc(event):
         global num_players, stn
         stn = int(entry.get())
         if stn > fcn/num_players:
-            tlabel.config(text="패를 나누기 위한 전체 타일 수가 부족합니다. 작은 수로 다시 입력해주세요.")
+            tlabel.config(text="Insufficient total tiles to divide cards. Please enter a small number.")
         elif stn < 2:
-            tlabel.config(text="타일 수가 너무 적습니다. 다시 입력해주세요.")
+            tlabel.config(text="Too few tiles. Please enter again.")
         elif stn >= 2 and stn <= fcn/num_players:
-            tlabel.config(text="플레이어가 받는 타일 수가 "+str(stn)+"개로 결정되었습니다.")
+            tlabel.config(text="The number of tiles the player receives is determined as "+str(stn)+".")
 
             tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
 
@@ -613,7 +610,7 @@ def acb1():
 
 def f_setting_button():
     window=Tk()
-    window.title("난이도 설정 테스트")
+    window.title("Level setting test")
     window.geometry("480x300+100+100")
     window.resizable(False, False)
     def flash():
@@ -636,7 +633,7 @@ def f_theory_button():
     global page
     
     acb3 = Tk()
-    acb3.title("이론 설명창 테스트")
+    acb3.title("Theory test")
     acb3.geometry("600x300+100+100")
 
     page=0
@@ -672,8 +669,8 @@ def f_theory_button():
             label1.config(text=str(Tbox[page]))
             label2.config(text=str(Sbox[page]))
 
-    buttonP = Button(acb3, text = "이전", overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)   
-    buttonN = Button(acb3, text = "다음", overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)    
+    buttonP = Button(acb3, text = "Previous", overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)   
+    buttonN = Button(acb3, text = "Next", overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)    
     
     buttonP.pack(side = LEFT, padx = 50)
     buttonN.pack(side = RIGHT, padx = 50)
@@ -799,12 +796,12 @@ def main_loop(): # Game main loop scene
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
         global fti_b, fti_w, YATT, RT
         wtt = Tk()                             # 윈도우 창을 생성
-        wtt.title("타일 가져오기")              # 타이틀
+        wtt.title("Get tiles from the field.")              # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
 
-        label1 = Label(wtt, text="1차 완성")    # 라벨 등록
+        label1 = Label(wtt, text="1st testing")    # 라벨 등록
         label1.pack(pady=10)
-        label2 = Label(wtt, text="가져올 타일을 선택하세요.")   # 라벨 등록
+        label2 = Label(wtt, text="Choose the color of the tile to get.")   # 라벨 등록
         label2.pack(pady=10)
         
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
@@ -833,9 +830,9 @@ def main_loop(): # Game main loop scene
                 YATT += 1
                 wtt.after(1000, wttd)
     
-        bb = Button(wtt, text='검정색 가져오기\n'+'남은 타일 수: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
+        bb = Button(wtt, text='Get Black\n'+'Number of remaining tiles: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
                     image=pixelVirtual, width=100, height=160, compound="c")                # 크기 텍스트 기준이 아닌 기준 픽셀 기준, 텍스트는 중앙표기.
-        bw = Button(wtt, text='하양색 가져오기\n'+'남은 타일 수: '+str(len(fti_w)), command = sf_bw, fg = 'black', bg = "ghost white",
+        bw = Button(wtt, text='Get White\n'+'Number of remaining tiles: '+str(len(fti_w)), command = sf_bw, fg = 'black', bg = "ghost white",
                     image=pixelVirtual, width=100, height=160, compound="c")
         bb.pack(side = LEFT, padx = 50)
         bw.pack(side = RIGHT, padx = 50)
@@ -844,12 +841,12 @@ def main_loop(): # Game main loop scene
             wtt.destroy()
 
         if len(fti_b) == 0 and len(fti_w) == 0:
-            label2.config(text="더 이상 타일이 없습니다.")
+            label2.config(text="There are no more tiles.")
             
             wtt.after(1000, wttd)
         
         if YATT != 0:
-            label2.config(text="이번 턴에 이미 패를 먹었습니다.")
+            label2.config(text="You have already taken a tile this turn.")
             bb.destroy()
             bw.destroy()
             wtt.after(1000, wttd)
