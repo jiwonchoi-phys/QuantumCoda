@@ -572,20 +572,25 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
 
     loop_num=[]
     loop_num.append(x.card_num[0])
+    print("x[0]: ",x.card_num[0])     
 
-    for player in p:
-        for card in player.deck_list:
-            if (card.card_color == x.card_color) and (card.card_loop == x.card_loop):
+    for player in p: 
+        for card in player.deck_list : #모든 카드를 돌면서
+            if (card.card_color == x.card_color) and (card.card_loop == x.card_loop): # 루프와 색상이 같은 경우에
+                '''
                 print('same loop------------')
                 print("card num: ",card.card_num)
-                print("x[0]",x.card_num[0])     
-                if x.card_num[0] in card.card_num:  #x의 숫자가 card에 있으면 붕괴(근데 loop_num을 봐야하는데)
-                    if len(card.card_num) == 2:
-                        del card.card_num[card.card_num.index(x.card_num[0])]
-                        print("survived number: ",card.card_num)
-                        if card.card_num[0] not in loop_num:
-                            loop_num.append(card.card_num[0])
                 '''
+
+                for i in loop_num: #loop_num에 있는 애들 다 돌면서 검사
+                    if i in card.card_num:  #loop_num의 숫자가 카드 안에 있고
+                        if len(card.card_num) == 2: # 카드 숫자가 두개면
+                            del card.card_num[card.card_num.index(x.card_num[0])] # 붕괴
+                            print("survived number: ",card.card_num)
+                            card.number = PRINTTEXT("%s" % card.card_num, 18, color=card.font_color)
+                            if card.card_num[0] not in loop_num:
+                                loop_num.append(card.card_num[0]) #그리고 loop_num에 루프붕괴 숫자 추가
+                '''        
                 print("-------------")
                 print(card.card_color)
                 print(card.card_loop)
