@@ -195,7 +195,7 @@ class CARD():
                     if YATT == 0 and len(fti_b) == 0 and len(fti_w) == 0:
                         self.f_click_tile()
                     pass
-                else: #print("클릭됨") # 확인용
+                else:
                     self.f_click_tile()
         
         if self.opened == True:
@@ -234,7 +234,7 @@ class CARD():
                 self.card_num = sf_p(self.card_num, self.card_probability)
                 self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
                 label1.config(text="추측한 "+str(PGN)+"숫자가 타일에 존재 합니다!")
-                if PGN == t_num:
+                if PGN == self.card_num: # 에러 발견.
                     label2.config(text="추측 성공! 연속 추측 가능.")
                     YATT -= 1
                     ct_tk.after(1000, ctd)
@@ -419,10 +419,10 @@ def all_arrange(players):
 def f_option_room(): # 옵션 설정 방
     screen.fill([207, 216, 220])
     dp = PRINTTEXT("option testroom", size = 50)
-    shb1 = BUTTON("button test")
-    shb2 = BUTTON("Level Setting")
-    shb3 = BUTTON("theory test")
-    shbb = BUTTON("back test(main 이동 필요)")
+    orb1 = BUTTON("button test")
+    orb2 = BUTTON("Level Setting")
+    orb3 = BUTTON("theory test")
+    orbb = BUTTON("back")
 
     play = False
     while not play:
@@ -431,10 +431,10 @@ def f_option_room(): # 옵션 설정 방
                 pygame.quit()
                 quit()
 
-        shb1._draw_(loc = (100,300), size = (150,30), action=acb1)
-        shb2._draw_(loc = (400,300), size = (150,30), action=acb2)
-        shb3._draw_(loc = (700,300), size = (150,30), action=acb3)
-        shbb._draw_(loc = (800,550), size = (150,30), action=game_intro)
+        orb1._draw_(loc = (100,300), size = (150,30))
+        orb2._draw_(loc = (SCREEN_WIDTH*2/5,300), size = (150,30), action=f_setting_button)
+        orb3._draw_(loc = (SCREEN_WIDTH*4/5,300), size = (150,30), action=f_theory_button)
+        orbb._draw_(loc = (SCREEN_WIDTH*2/5,550), size = (150,30), action=game_intro)
         # text positions
         dp._blit_(loc='top center')
 
@@ -570,18 +570,18 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
                             del card.card_num[index(num)]
 
 """
-    ====================<<<     SH-TEST    >>>=================
+    ====================<<<     Util-TEST    >>>=================
 """
 
 def acb1():
-    print("kkkkkkkkkkkkkkkkkkkkk")
+    #print("kkkkkkkkkkkkkkkkkkkkk")
     pass
 
-def acb2():
+def f_setting_button():
     window=Tk()
-    window.title("입력 테스트")
+    window.title("난이도 설정 테스트")
     window.geometry("480x300+100+100")
-    window.resizable(False, False)                  # 창 크기 조절 가능 여부 거부
+    window.resizable(False, False)
     def flash():
         checkbutton1.flash()
 
@@ -598,7 +598,7 @@ def acb2():
 
     window.mainloop()
 
-def acb3():
+def f_theory_button():
     global page
     
     acb3 = Tk()
@@ -626,20 +626,12 @@ def acb3():
         if page == mpage:
             label1.config(text=str(Tbox[page-1]))
             label2.config(text=str(Sbox[page-1]))
-            """
-            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
-            buttonP.pack(side = LEFT, padx = 50)
-            """
+            
 
         else:
             label1.config(text=str(Tbox[page-1]))
             label2.config(text=str(Sbox[page-1]))
-            """
-            buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
-            buttonP.pack(side = LEFT, padx = 50)
-            buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
-            buttonN.pack(side = RIGHT, padx = 50)
-            """
+            
 
     def pageDOWN():
         global page
@@ -647,10 +639,7 @@ def acb3():
 
         label1.config(text=str(Tbox[page]))
         label2.config(text=str(Sbox[page]))
-        """
-        buttonN = Button(acb3, overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)
-        buttonN.pack(side = RIGHT, padx = 50)
-        """
+        
 
     buttonP = Button(acb3, overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)
     buttonP.pack(side = LEFT, padx = 50)    
@@ -899,9 +888,6 @@ def make_card(num_players, stn):
             p[i].deck_list.append(qwer)
             tii.pop(tii.index(qwer))
 
-    
-    
-
 def f_ftile_color_arrnage(tii):           
     global fti_b, fti_w
     fti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
@@ -923,10 +909,8 @@ screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
 
 game_intro()                                # 실행 장면을 위한 함수들
-shtestroom()
 how_to_play()
 
 main_loop()
-
 
 pygame.quit()                               # pygame 종료
