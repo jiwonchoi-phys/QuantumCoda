@@ -639,10 +639,10 @@ def f_theory_button():
     #image=PhotoImage(file="a.png") 
     #label = Label(acb3, image=image)         # 라벨 등록
 
-    label1 = Label(acb3, text="intro")
-    label2 = Label(acb3, text="~")
-    label1.pack()
-    label2.pack()
+    label1 = Label(acb3, text="intro", justify = "left")
+    label2 = Label(acb3, text="~", justify = "left")
+    label1.pack(side = "top", anchor = "w")
+    label2.pack(side = "top", anchor = "w")
 
     Tbox = ["superposition:","entanglement:","collapse:"]
     Sbox = ["the ability of quantum objects to be in two places at once.",
