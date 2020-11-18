@@ -248,7 +248,7 @@ class CARD():
                 return number
                 
             def ctcalc(event):
-                global RT, YATT        # RT; class: CARD
+                global RT, YATT, Notice        # RT; class: CARD
                 PGN = int(entry.get()) # The player's guess number.
                 
                 if PGN in self.card_num:
@@ -260,6 +260,7 @@ class CARD():
                         YATT = 3
                         p[turn].put_point(20)
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                        Notice = "Continuous guessing is possible."
                         ct_tk.after(1700, ctd)
                         collapse_loop(self)
                     else:
@@ -757,6 +758,11 @@ def f_win_page(): # 승리 페이지 구현 중
         # text positions
         dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4))
 
+        # rank
+        #box = []
+        #for i in range(0,num_players):
+        #    box.append(i)
+        #    box[i] = PRINTTEXT()
         pygame.display.update()
 
 """
