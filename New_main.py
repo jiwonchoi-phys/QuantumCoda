@@ -15,6 +15,7 @@ import platform # OS Environment module
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
 
 지원 진행상황 : 루프 붕괴 계속 하는 중(20일 전까지 끝낼 예정)
+내가 타일 먹고 상대 붕괴 시켰는데 그게 방금 먹은 타일이랑 루프일 경우 에러 뜨는 듯
 '''
 
 # RGB color information
@@ -629,7 +630,7 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.title("Enter the number of starting tiles.")
     tn_tk.geometry("480x300+100+100")
     tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-    tlabel = Label(tn_tk, text="At the start of the game, \nplease enter the number of tiles players will start with.")
+    tlabel = Label(tn_tk, text="At the start of the game,\nplease enter the number of tiles players will start with.")
     
     def tcalc(event):
         global num_players, stn
@@ -778,12 +779,12 @@ def f_win_page(): # 승리 페이지 구현 중
 
         wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,30), action=main_loop)
         wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,30), action=game_intro)
-        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,30), action=pygame.quit)
+        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,30), action=exit_window)
         wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_setting_button)
         # text positions
         dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4-100), loc_center=False)
 
-        # rank
+        # rank # 같은 점수 경우 검토 필요
         box , em = [], []
         for i in range(0,num_players):
             box.append(p[i].get_point())
@@ -814,7 +815,7 @@ def game_intro():   # Game intro scene
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
-    option = BUTTON("win-page test")
+    option = BUTTON("do not click")
     title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
