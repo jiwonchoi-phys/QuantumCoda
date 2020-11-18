@@ -12,7 +12,16 @@ import platform # OS Environment module
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
 오픈 여부.
+
+지원 진행상황 : 루프 붕괴 계속 하는 중(20일 전까지 끝낼 예정)
+
+fti_b,fti_w에 남은 카드가 없을 경우, RT로 가져올게 없음 -> 상대 카드 유추에 실패했을 때 에러 발생.(RT=0으로 남아있기 때문)
+
+ㄴ
+
 '''
+
+
 
 # RGB color information
 BLACK   = (  0,  0,  0)
@@ -239,6 +248,7 @@ class CARD():
             def ctcalc(event):
                 global RT, YATT        # RT; class: CARD
                 PGN = int(entry.get()) # The player's guess number.
+                
                 if PGN in self.card_num:
                     self.card_num = sf_p(self.card_num, self.card_probability)
                     self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
@@ -265,7 +275,7 @@ class CARD():
                     label3 = Label(ct_tk, text="붕괴된 숫자 :"+str(NTN))
                     label3.pack()
 
-                    NT = CARD(NTC, NTN, None, RT.get_loop())
+                    NT = CARD(NTC, NTN, None,  RT.get_loop())
                     p[turn].deck_list.append(NT)
                     del p[turn].deck_list[p[turn].deck_list.index(RT)]
                     print(RT.card_color)
@@ -570,27 +580,25 @@ def f_draw_card(p, turn, Ttext):
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
 
-    loop_num=[]
-    loop_num.append(x.card_num[0])
-    print("x[0]: ",x.card_num[0])     
+    loop_num=x.card_num[0]      
+    print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
 
-    for player in p: 
-        for card in player.deck_list : #모든 카드를 돌면서
-            if (card.card_color == x.card_color) and (card.card_loop == x.card_loop): # 루프와 색상이 같은 경우에
-                '''
-                print('same loop------------')
-                print("card num: ",card.card_num)
-                '''
-
-                for i in loop_num: #loop_num에 있는 애들 다 돌면서 검사
-                    if i in card.card_num:  #loop_num의 숫자가 카드 안에 있고
-                        if len(card.card_num) == 2: # 카드 숫자가 두개면
-                            del card.card_num[card.card_num.index(x.card_num[0])] # 붕괴
-                            print("survived number: ",card.card_num)
-                            card.number = PRINTTEXT("%s" % card.card_num, 18, color=card.font_color)
-                            if card.card_num[0] not in loop_num:
-                                loop_num.append(card.card_num[0]) #그리고 loop_num에 루프붕괴 숫자 추가
-                    '''        
+    for iter in range(10):  # 충분히 많이 반복
+        for player in p:    # 모든 플레이어의
+            for card in player.deck_list :      #모든 카드를 돌면서
+                if (card.card_color == x.card_color) and (card.card_loop == x.card_loop): # 루프와 색상이 같은 경우에
+                    '''
+                    print('same loop------------')
+                    print("card num: ",card.card_num)
+                    '''
+                    # 카드가 loop_num을 가지고 있고, 카드 숫자가 두개면
+                    if (loop_num in card.card_num) and (len(card.card_num) == 2):        
+                        del card.card_num[card.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
+                        print("survived number: ",card.card_num)
+                        card.number = PRINTTEXT("%s" % card.card_num, 18, color=card.font_color)    # card_num 업데이트
+                        loop_num = card.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
+            
+                '''        
                 print("-------------")
                 print(card.card_color)
                 print(card.card_loop)
