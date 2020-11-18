@@ -18,7 +18,7 @@ import platform # OS Environment module
 지원 진행상황 : 루프 붕괴 계속 하는 중(20일 전까지 끝낼 예정)
 
 fti_b,fti_w에 남은 카드가 없을 경우, RT로 가져올게 없음 -> 상대 카드 유추에 실패했을 때 에러 발생.(RT=0으로 남아있기 때문)
-
+Optional)카드에서 플레이어의 정보를 가져오는 것 필요
 ㄴ
 
 '''
@@ -40,7 +40,7 @@ PURPLE  = (217, 65,197)
 GRAY    = (201,201,201)
 GRAY_2  = (169,169,169)
 
-#======== Initialize pygame ==========
+
 # Object size
 SCREEN_WIDTH  = 1100
 SCREEN_HEIGHT = 600
@@ -53,7 +53,7 @@ CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
-cut_list=[]
+cut_list=[]         # 각 loop당 카드의 갯수
 idx=0
 
 """
@@ -578,14 +578,14 @@ def f_draw_card(p, turn, Ttext):
         p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
         Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
 
-def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
+def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
 
     loop_num=x.card_num[0]      
     print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
 
     for iter in range(10):  # 충분히 많이 반복
         for player in p:    # 모든 플레이어의
-            for card in player.deck_list :      #모든 카드를 돌면서
+            for card in player.deck_list:      #모든 카드를 돌면서
                 if (card.card_color == x.card_color) and (card.card_loop == x.card_loop): # 루프와 색상이 같은 경우에
                     '''
                     print('same loop------------')
@@ -597,19 +597,33 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드를 나타냄
                         print("survived number: ",card.card_num)
                         card.number = PRINTTEXT("%s" % card.card_num, 18, color=card.font_color)    # card_num 업데이트
                         loop_num = card.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
-            
-                '''        
-                print("-------------")
-                print(card.card_color)
-                print(card.card_loop)
-                print(card.card_num)
-                print(card.card_probability)
-                '''
-    print("loop number: ", loop_num)
-     
-    for card in fti_b and fti_w:
-        if (card.card_color == x.card_color) and (card.card_loop == x.card_loop):
-            print()
+                    
+        # 왜 안뽑은 카드는 못찾을까?
+        for card_b in fti_b:
+            if (card_b.card_num == x.card_num) and (card_b.card_loop == x.card_loop):
+                if (loop_num in card_b.card_num) and (len(card_b.card_num) == 2):
+                    del card_b.card_num[card_b.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
+                    print("survived number: ",card_b.card_num)
+                    card_b.number = PRINTTEXT("%s" % card_b.card_num, 18, color=card_b.font_color)    # card_num 업데이트
+                    loop_num = card_b.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
+                    
+                    print("----black----")
+                    print(card_b.card_loop)
+                    print(card_b.card_num)
+                    
+        for card_w in fti_w:
+            if (card_w.card_num == x.card_num) and (card_w.card_loop == x.card_loop):
+                if (loop_num in card_w.card_num) and (len(card_w.card_num) == 2):
+                    del card_w.card_num[card_w.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
+                    print("survived number: ",card_w.card_num)
+                    card_w.number = PRINTTEXT("%s" % card_w.card_num, 18, color=card_w.font_color)    # card_num 업데이트
+                    loop_num = card_w.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
+                    
+                    print(card_w.card_loop)
+                    print(card_w.card_num)    
+        print("---------------")
+        print(loop_num)
+
 
 """
     ====================<<<     Util-TEST    >>>=================
