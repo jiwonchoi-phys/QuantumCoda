@@ -579,7 +579,7 @@ def f_draw_card(p, turn, Ttext):
         Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
-
+    global fti_w, fti_b
     loop_num=x.card_num[0]      
     print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
 
@@ -600,7 +600,7 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
                     
         # 왜 안뽑은 카드는 못찾을까?
         for card_b in fti_b:
-            if (card_b.card_num == x.card_num) and (card_b.card_loop == x.card_loop):
+            if (card_b.card_color == x.card_color) and (card_b.card_loop == x.card_loop):
                 if (loop_num in card_b.card_num) and (len(card_b.card_num) == 2):
                     del card_b.card_num[card_b.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
                     print("survived number: ",card_b.card_num)
@@ -612,7 +612,7 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
                     print(card_b.card_num)
                     
         for card_w in fti_w:
-            if (card_w.card_num == x.card_num) and (card_w.card_loop == x.card_loop):
+            if (card_w.card_color == x.card_color) and (card_w.card_loop == x.card_loop):
                 if (loop_num in card_w.card_num) and (len(card_w.card_num) == 2):
                     del card_w.card_num[card_w.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
                     print("survived number: ",card_w.card_num)
