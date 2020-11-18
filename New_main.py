@@ -11,7 +11,7 @@ import platform # OS Environment module
 '''
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
-오픈 여부.
+오픈 여부.............
 '''
 
 # RGB color information
@@ -199,7 +199,7 @@ class CARD():
                 if YATT != 1: # 카드 안먹으면 클릭 안됨. 아래 두 경우 제외
                     if YATT == 0 and len(fti_b) == 0 and len(fti_w) == 0: # 타일이 없어 못 먹은 경우 추측 가능.
                         self.f_click_tile()
-                    if YATT == 3:   # 추측 성공시 추가 추측 가능.
+                    elif YATT == 3:   # 추측 성공시 추가 추측 가능.
                         self.f_click_tile()
                     pass
                 elif YATT == 1:
@@ -214,6 +214,7 @@ class CARD():
         global RT, YATT
         if self in p[turn].deck_list: # 자신의 패 선택 불가.
             pass
+        
         else:   # 타인의 패 선택시
             t_num = self.card_num
             t_probability = self.card_probability
@@ -242,7 +243,7 @@ class CARD():
                 if PGN in self.card_num:
                     self.card_num = sf_p(self.card_num, self.card_probability)
                     self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-                    label1.config(text="The guessed number "+str(PGN)+" exists on the tile!")
+                    label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
                 
                     if PGN == self.card_num[0]: # self.card_num class: list
                         YATT = 3
@@ -257,7 +258,7 @@ class CARD():
 
                 else:
                     YATT = 2
-                    label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.")
+                    label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                     label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
                     NTC = RT.get_color() #
                     NTN = sf_p(RT.get_num(), RT.get_pro()) #
