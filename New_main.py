@@ -1,5 +1,7 @@
 #======건들지 마시오=====
 from tkinter import *
+from tkinter.ttk import *
+from PIL import ImageTk, Image
 import pygame
 import math
 import random
@@ -631,52 +633,58 @@ def f_setting_button():
     window.mainloop()
 
 def f_theory_button():
-    global page
+    window=Tk()
+    window.title("Theory test")
+    window.geometry("800x500+100+100")
+    window.resizable(False, False)
     
-    acb3 = Tk()
-    acb3.title("Theory test")
-    acb3.geometry("600x300+100+100")
-
-    page=0
-    mpage = 3
-    #image=PhotoImage(file="a.png") 
-    #label = Label(acb3, image=image)         # 라벨 등록
-
-    label1 = Label(acb3, text="intro", justify = "left")
-    label2 = Label(acb3, text="~", justify = "left")
-    label1.pack(side = "top", anchor = "w")
-    label2.pack(side = "top", anchor = "w")
-
-    Tbox = ["superposition:","entanglement:","collapse:"]
-    Sbox = ["the ability of quantum objects to be in two places at once.",
-            "the phenomenon where distant parts of a quantum system display correlations\nthat cannot be explained by either timelike causality or common cause.",
-            "the phenomenon where the quantum states of a system are reduced to classical states.\nCollapses occur when a measurement happens,\nbut the mathematics of the current formulation of quantum mechanics is\nsilent on the measurement process.\nMany of the interpretations of quantum mechanics derive from different efforts to deal\nwith the measurement problem."]
-
-    def pageUP():
-        global page
-        if page == mpage:
-            pass
-        else:
-            page += 1
-            label1.config(text=str(Tbox[page-1]))
-            label2.config(text=str(Sbox[page-1]))
-
-    def pageDOWN():
-        global page
-        if page == 0:
-            pass
-        else:
-            page -= 1
-            label1.config(text=str(Tbox[page]))
-            label2.config(text=str(Sbox[page]))
-
-    buttonP = Button(acb3, text = "Previous", overrelief="solid", width=15, command=pageDOWN, repeatdelay=1000, repeatinterval=100)   
-    buttonN = Button(acb3, text = "Next", overrelief="solid", width=15, command=pageUP, repeatdelay=1000, repeatinterval=100)    
+    n_width = 720
+    n_heigh = 480
+    notebook=Notebook(window, width = n_width, height = n_heigh)
+    notebook.pack()
     
-    buttonP.pack(side = LEFT, padx = 50)
-    buttonN.pack(side = RIGHT, padx = 50)
+    # 1
+    frame1=Frame(window)
+    notebook.add(frame1, text="Intro")
+
+    A = open('QM.txt', 'r')
+    QM =A.read()
     
-    acb3.mainloop()
+    msg1=Message(frame1, width = n_width, text=QM)
+    msg1.pack(side = "top", anchor = "w")
+
+    # 2
+    frame2=Frame(window)
+    notebook.add(frame2, text="Superposition")
+
+    #B = open('test.txt', 'r')
+    #data =B.read()
+    
+    msg2=Message(frame2, width = n_width, text="yet")
+    msg2.pack(side = "top", anchor = "w")
+                   
+    # 3
+    frame3=Frame(window)
+    notebook.add(frame3, text="entanglement")
+
+    C = open('entanglement.txt', 'r')
+    entanglement =C.read()
+    
+    msg3=Message(frame3, width = n_width, text=entanglement)
+    msg3.pack(side = "top", anchor = "w")
+                   
+    # 4
+    frame4=Frame(window)
+    notebook.add(frame4, text="이미지 크기조절 및 출력 테스트")
+
+    image=Image.open("a.png")
+    image = image.resize((n_width,n_heigh-20),Image.ANTIALIAS)
+    r_img = ImageTk.PhotoImage(image)
+    
+    msg4=Label(frame4, width = n_width, image=r_img)
+    msg4.pack(side = "top", anchor = "w")
+
+    window.mainloop()
 
 """
     ====================<<<     Main    >>>====================
