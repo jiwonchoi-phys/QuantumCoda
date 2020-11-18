@@ -280,7 +280,7 @@ class CARD():
                         YATT = 2
                         p[turn].put_point(2)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                        label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
+                        label2.config(text="Collapse and open the tile brought this turn.")
                         NTC = RT.get_color() #
                         NTN = sf_p(RT.get_num(), RT.get_pro()) #
                         
