@@ -454,7 +454,6 @@ def f_option_room(): # 옵션 설정 방
     dp = PRINTTEXT("option testroom", size = 50)
     orb1 = BUTTON("button test")
     orb2 = BUTTON("Level Setting")
-    orb3 = BUTTON("theory test")
     orbb = BUTTON("back")
 
     play = False
@@ -466,7 +465,6 @@ def f_option_room(): # 옵션 설정 방
 
         #orb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
         orb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
-        orb3._draw_(loc = (SCREEN_WIDTH*4/5-80,300), size = (160,30), action=f_theory_button)
         orbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
         # text positions
         dp._blit_(loc='top center')
@@ -654,7 +652,7 @@ def f_setting_button():
 
     window.mainloop()
 
-def f_theory_button():
+def theory_desc():
     window=Tk()
     window.title("Theory test")
     window.geometry("800x500+100+100")
@@ -679,10 +677,10 @@ def f_theory_button():
     frame2=Frame(window)
     notebook.add(frame2, text="Superposition")
 
-    #B = open('test.txt', 'r')
-    #data =B.read()
+    B = open('superposition.txt', 'r')
+    superposition = B.read()
     
-    msg2=Message(frame2, width = n_width, text="yet")
+    msg2=Message(frame2, width = n_width, text=superposition)
     msg2.pack(side = "top", anchor = "w")
                    
     # 3
@@ -724,9 +722,6 @@ def game_intro():       # Game intro scene
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
-    new_test1 = BUTTON("test 1")
-    new_test2 = BUTTON("test 2")
-
     option = BUTTON("Option test")
 
     title_exit_button = BUTTON("Exit",active_color=RED)
@@ -738,16 +733,14 @@ def game_intro():       # Game intro scene
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
         
-        # text positions
+        # text _blit_ location
         title._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
         credits_title._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-100))
         credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-70))
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
-        new_test1._draw_(loc = 'bottom left', size = (60,30), action=None)
-        new_test2._draw_(loc = 'bottom right', size = (60,30),action=None)
+        # button _draw_ functions
         option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_option_room)
-        
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
         title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
@@ -760,12 +753,16 @@ def how_to_play(): # scene for game description # 장면 테스트 중
     play = False
 
     # dp: description
-    dp1 = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
-    dp2 = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
-    dp3 = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
+    dp1_ko = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
+    dp2_ko = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
+    dp3_ko = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
+    dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game is combined", size = 20)
+    dp_en2 = PRINTTEXT("the phenomenon of Quantum Mechanics.", size = 20)
+    dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside.", size = 20)
 
-    theorem_button = BUTTON("원리 Theorem")
+    theory_button = BUTTON("원리 Theory")
     Rule_button = BUTTON("게임규칙 Rule")
+    prac_button = BUTTON("연습게임 Practice")
     back_button = BUTTON("Back to Title")
     exit_button = BUTTON("Exit",active_color=RED)
 
@@ -775,12 +772,16 @@ def how_to_play(): # scene for game description # 장면 테스트 중
                 pygame.quit()
 
         # text positions
-        dp1._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4))
-        dp2._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25))
-        dp3._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 50))
+        dp1_ko._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4))
+        dp2_ko._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25))
+        dp3_ko._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 50))
+        dp_en1._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 200))
+        dp_en2._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 225))
+        dp_en3._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 250))
 
-        theorem_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = None)
+        theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
         Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
+        prac_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*3 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
         back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
         exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
 
@@ -910,7 +911,7 @@ def main_loop(): # Game main loop scene
         
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
-        button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (60,30), action = next_turn)
+        button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
         button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
