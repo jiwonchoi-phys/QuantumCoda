@@ -121,7 +121,11 @@ class PLAYER():
         self.deck_list = []         # 덱 리스트
         self.closed_deck = []
         self.opened_deck = []       # 오픈덱 리스트
-    
+        self.point = 0
+
+    def point(self):
+        return self.point
+
     def draw_card(self,x,y):
         for i, card in enumerate(self.deck_list):
             card.draw_img(loc=(x + i*CARD_WIDTH,y)) # 같은 행에 카드 폭만큼 다른 열로 이어 붙임.
@@ -269,24 +273,32 @@ class CARD():
                     
 
                 else:
-                    YATT = 2
-                    label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                    label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
-                    NTC = RT.get_color() #
-                    NTN = sf_p(RT.get_num(), RT.get_pro()) #
-                    
-                    label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
-                    label3.pack()
+                    if YATT == 0:
+                        YATT = 2
+                        label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
+                        label2.config(text="먹은 타일이 없어 붕괴 및 오픈 과정 생략.")
+                        ct_tk.after(2100, ctd)
+                        pass
 
-                    NT = CARD(NTC, NTN, None,  RT.get_loop())
-                    p[turn].deck_list.append(NT)
-                    del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                    print(RT.card_color)
-                    print(RT.card_loop)
-                    print(RT.card_num)
-                    print(RT.card_probability)
-                    ct_tk.after(2100, ctd)
-                    collapse_loop(RT)
+                    elif YATT == 1:
+                        YATT = 2
+                        label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
+                        label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
+                        NTC = RT.get_color() #
+                        NTN = sf_p(RT.get_num(), RT.get_pro()) #
+                        
+                        label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
+                        label3.pack()
+
+                        NT = CARD(NTC, NTN, None,  RT.get_loop())
+                        p[turn].deck_list.append(NT)
+                        del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                        print(RT.card_color)
+                        print(RT.card_loop)
+                        print(RT.card_num)
+                        print(RT.card_probability)
+                        ct_tk.after(2100, ctd)
+                        collapse_loop(RT)
 
             def ctd():
                 ct_tk.destroy()
