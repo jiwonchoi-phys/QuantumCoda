@@ -504,6 +504,31 @@ def f_ftile_color_arrnage(tii):
         elif tii[i].get_color() == 0:
             fti_w.append(tii[i])
 
+def exit_window(): # Exit Warning window Tk.
+    ex = Tk()
+    ex.title("Warning")
+    ex.geometry("480x300+100+100")
+    ex.resizable(False, False)
+    exlabel = Label(ex, text="Do you want to end this game? \nIf you click Exit button then this behavior is not reversible...")
+
+    def click_exit(event):
+        pygame.quit()
+        quit()
+    def click_cancel(event):
+        ex.destroy()
+
+    bt1 = Button(ex, text="Exit")
+    bt2 = Button(ex, text="Cancel")
+    
+    bt1.place(x= SCREEN_WIDTH // 5 - 100,y= SCREEN_HEIGHT // 5, width = 100, height = 50)
+    bt2.place(x= SCREEN_WIDTH // 5 + 50,y= SCREEN_HEIGHT // 5, width = 100, height = 50)
+
+    bt1.bind("<Button-1>", click_exit)
+    bt2.bind("<Button-1>", click_cancel)
+
+    exlabel.place(x= SCREEN_WIDTH // 20, y= SCREEN_HEIGHT // 10)
+    ex.mainloop()
+
 def theory_desc(): # 이론 Tk.
     window=Tk()
     window.title("Theory test")
@@ -601,7 +626,7 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.title("Enter the number of starting tiles.")
     tn_tk.geometry("480x300+100+100")
     tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-    tlabel = Label(tn_tk, text="At the start of the game, please enter the number of tiles players will start with.")
+    tlabel = Label(tn_tk, text="At the start of the game, \nplease enter the number of tiles players will start with.")
     
     def tcalc(event):
         global num_players, stn
@@ -791,7 +816,7 @@ def game_intro():   # Game intro scene
         option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_win_page)
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
-        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
+        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=quit)
 
         pygame.display.update()
         clock.tick(15)
@@ -801,12 +826,13 @@ def how_to_play(): # scene for game description # 장면 테스트 중
     play = False
 
     # dp: description
-    dp1_ko = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
-    dp2_ko = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
-    dp3_ko = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
-    dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game is combined", size = 20)
-    dp_en2 = PRINTTEXT("the phenomenon of Quantum Mechanics.", size = 20)
-    dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside.", size = 20)
+    dp_ko1 = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
+    dp_ko2 = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
+    dp_ko3 = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
+    dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game included", size = 20)
+    dp_en2 = PRINTTEXT("weird elements inspired on the phenomenon of Quantum Mechanics.", size = 20)
+    dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside", size = 20)
+    dp_en4 = PRINTTEXT("what you want to know.", size = 20)
 
     theory_button = BUTTON("원리 Theory")
     Rule_button = BUTTON("게임규칙 Rule")
@@ -820,12 +846,13 @@ def how_to_play(): # scene for game description # 장면 테스트 중
                 pygame.quit()
 
         # text positions
-        dp1_ko._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4))
-        dp2_ko._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25))
-        dp3_ko._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 50))
+        dp_ko1._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4))
+        dp_ko2._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25))
+        dp_ko3._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 50))
         dp_en1._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 200))
         dp_en2._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 225))
         dp_en3._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 250))
+        dp_en4._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 275))
 
         theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
         Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
@@ -865,11 +892,13 @@ def main_loop(): # Game main loop scene
             if turn == num_players:
                 turn = 0
         elif YATT == 0:
-            ttftt = PRINTTEXT("Take the tile first this turn.", 20)
+            ttftt = PRINTTEXT("Take the tile first at this turn.", 20)
             ttftt._blit_(loc=(SCREEN_WIDTH/2,50))
+            clock.tick(5)
         elif YATT == 1:
             gnot = PRINTTEXT("Guess the number of tiles on your opponent.", 20)
             gnot._blit_(loc=(SCREEN_WIDTH/2,50))
+            clock.tick(5)
     
             
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
@@ -878,9 +907,9 @@ def main_loop(): # Game main loop scene
         wtt.title("Get tiles from the field.") # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
 
-        label1 = Label(wtt, text="1st testing")    # 라벨 등록
+        label1 = Label(wtt, text="Take a new tile")    # 라벨 등록
         label1.pack(pady=10)
-        label2 = Label(wtt, text="Choose the color of the tile to get.")   # 라벨 등록
+        label2 = Label(wtt, text="Choose the color of the tile to take.")   # 라벨 등록
         label2.pack(pady=10)
         
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
@@ -889,7 +918,7 @@ def main_loop(): # Game main loop scene
             global fti_b, p, YATT, RT
 
             if len(fti_b) == 0:
-                label2.config(text="새캬 없는걸 왜 눌러.")
+                label2.config(text="There are no more tiles of this color.")
             else:
                 RT = random.choice(fti_b)
                 p[turn].deck_list.append(RT)
@@ -901,7 +930,7 @@ def main_loop(): # Game main loop scene
             global fti_w, p, YATT, RT
         
             if len(fti_w) == 0:
-                label2.config(text="새캬 없는걸 왜 눌러.")
+                label2.config(text="There are no more tiles of this color.")
             else:
                 RT = random.choice(fti_w)
                 p[turn].deck_list.append(RT)
@@ -936,8 +965,7 @@ def main_loop(): # Game main loop scene
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
-                pygame.quit()
-                quit()
+                exit_window()
 
         # 턴 관련
         pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
@@ -966,7 +994,7 @@ def main_loop(): # Game main loop scene
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
-        button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
+        button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = exit_window)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()
