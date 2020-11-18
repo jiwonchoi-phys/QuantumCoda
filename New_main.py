@@ -13,17 +13,9 @@ import platform # OS Environment module
 '''
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
-오픈 여부.
 
 지원 진행상황 : 루프 붕괴 계속 하는 중(20일 전까지 끝낼 예정)
-
-fti_b,fti_w에 남은 카드가 없을 경우, RT로 가져올게 없음 -> 상대 카드 유추에 실패했을 때 에러 발생.(RT=0으로 남아있기 때문)
-Optional)카드에서 플레이어의 정보를 가져오는 것 필요
-ㄴ
-
 '''
-
-
 
 # RGB color information
 BLACK   = (  0,  0,  0)
@@ -40,7 +32,6 @@ PURPLE  = (217, 65,197)
 GRAY    = (201,201,201)
 GRAY_2  = (169,169,169)
 
-
 # Object size
 SCREEN_WIDTH  = 1100
 SCREEN_HEIGHT = 600
@@ -50,7 +41,6 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
-
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 cut_list=[]         # 각 loop당 카드의 갯수
@@ -345,13 +335,8 @@ class BUTTON():
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
         
         def button_sound():
-    
-            b_s = "18V Cordless Drill Switch.wav"
-
-            pygame.mixer.init()
-            pygame.mixer.music.load(b_s)
-            pygame.mixer.music.set_volume(1)
-            pygame.mixer.music.play(1)
+            b_s = pygame.mixer.Sound("18V Cordless Drill Switch.wav")
+            b_s.play()
 
         # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
         if loc_center == True:
@@ -380,8 +365,8 @@ class BUTTON():
             if click[0] == 1:
                 if action == None:
                     pass
-                else: #print("클릭됨") # 확인용
-                    #button_sound()
+                else: # print("클릭됨") # 확인용
+                    button_sound()
                     action()
         
         else:
@@ -455,6 +440,46 @@ def make_spooky(x):
     
     return x      
 
+def make_card(num_players, stn):
+    global p, tii, max_card_num
+    
+    field_black = [] 
+    field_white = []
+    make_spooky(field_black)
+    make_spooky(field_white)
+    
+    
+    ti = []                             # 전체 타일 묶음
+    tb = []                             # Tile Black
+    tw = []                             # Tile White
+
+    for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 으로 구분하는 for문)
+        tb.append([1,field_black[i]])
+        tw.append([0,field_white[i]])
+        ti.append(tb[i])
+        ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
+
+    for i in ti:
+        print(i)
+
+    random.shuffle(ti)                  # 모든 타일 섞음
+    spooky_arrange(ti)                  # util 참고.
+    
+    tii = [CARD(ti[i][0],ti[i][1][0:2],\
+        ti[i][1][2:4],ti[i][1][4]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
+
+    # num_players만큼 플레이어 생성
+    p = [PLAYER() for i in range(num_players)]
+
+    # PLAYER의 덱에 생성된 카드를 랜덤으로 추가
+    for i in range(num_players):
+        p[i].deck_list = []
+        p[i].opened_deck = []
+        for k in range(0,stn):
+            qwer = random.choice(tii)
+            p[i].deck_list.append(qwer)
+            tii.pop(tii.index(qwer))
+
 def spooky_arrange(t):
     l = t
     for k in range(0,len(l)): 
@@ -468,12 +493,23 @@ def all_arrange(players):
     for p in players:
         p.tile_arrange()
 
-def f_option_room(): # 옵션 설정 방
+def f_ftile_color_arrnage(tii):           
+    global fti_b, fti_w
+    fti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
+    fti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
+
+    for i in range(len(tii)):  # 검은색 흰색 그룹에 색에 맞게 넣음
+        if tii[i].get_color() == 1:
+            fti_b.append(tii[i])
+        elif tii[i].get_color() == 0:
+            fti_w.append(tii[i])
+
+def f_win_page(): # 승리 페이지 구현 중
     screen.fill([240, 244, 195])
-    dp = PRINTTEXT("option testroom", size = 50)
-    orb1 = BUTTON("button test")
-    orb2 = BUTTON("Level Setting")
-    orbb = BUTTON("back")
+    dp = PRINTTEXT("win testroom", size = 50)
+    wpb1 = BUTTON("ReGame")
+    wpb2 = BUTTON("Level Setting")
+    wpbb = BUTTON("로비로")
 
     play = False
     while not play:
@@ -482,13 +518,67 @@ def f_option_room(): # 옵션 설정 방
                 pygame.quit()
                 quit()
 
-        #orb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
-        orb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
-        orbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
+        wpb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
+        wpb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
+        wpbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
         # text positions
         dp._blit_(loc='top center')
 
         pygame.display.update()
+
+def theory_desc():
+    window=Tk()
+    window.title("Theory test")
+    window.geometry("800x500+100+100")
+    window.resizable(False, False)
+    
+    n_width = 720
+    n_heigh = 480
+    notebook=Notebook(window, width = n_width, height = n_heigh)
+    notebook.pack()
+    
+    # 1
+    frame1=Frame(window)
+    notebook.add(frame1, text="Intro")
+
+    A = open('QM.txt', 'r')
+    QM =A.read()
+    
+    msg1=Message(frame1, width = n_width, text=QM)
+    msg1.pack(side = "top", anchor = "w")
+
+    # 2
+    frame2=Frame(window)
+    notebook.add(frame2, text="Superposition")
+
+    B = open('superposition.txt', 'r')
+    superposition = B.read()
+    
+    msg2=Message(frame2, width = n_width, text=superposition)
+    msg2.pack(side = "top", anchor = "w")
+                   
+    # 3
+    frame3=Frame(window)
+    notebook.add(frame3, text="entanglement")
+
+    C = open('entanglement.txt', 'r')
+    entanglement =C.read()
+    
+    msg3=Message(frame3, width = n_width, text=entanglement)
+    msg3.pack(side = "top", anchor = "w")
+                   
+    # 4
+    frame4=Frame(window)
+    notebook.add(frame4, text="이미지 크기조절 및 출력 테스트")
+
+    image=Image.open("a.png")
+    image = image.resize((n_width,n_heigh-20),Image.ANTIALIAS)
+    r_img = ImageTk.PhotoImage(image)
+    
+    msg4=Label(frame4, width = n_width, image=r_img)
+    msg4.pack(side = "top", anchor = "w")
+
+    window.mainloop()
 
 def f_pn():
     global plabel, num_players
@@ -636,7 +726,6 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
         print("---------------")
         print(loop_num)
 
-
 """
     ====================<<<     Util-TEST    >>>=================
 """
@@ -663,60 +752,6 @@ def f_setting_button():
     checkbutton1.pack()
     checkbutton2.pack()
     checkbutton3.pack()
-
-    window.mainloop()
-
-def theory_desc():
-    window=Tk()
-    window.title("Theory test")
-    window.geometry("800x500+100+100")
-    window.resizable(False, False)
-    
-    n_width = 720
-    n_heigh = 480
-    notebook=Notebook(window, width = n_width, height = n_heigh)
-    notebook.pack()
-    
-    # 1
-    frame1=Frame(window)
-    notebook.add(frame1, text="Intro")
-
-    A = open('QM.txt', 'r')
-    QM =A.read()
-    
-    msg1=Message(frame1, width = n_width, text=QM)
-    msg1.pack(side = "top", anchor = "w")
-
-    # 2
-    frame2=Frame(window)
-    notebook.add(frame2, text="Superposition")
-
-    B = open('superposition.txt', 'r')
-    superposition = B.read()
-    
-    msg2=Message(frame2, width = n_width, text=superposition)
-    msg2.pack(side = "top", anchor = "w")
-                   
-    # 3
-    frame3=Frame(window)
-    notebook.add(frame3, text="entanglement")
-
-    C = open('entanglement.txt', 'r')
-    entanglement =C.read()
-    
-    msg3=Message(frame3, width = n_width, text=entanglement)
-    msg3.pack(side = "top", anchor = "w")
-                   
-    # 4
-    frame4=Frame(window)
-    notebook.add(frame4, text="이미지 크기조절 및 출력 테스트")
-
-    image=Image.open("a.png")
-    image = image.resize((n_width,n_heigh-20),Image.ANTIALIAS)
-    r_img = ImageTk.PhotoImage(image)
-    
-    msg4=Label(frame4, width = n_width, image=r_img)
-    msg4.pack(side = "top", anchor = "w")
 
     window.mainloop()
 
@@ -754,7 +789,7 @@ def game_intro():       # Game intro scene
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
         # button _draw_ functions
-        option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_option_room)
+        option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_win_page)
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
         title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=pygame.quit)
@@ -810,7 +845,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    #play_music()
+    play_music()
     
     f_ftile_color_arrnage(tii)
 
@@ -821,7 +856,6 @@ def main_loop(): # Game main loop scene
 
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
     
-
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn, YATT
         if YATT == 2 or YATT == 3: # 추측 이후 턴넘김 활성화
@@ -842,7 +876,7 @@ def main_loop(): # Game main loop scene
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
         global fti_b, fti_w, YATT, RT
         wtt = Tk()                             # 윈도우 창을 생성
-        wtt.title("Get tiles from the field.")              # 타이틀
+        wtt.title("Get tiles from the field.") # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
 
         label1 = Label(wtt, text="1st testing")    # 라벨 등록
@@ -937,57 +971,6 @@ def main_loop(): # Game main loop scene
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()
-
-def make_card(num_players, stn):
-    global p, tii, max_card_num
-    
-    field_black = [] 
-    field_white = []
-    make_spooky(field_black)
-    make_spooky(field_white)
-    
-    
-    ti = []                             # 전체 타일 묶음
-    tb = []                             # Tile Black
-    tw = []                             # Tile White
-
-    for i in range(0,max_card_num+1):   # 색상 정보 추가 (Black: 1, While: 0 으로 구분하는 for문)
-        tb.append([1,field_black[i]])
-        tw.append([0,field_white[i]])
-        ti.append(tb[i])
-        ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
-
-    for i in ti:
-        print(i)
-
-    random.shuffle(ti)                  # 모든 타일 섞음
-    spooky_arrange(ti)                  # util 참고.
-    
-    tii = [CARD(ti[i][0],ti[i][1][0:2],\
-        ti[i][1][2:4],ti[i][1][4]) for i in range(len(ti))] # 생성된 카드를 클래스로 복제
-
-    # num_players만큼 플레이어 생성
-    p = [PLAYER() for i in range(num_players)]
-
-    # PLAYER의 덱에 생성된 카드를 랜덤으로 추가
-    for i in range(num_players):
-        p[i].deck_list = []
-        p[i].opened_deck = []
-        for k in range(0,stn):
-            qwer = random.choice(tii)
-            p[i].deck_list.append(qwer)
-            tii.pop(tii.index(qwer))
-
-def f_ftile_color_arrnage(tii):           
-    global fti_b, fti_w
-    fti_b = []  # 검은색을 뽑을건지 흰색을 뽑을건지 플레이어가 정함
-    fti_w = []  # 그래서 따로 검은색 흰색 그룹을 생성
-
-    for i in range(len(tii)):  # 검은색 흰색 그룹에 색에 맞게 넣음
-        if tii[i].get_color() == 1:
-            fti_b.append(tii[i])
-        elif tii[i].get_color() == 0:
-            fti_w.append(tii[i])
 
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
