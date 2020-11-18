@@ -756,13 +756,21 @@ def f_win_page(): # 승리 페이지 구현 중
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,30), action=pygame.quit)
         wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_setting_button)
         # text positions
-        dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4))
+        dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4-100), loc_center=False)
 
         # rank
-        #box = []
-        #for i in range(0,num_players):
-        #    box.append(i)
-        #    box[i] = PRINTTEXT()
+        box , em = [], []
+        for i in range(0,num_players):
+            box.append(p[i].get_point())
+            em.append(i)
+        
+        for i in range(0,num_players):
+            n = max(box)
+            k = box.index(n)
+            em[i] = PRINTTEXT(str(i+1)+"등 : Player "+str(k+1)+": [point: "+str(n)+"]", size = 30)
+            em[i]._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4+i*60), loc_center=False)
+            box[k] = -1
+
         pygame.display.update()
 
 """
@@ -848,6 +856,10 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 def main_loop(): # Game main loop scene
     global num_players, stn, turn, YATT, RT
+
+    turn , RT = 0, 0        # 첫값 0. 수정 금지.
+    Notice = " "            # 상동.
+
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
@@ -862,6 +874,7 @@ def main_loop(): # Game main loop scene
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
     button_exit = BUTTON("Exit",active_color=RED)
+    button_test = BUTTON("test",active_color=RED)
 
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
     
@@ -981,6 +994,7 @@ def main_loop(): # Game main loop scene
         button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
         button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
+        button_test._draw_(loc = (100,550), size = (130,30), action = f_win_page)
         select_card._blit_(loc=(5,30),loc_center=False) 
         
         pygame.display.update()
@@ -989,9 +1003,7 @@ def main_loop(): # Game main loop scene
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
-turn = 0        # 첫값 0. 수정 금지.
-RT = 0          # 상동.
-Notice = " "    # 상동.
+
 screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
 
