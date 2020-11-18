@@ -149,7 +149,7 @@ class PLAYER():
                     self.deck_list = deck                   # 저장
 
 class CARD():
-    global RT, YATT
+    global RT, YATT, Notice
     def __init__(self,color,num,prob,loop):
         # Set card & font color
         if color == 1: # Black
@@ -219,11 +219,13 @@ class CARD():
                 self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
     def f_click_tile(self):
-        global RT, YATT
+        global RT, YATT, Notice
         if self in p[turn].deck_list: # 자신의 패 선택 불가.
+            Notice = "You cannot select your card."
             pass
         
         else:   # 타인의 패 선택시
+            Notice = " "
             t_num = self.card_num
             t_probability = self.card_probability
 
@@ -246,7 +248,7 @@ class CARD():
                 return number
                 
             def ctcalc(event):
-                global RT, YATT        # RT; class: CARD
+                global RT, YATT, Notice        # RT; class: CARD
                 PGN = int(entry.get()) # The player's guess number.
                 
                 if PGN in self.card_num:
@@ -258,6 +260,7 @@ class CARD():
                         YATT = 3
                         p[turn].put_point(20)
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                        Notice = "Continuous guessing is possible."
                         ct_tk.after(1700, ctd)
                         collapse_loop(self)
                     else:
@@ -760,10 +763,11 @@ def f_setting_button(): # 난이도 설정 Tk 구현중..
 
 def f_win_page(): # 승리 페이지 구현 중
     screen.fill([240, 244, 195])
-    dp = PRINTTEXT("win testroom", size = 50)
+    dp = PRINTTEXT("win-page test", size = 50)
     wpb1 = BUTTON("ReGame")
-    wpb2 = BUTTON("Level Setting")
-    wpbb = BUTTON("로비로")
+    wpb2 = BUTTON("home")
+    wpb3 = BUTTON("Exit-game")
+    wpbb = BUTTON("Level Setting")
 
     play = False
     while not play:
@@ -772,12 +776,18 @@ def f_win_page(): # 승리 페이지 구현 중
                 pygame.quit()
                 quit()
 
-        wpb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
-        wpb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
-        wpbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
+        wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,30), action=main_loop)
+        wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,30), action=game_intro)
+        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,30), action=pygame.quit)
+        wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_setting_button)
         # text positions
-        dp._blit_(loc='top center')
+        dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4))
 
+        # rank
+        #box = []
+        #for i in range(0,num_players):
+        #    box.append(i)
+        #    box[i] = PRINTTEXT()
         pygame.display.update()
 
 """
@@ -796,7 +806,7 @@ def game_intro():   # Game intro scene
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
-    option = BUTTON("Option test")
+    option = BUTTON("win-page test")
     title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
@@ -883,8 +893,9 @@ def main_loop(): # Game main loop scene
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
     
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
-        global turn, pl_turn, YATT
+        global turn, pl_turn, YATT, Notice
         if YATT == 2 or YATT == 3: # 추측 이후 턴넘김 활성화
+            Notice = " "
             turn += 1
             YATT = 0
             time.sleep(1.6)   # 임시 1.6초 딜레이
@@ -892,17 +903,14 @@ def main_loop(): # Game main loop scene
             if turn == num_players:
                 turn = 0
         elif YATT == 0:
-            ttftt = PRINTTEXT("Take the tile first at this turn.", 20)
-            ttftt._blit_(loc=(SCREEN_WIDTH/2,50))
-            clock.tick(5)
-        elif YATT == 1:
-            gnot = PRINTTEXT("Guess the number of tiles on your opponent.", 20)
-            gnot._blit_(loc=(SCREEN_WIDTH/2,50))
-            clock.tick(5)
-    
+            Notice = "Take the tile first this turn."
             
+        elif YATT == 1:
+            Notice = "Guess the number of tiles on your opponent."
+ 
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
-        global fti_b, fti_w, YATT, RT
+        global fti_b, fti_w, YATT, RT, Notice
+        Notice = " "
         wtt = Tk()                             # 윈도우 창을 생성
         wtt.title("Get tiles from the field.") # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
@@ -974,6 +982,10 @@ def main_loop(): # Game main loop scene
         
         # 덱의 카드 정렬
         all_arrange(p)
+
+        # 공지
+        Notice_box = PRINTTEXT(Notice, 20)
+        Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
         
         # 덱 그리기(플러이어 텍스트 포함)
         T = list(range(turn,turn+num_players))
@@ -1003,8 +1015,9 @@ def main_loop(): # Game main loop scene
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
-turn = 0    # 첫값 0. 수정 금지.
-RT = 0      # 상동.
+turn = 0        # 첫값 0. 수정 금지.
+RT = 0          # 상동.
+Notice = " "    # 상동.
 screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
 
