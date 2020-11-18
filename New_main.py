@@ -123,8 +123,11 @@ class PLAYER():
         self.opened_deck = []       # 오픈덱 리스트
         self.point = 0
 
-    def point(self):
+    def get_point(self):
         return self.point
+    
+    def put_point(self, x):
+        self.point = self.point + x 
 
     def draw_card(self,x,y):
         for i, card in enumerate(self.deck_list):
@@ -263,11 +266,13 @@ class CARD():
                 
                     if PGN == self.card_num[0]: # self.card_num class: list
                         YATT = 3
+                        p[turn].put_point(20)
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
                         ct_tk.after(1700, ctd)
                         collapse_loop(self)
                     else:
                         YATT = 2
+                        p[turn].put_point(10)
                         label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
                         ct_tk.after(1700, ctd)
                     
@@ -275,6 +280,7 @@ class CARD():
                 else:
                     if YATT == 0:
                         YATT = 2
+                        p[turn].put_point(2)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="먹은 타일이 없어 붕괴 및 오픈 과정 생략.")
                         ct_tk.after(2100, ctd)
@@ -282,6 +288,7 @@ class CARD():
 
                     elif YATT == 1:
                         YATT = 2
+                        p[turn].put_point(2)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
                         NTC = RT.get_color() #
@@ -561,15 +568,10 @@ def play_music():
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
 
-def f_draw_card(p, turn, Ttext):
-    T = list(range(turn,turn+num_players))
+def f_draw_card(p, turn, T, Ttext):
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
     Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4),loc_center=False)
 
-    for i in range(num_players):
-        if T[i] >= num_players:
-            T[i] = T[i]-num_players
-    
     if num_players == 2:
         p[T[1]].draw_card(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
         Ttext[1]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)
@@ -913,13 +915,20 @@ def main_loop(): # Game main loop scene
         all_arrange(p)
         
         # 덱 그리기(플러이어 텍스트 포함)
+        T = list(range(turn,turn+num_players))
+        for i in range(num_players):
+            if T[i] >= num_players:
+                T[i] = T[i]-num_players
+
         Ttext = list(range(num_players))
         Ttext[0] = PRINTTEXT('Yours:', size= 20)
+
+        Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
+        Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4+50))
+        
         for i in range(1,num_players):
-            Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1), size= 15)
-            if i+turn+1 > num_players:
-                Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1-num_players), size= 15)
-        f_draw_card(p, turn, Ttext)
+            Ttext[i] = PRINTTEXT('Player: '+str(T[i]+1)+' ( point: '+str((p[T[i]].get_point()))+' )', size= 15)
+        f_draw_card(p, turn, T, Ttext)
         
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
