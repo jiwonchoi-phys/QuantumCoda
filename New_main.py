@@ -150,7 +150,7 @@ class PLAYER():
 
 class CARD():
     global RT, YATT
-    def __init__(self,color,num,prob,loop):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
+    def __init__(self,color,num,prob,loop):
         # Set card & font color
         if color == 1: # Black
             self.card_color = BLACK
@@ -504,29 +504,7 @@ def f_ftile_color_arrnage(tii):
         elif tii[i].get_color() == 0:
             fti_w.append(tii[i])
 
-def f_win_page(): # 승리 페이지 구현 중
-    screen.fill([240, 244, 195])
-    dp = PRINTTEXT("win testroom", size = 50)
-    wpb1 = BUTTON("ReGame")
-    wpb2 = BUTTON("Level Setting")
-    wpbb = BUTTON("로비로")
-
-    play = False
-    while not play:
-        for event in pygame.event.get():        # 기본 event loop
-            if event.type == pygame.QUIT:       # pygame 종료
-                pygame.quit()
-                quit()
-
-        wpb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
-        wpb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
-        wpbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
-        # text positions
-        dp._blit_(loc='top center')
-
-        pygame.display.update()
-
-def theory_desc():
+def theory_desc(): # 이론 Tk.
     window=Tk()
     window.title("Theory test")
     window.geometry("800x500+100+100")
@@ -580,7 +558,7 @@ def theory_desc():
 
     window.mainloop()
 
-def f_pn():
+def f_pn(): # 플레이어 수를 입력 받는 Tk.
     global plabel, num_players
     player_num_max = 4  #게임 가능 플레이어 수 제한
 
@@ -615,7 +593,7 @@ def f_pn():
     pn_tk.mainloop()
     return num_players
 
-def f_tn(num_players):
+def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     global tlabel, stn, fcn, max_card_num
 
     fcn=(max_card_num+1)*2              # full card number
@@ -658,7 +636,7 @@ def play_music():
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
 
-def f_draw_card(p, turn, T, Ttext):
+def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위치를 지정한 함수.
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
     Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4),loc_center=False)
 
@@ -727,14 +705,14 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
         print(loop_num)
 
 """
-    ====================<<<     Util-TEST    >>>=================
+    ====================<<<     Util-구현중..    >>>=================
 """
 
 def acb1():
     #print("kkkkkkkkkkkkkkkkkkkkk")
     pass
 
-def f_setting_button():
+def f_setting_button(): # 난이도 설정 Tk 구현중..
     window=Tk()
     window.title("Level setting test")
     window.geometry("480x300+100+100")
@@ -755,16 +733,38 @@ def f_setting_button():
 
     window.mainloop()
 
+def f_win_page(): # 승리 페이지 구현 중
+    screen.fill([240, 244, 195])
+    dp = PRINTTEXT("win testroom", size = 50)
+    wpb1 = BUTTON("ReGame")
+    wpb2 = BUTTON("Level Setting")
+    wpbb = BUTTON("로비로")
+
+    play = False
+    while not play:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+
+        wpb1._draw_(loc = (SCREEN_WIDTH/5,300), size = (150,30))
+        wpb2._draw_(loc = (SCREEN_WIDTH*2/5-80,300), size = (160,30), action=f_setting_button)
+        wpbb._draw_(loc = (SCREEN_WIDTH-200,SCREEN_HEIGHT-60), size = (160,30), action=game_intro)
+        # text positions
+        dp._blit_(loc='top center')
+
+        pygame.display.update()
+
 """
     ====================<<<     Main    >>>====================
 """
 
 #========== functions for pygame ==========#
-def game_intro():       # Game intro scene
+def game_intro():   # Game intro scene
     screen.fill(WHITE)
-    intro = False       # while문 돌리기 위함
-    # Title Texts
-    title = PRINTTEXT("Quantum Coda", size = 50)
+    intro = False   # while문 돌리기 위함
+
+    title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
@@ -772,7 +772,6 @@ def game_intro():       # Game intro scene
 
     # Button Texts
     option = BUTTON("Option test")
-
     title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
@@ -981,9 +980,6 @@ RT = 0      # 상동.
 screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
 
-game_intro()                                # 실행 장면을 위한 함수들
-how_to_play()
-
-main_loop()
+game_intro()                                # 실행 장면을 위한 최초 함수.
 
 pygame.quit()                               # pygame 종료
