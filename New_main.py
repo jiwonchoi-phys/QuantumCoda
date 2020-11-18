@@ -1,6 +1,6 @@
 #======건들지 마시오=====
 from tkinter import *
-from tkinter.ttk import *
+from tkinter.ttk import Notebook
 from PIL import ImageTk, Image
 import pygame
 import math
