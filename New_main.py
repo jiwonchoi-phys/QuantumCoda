@@ -133,12 +133,12 @@ class PLAYER():
                     pass
                 
                 elif sum(deck[k].get_num())/len(deck[k].get_num()) == sum(deck[k+1].get_num())/len(deck[k+1].get_num()): # 2) 평균이 같다면
-                    if deck[k].get_num()[0] < deck[k+1].get_num()[0]:    # 2) spooky 값 비교. 앞에 놈이 작으면 놔둠
-                        pass
+                    if deck[k].get_num()[0] < deck[k+1].get_num()[0]:    # 2) spooky 값 비교. 앞에 놈이 작으면 놔둠 (붕괴된 수랑 비교시 붕괴된 수가 항상 가장 오른쪽.)
+                        pass                                             
                 
                     elif deck[k].get_num()[0] == deck[k+1].get_num()[0]:    # 2) spooky 값도 같다면 색상 비교
-                        if deck[k].get_color() > deck[k+1].get_color():     # 흰색이 뒤로 오면
-                            deck[k+1],deck[k] = deck[k],deck[k+1]           # 검정색이 먼저오게 바꿈.
+                        if deck[k].get_color() < deck[k+1].get_color():     # 하양색이 앞에 오면
+                            deck[k+1],deck[k] = deck[k],deck[k+1]           # 검정색이 먼저 앞에 오게 바꿈.
                             self.deck_list = deck  
                     
                     else:                                       # 2) spooky 앞에 놈이 크면 자리 바꿈.
