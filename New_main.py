@@ -172,6 +172,7 @@ class CARD():
         self.opened = True
         self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
         self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
+        self.opentext = PRINTTEXT("opened",20,color=self.font_color)
         
 
     def is_opened(self):
@@ -192,10 +193,6 @@ class CARD():
     def out(self):
         pass
 
-    def info(self):
-        print("color: {}, num: {}, prob: {}, loop: {}").format(
-            self.card_color,self.card_num,self.card_probability,self.card_loop)
-    
     def draw_img(self, loc=(0,0), action=True):
         x, y = loc[0:2]
         mouse_pos = pygame.mouse.get_pos()
@@ -220,8 +217,10 @@ class CARD():
         
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+            self.opentext._blit_(loc=(x + self.width/2, y + self.height/4))
             if len(self.get_num()) == 2:
                 self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+                
         
     def f_click_tile(self):
         global RT, YATT, Notice
@@ -298,10 +297,6 @@ class CARD():
                         NT = CARD(NTC, NTN, None,  RT.get_loop())
                         p[turn].deck_list.append(NT)
                         del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                        print(RT.card_color)
-                        print(RT.card_loop)
-                        print(RT.card_num)
-                        print(RT.card_probability)
                         ct_tk.after(2100, ctd)
                         collapse_loop(RT)
 
@@ -374,7 +369,7 @@ class BUTTON():
                 if action == None:
                     pass
                 else: # print("클릭됨") # 확인용
-                    button_sound()
+                    #button_sound()
                     action()
         
         else:
@@ -742,43 +737,26 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
         for player in p:    # 모든 플레이어의
             for card in player.deck_list:      #모든 카드를 돌면서
                 if (card.card_color == x.card_color) and (card.card_loop == x.card_loop): # 루프와 색상이 같은 경우에
-                    '''
-                    print('same loop------------')
-                    print("card num: ",card.card_num)
-                    '''
                     # 카드가 loop_num을 가지고 있고, 카드 숫자가 두개면
                     if (loop_num in card.card_num) and (len(card.card_num) == 2):        
                         del card.card_num[card.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
-                        print("survived number: ",card.card_num)
                         card.number = PRINTTEXT("%s" % card.card_num, 18, color=card.font_color)    # card_num 업데이트
                         loop_num = card.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
-                    
-        # 왜 안뽑은 카드는 못찾을까?
-        for card_b in fti_b:
-            if (card_b.card_color == x.card_color) and (card_b.card_loop == x.card_loop):
-                if (loop_num in card_b.card_num) and (len(card_b.card_num) == 2):
-                    del card_b.card_num[card_b.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
-                    print("survived number: ",card_b.card_num)
-                    card_b.number = PRINTTEXT("%s" % card_b.card_num, 18, color=card_b.font_color)    # card_num 업데이트
-                    loop_num = card_b.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
-                    
-                    print("----black----")
-                    print(card_b.card_loop)
-                    print(card_b.card_num)
-                    
-        for card_w in fti_w:
-            if (card_w.card_color == x.card_color) and (card_w.card_loop == x.card_loop):
-                if (loop_num in card_w.card_num) and (len(card_w.card_num) == 2):
-                    del card_w.card_num[card_w.card_num.index(loop_num)]    # loop_num과 다른 숫자로 붕괴
-                    print("survived number: ",card_w.card_num)
-                    card_w.number = PRINTTEXT("%s" % card_w.card_num, 18, color=card_w.font_color)    # card_num 업데이트
-                    loop_num = card_w.card_num[0]     # loop_num을 card_num으로 바꿈(루프내 다른 카드를 붕괴시킬 수 있도록)
-                    
-                    print(card_w.card_loop)
-                    print(card_w.card_num)    
-        print("---------------")
-        print(loop_num)
 
+        if x.card_color == BLACK:        
+            for card_b in fti_b:
+                if (card_b.card_loop == x.card_loop) and (loop_num in card_b.card_num) and (len(card_b.card_num) == 2):
+                        del card_b.card_num[card_b.card_num.index(loop_num)]
+                        card_b.number = PRINTTEXT("%s" % card_b.card_num, 18, color=card_b.font_color)
+                        loop_num = card_b.card_num[0]
+
+        else:                
+            for card_w in fti_w:
+                if (card_w.card_loop == x.card_loop) and (loop_num in card_w.card_num) and (len(card_w.card_num) == 2):
+                        del card_w.card_num[card_w.card_num.index(loop_num)]
+                        card_w.number = PRINTTEXT("%s" % card_w.card_num, 18, color=card_w.font_color)
+                        loop_num = card_w.card_num[0]
+                        
 """
     ====================<<<     Util-구현중..    >>>=================
 """
@@ -900,7 +878,6 @@ def main_loop(): # Game main loop scene
     make_card(num_players, stn)
     
     f_play_music(main_music)
-    
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
