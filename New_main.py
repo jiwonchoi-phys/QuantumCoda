@@ -141,8 +141,8 @@ class PLAYER():
                         pass                                             
                 
                     elif deck[k].get_num()[0] == deck[k+1].get_num()[0]:    # 2) spooky 값도 같다면 색상 비교
-                        if deck[k].get_color() < deck[k+1].get_color():     # 하양색이 앞에 오면
-                            deck[k+1],deck[k] = deck[k],deck[k+1]           # 검정색이 먼저 앞에 오게 바꿈.
+                        if deck[k].get_color() < deck[k+1].get_color() and states[0] == True :  # 하양색이 앞에 오면
+                            deck[k+1],deck[k] = deck[k],deck[k+1]                               # 검정색이 먼저 앞에 오게 바꿈.
                             self.deck_list = deck  
                     
                     else:                                       # 2) spooky 앞에 놈이 크면 자리 바꿈.
@@ -368,7 +368,7 @@ class BUTTON():
             if click[0] == 1:
                 if action == None:
                     pass
-                else: # print("클릭됨") # 확인용
+                else:
                     #button_sound()
                     action()
         
@@ -655,20 +655,49 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.mainloop()
     return stn
 
-def f_play_music(name):
+def f_play_music(name): # 음악 연속 재생 함수.
     pygame.mixer.init()
     pygame.mixer.music.load(name)
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
 
+def f_level_set(): # 난이도 설정 Tk.
+    global states
+    
+    name_box = ["색상 정렬 사용","확률 보기 사용","아이템 사용"]
+    chk = [0,0,0] # Dummy list for name.
+    
+    def onPress(i):                       
+        states[i] = not states[i]   
+    root = Tk()
+    root.title("Level setting test")
+    root.geometry("480x300+100+100")
+    root.resizable(False, False)
+    t = Label(text="끌 수록 난이도 up (Check =  Use)")
+    t.pack(pady=20)
+    a1 = Message(width = 480, text="색상 정렬:  검정, 하양의 두 타일이 spooky 숫자 2개가 모두 같은 경우, 검정이 왼쪽에 위치하게 합니다. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )")
+    a1.pack(anchor = "w", pady=2)
+    a2 = Message(width = 480, text="확률 보기:  상대방 타일의 확률 보기를 사용합니다.")
+    a2.pack(anchor = "w", pady=2)
+    a3 = Message(width = 480, text="아이템:  게임의 난이도를 낮추는 아이템을 사용합니다.")
+    a3.pack(anchor = "w", pady=2)
+    
+    for i in range(3):
+        chk[i] = Checkbutton(root, text=name_box[i], command=(lambda i=i: onPress(i)) )
+        if states[i] == True:
+            chk[i].select()
+        chk[i].pack(side = LEFT, expand = YES, fill = BOTH)
+        
+    root.mainloop()
+
 def f_win_page(): # 승리 페이지.
-    screen.fill([255, 255, 141])
+    screen.fill([255, 249, 196])
     dp = PRINTTEXT("The result of the game.", size = 50)
     wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Exit-game", inactive_color = WHITE, active_color=GRAY)
     wpbb = BUTTON("Level Setting")
-    f_play_music(win_music)
+    #f_play_music(win_music)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -679,7 +708,7 @@ def f_win_page(): # 승리 페이지.
         wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=main_loop)
         wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=game_intro)
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=exit_window)
-        wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_setting_button)
+        wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_level_set)
         # text positions
         dp._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/10), loc_center=False)
 
@@ -761,27 +790,6 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
     ====================<<<     Util-구현중..    >>>=================
 """
 
-def f_setting_button(): # 난이도 설정 Tk 구현중..
-    window=Tk()
-    window.title("Level setting test")
-    window.geometry("480x300+100+100")
-    window.resizable(False, False)
-    def flash():
-        checkbutton1.flash()
-
-    CheckVariety_1=IntVar()
-    CheckVariety_2=IntVar()
-
-    checkbutton1=Checkbutton(window, text="O", variable=CheckVariety_1)
-    checkbutton2=Checkbutton(window, text="△", variable=CheckVariety_2)
-    checkbutton3=Checkbutton(window, text="X", variable=CheckVariety_2, command=flash)
-
-    checkbutton1.pack()
-    checkbutton2.pack()
-    checkbutton3.pack()
-
-    window.mainloop()
-
 """
     ====================<<<     Main    >>>====================
 """
@@ -798,7 +806,7 @@ def game_intro():   # Game intro scene
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
-    option = BUTTON("do not click")
+    option = BUTTON("level test")
     title_exit_button = BUTTON("Exit",active_color=RED)
     play_button = BUTTON("Play!")
     how_button = BUTTON("How to Play?")
@@ -815,7 +823,7 @@ def game_intro():   # Game intro scene
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
         # button _draw_ functions
-        option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_win_page)
+        option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_level_set)
         play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
         title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=quit)
@@ -877,7 +885,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    f_play_music(main_music)
+    #f_play_music(main_music)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
@@ -1012,6 +1020,8 @@ def main_loop(): # Game main loop scene
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
+
+states = [True,True,True] # 초기 세팅 값(수정 엄금).
 
 screen.fill(WHITE)                          # 화면 흰색으로 채움
 pygame.display.update()                     # 화면 업데이트.
