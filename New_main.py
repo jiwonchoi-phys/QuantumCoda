@@ -659,7 +659,7 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
 def play_music():
     
     main_music = "White River - Aakash Gandhi.wav"
-
+    
     pygame.mixer.init()
     pygame.mixer.music.load(main_music)
     pygame.mixer.music.set_volume(0.8)
@@ -737,10 +737,6 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
     ====================<<<     Util-구현중..    >>>=================
 """
 
-def acb1():
-    #print("kkkkkkkkkkkkkkkkkkkkk")
-    pass
-
 def f_setting_button(): # 난이도 설정 Tk 구현중..
     window=Tk()
     window.title("Level setting test")
@@ -762,9 +758,9 @@ def f_setting_button(): # 난이도 설정 Tk 구현중..
 
     window.mainloop()
 
-def f_win_page(): # 승리 페이지 구현 중
+def f_win_page(): # 승리 페이지
     screen.fill([240, 244, 195])
-    dp = PRINTTEXT("win-page test", size = 50)
+    dp = PRINTTEXT("The result of the game.", size = 50)
     wpb1 = BUTTON("ReGame")
     wpb2 = BUTTON("home")
     wpb3 = BUTTON("Exit-game")
@@ -784,19 +780,29 @@ def f_win_page(): # 승리 페이지 구현 중
         # text positions
         dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4-100), loc_center=False)
 
-        # rank # 같은 점수 경우 검토 필요
+        # music
+        
+        # rank 
+        def sf_calculate_rank(vector):
+            a={}
+            rank=1
+            for num in sorted(vector):
+                if num not in a:
+                    a[num]=rank
+                    rank=rank+1
+            return[a[i] for i in vector]
+
         box , em = [], []
         for i in range(0,num_players):
-            box.append(p[i].get_point())
+            box.append(-p[i].get_point())
             em.append(i)
         
-        for i in range(0,num_players):
-            n = max(box)
-            k = box.index(n)
-            em[i] = PRINTTEXT(str(i+1)+"등 : Player "+str(k+1)+": [point: "+str(n)+"]", size = 30)
-            em[i]._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4+i*60), loc_center=False)
-            box[k] = -1
+        cbox = sf_calculate_rank(box)
 
+        for i in range(0,num_players):
+            em[i] = PRINTTEXT("Player "+str(i+1)+":  >>> rank: "+str(cbox[i])+" [point: "+str(p[i].get_point())+"].", size = 26)
+            em[i]._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4+i*54), loc_center=False)
+        
         pygame.display.update()
 
 """
