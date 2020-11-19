@@ -33,6 +33,10 @@ PURPLE  = (217, 65,197)
 GRAY    = (201,201,201)
 GRAY_2  = (169,169,169)
 
+# Music
+main_music = "White River - Aakash Gandhi.wav"
+win_music = "Trimmed & Taught - Dan Lebowitz.wav"
+
 # Object size
 SCREEN_WIDTH  = 1100
 SCREEN_HEIGHT = 600
@@ -656,14 +660,56 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.mainloop()
     return stn
 
-def play_music():
-    
-    main_music = "White River - Aakash Gandhi.wav"
-    
+def f_play_music(name):
     pygame.mixer.init()
-    pygame.mixer.music.load(main_music)
+    pygame.mixer.music.load(name)
     pygame.mixer.music.set_volume(0.8)
     pygame.mixer.music.play(-1) # 무한재생.
+
+def f_win_page(): # 승리 페이지.
+    screen.fill([255, 255, 141])
+    dp = PRINTTEXT("The result of the game.", size = 50)
+    wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
+    wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
+    wpb3 = BUTTON("Exit-game", inactive_color = WHITE, active_color=GRAY)
+    wpbb = BUTTON("Level Setting")
+    f_play_music(win_music)
+    play = False
+    while not play:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+
+        wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=main_loop)
+        wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=game_intro)
+        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=exit_window)
+        wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_setting_button)
+        # text positions
+        dp._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/10), loc_center=False)
+
+        # rank 
+        def sf_calculate_rank(vector):
+            a={}
+            rank=1
+            for num in sorted(vector):
+                if num not in a:
+                    a[num]=rank
+                    rank=rank+1
+            return[a[i] for i in vector]
+
+        box , em = [], []
+        for i in range(0,num_players):
+            box.append(-p[i].get_point())
+            em.append(i)
+        
+        cbox = sf_calculate_rank(box)
+
+        for i in range(0,num_players):
+            em[i] = PRINTTEXT("Player "+str(i+1)+":  >>> rank: "+str(cbox[i])+" [point: "+str(p[i].get_point())+"].", size = 26)
+            em[i]._blit_(loc= (SCREEN_WIDTH/10+10, SCREEN_HEIGHT/4+i*54), loc_center=False)
+        
+        pygame.display.update()
 
 def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위치를 지정한 함수.
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
@@ -757,53 +803,6 @@ def f_setting_button(): # 난이도 설정 Tk 구현중..
     checkbutton3.pack()
 
     window.mainloop()
-
-def f_win_page(): # 승리 페이지
-    screen.fill([240, 244, 195])
-    dp = PRINTTEXT("The result of the game.", size = 50)
-    wpb1 = BUTTON("ReGame")
-    wpb2 = BUTTON("home")
-    wpb3 = BUTTON("Exit-game")
-    wpbb = BUTTON("Level Setting")
-
-    play = False
-    while not play:
-        for event in pygame.event.get():        # 기본 event loop
-            if event.type == pygame.QUIT:       # pygame 종료
-                pygame.quit()
-                quit()
-
-        wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,30), action=main_loop)
-        wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,30), action=game_intro)
-        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,30), action=exit_window)
-        wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_setting_button)
-        # text positions
-        dp._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4-100), loc_center=False)
-
-        # music
-        
-        # rank 
-        def sf_calculate_rank(vector):
-            a={}
-            rank=1
-            for num in sorted(vector):
-                if num not in a:
-                    a[num]=rank
-                    rank=rank+1
-            return[a[i] for i in vector]
-
-        box , em = [], []
-        for i in range(0,num_players):
-            box.append(-p[i].get_point())
-            em.append(i)
-        
-        cbox = sf_calculate_rank(box)
-
-        for i in range(0,num_players):
-            em[i] = PRINTTEXT("Player "+str(i+1)+":  >>> rank: "+str(cbox[i])+" [point: "+str(p[i].get_point())+"].", size = 26)
-            em[i]._blit_(loc= (SCREEN_WIDTH/5, SCREEN_HEIGHT/4+i*54), loc_center=False)
-        
-        pygame.display.update()
 
 """
     ====================<<<     Main    >>>====================
@@ -900,7 +899,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    play_music()
+    f_play_music(main_music)
     
     f_ftile_color_arrnage(tii)
 
