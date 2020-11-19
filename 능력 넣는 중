@@ -153,7 +153,7 @@ class PLAYER():
                     self.deck_list = deck                   # 저장
 
 class CARD():
-    global RT, YATT
+    global RT, YATT, point_state
     def __init__(self,color,num,prob,loop):   # 알고리즘 업데이트; num = [숫자,숫자,확률,확률] : 한 원소에 4개 값 List.
         # Set card & font color
         if color == 1: # Black
@@ -223,7 +223,7 @@ class CARD():
                 self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
     def f_click_tile(self):
-        global RT, YATT, san_num                        
+        global RT, YATT, san_num, point_state                        
         if self in p[turn].deck_list: # 자신의 패 선택 불가.
             pass
         
@@ -262,7 +262,7 @@ class CARD():
                 return number
                 
             def ctcalc(event):
-                global RT, YATT        # RT; class: CARD
+                global RT, YATT, point_state       # RT; class: CARD
                 PGN = int(entry.get()) # The player's guess number.
                 
                 if PGN in self.card_num:
@@ -273,17 +273,20 @@ class CARD():
                         PGN = self.card_num[0]
                     if PGN == self.card_num[0]: # self.card_num class: list
                         YATT = 3
+                        point_state = 3 # 포인트를 할당 해주기 위해 현재 맞췄는지 알아보는 변수
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
                         ct_tk.after(1700, ctd)
                         collapse_loop(self)
                     else:
                         YATT = 2
+                        point_state = 2
                         label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
                         ct_tk.after(1700, ctd)
                     
 
                 else:
                     YATT = 2
+                    point_state = 1
                     label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                     label2.config(text="The guessed number is not on the tile.\nCollapse and open the tile brought this turn.")
                     NTC = RT.get_color() #
@@ -333,7 +336,7 @@ class CARD():
                    fti_w.pop(fti_w.index(active3_1)) 
    
 class BUTTON():
-    def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
+    def __init__(self, msg, inactive_color=[255,204,102], active_color=GRAY_2,\
         font_color=BLACK, font=None, font_size=20, action=None):
         if font == None:                # OS별 폰트 문제 체크
             if platform.system() == 'Windows':
@@ -763,27 +766,27 @@ def ability_show():
         a_a = "active ability : take a random tile"
     else:
         a_a = "oops! your silent now..."
-    ability_text_p = PRINTTEXT(p_a, size = 20)
-    ability_text_a = PRINTTEXT(a_a, size = 20)
+    ability_text_p = PRINTTEXT(p_a, size = 20, color = [150,75,0])
+    ability_text_a = PRINTTEXT(a_a, size = 20, color = [150,75,0])
     ability_text_p._blit_(loc = (SCREEN_WIDTH/2,50))
     ability_text_a._blit_(loc = (SCREEN_WIDTH/2,80))       
 
 def game_intro():       # Game intro scene
-    screen.fill(WHITE)
+    screen.fill([240, 244, 195])
     intro = False       # while문 돌리기 위함
     # Title Texts
-    title = PRINTTEXT("Quantum Coda", size = 50)
+    title = PRINTTEXT("Quantum Coda", size = 50, color = [150,75,0])
 
-    credits_title = PRINTTEXT("Credits", size = 30)
-    credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
-    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
+    credits_title = PRINTTEXT("Credits", size = 30, color = [150,75,0])
+    credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20, color = [150,75,0])
+    credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20, color = [150,75,0])
 
     # Button Texts
-    option = BUTTON("Option test")
+    option = BUTTON("Option test",inactive_color = [255,204,102])
 
-    title_exit_button = BUTTON("Exit",active_color=RED)
-    play_button = BUTTON("Play!")
-    how_button = BUTTON("How to Play?")
+    title_exit_button = BUTTON("Exit",inactive_color = [255,204,102],active_color=RED)
+    play_button = BUTTON("Play!",inactive_color = [255,204,102])
+    how_button = BUTTON("How to Play?",inactive_color = [255,204,102])
 
     while not intro:
         for event in pygame.event.get():        # 기본 event loop
@@ -806,16 +809,16 @@ def game_intro():       # Game intro scene
         clock.tick(15)
 
 def how_to_play(): # scene for game description # 장면 테스트 중
-    screen.fill(WHITE)
+    screen.fill([240, 244, 195])
     play = False
 
     # dp: description
-    dp1_ko = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
-    dp2_ko = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
-    dp3_ko = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
-    dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game is combined", size = 20)
-    dp_en2 = PRINTTEXT("the phenomenon of Quantum Mechanics.", size = 20)
-    dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside.", size = 20)
+    dp1_ko = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20, color = [150,75,0])
+    dp2_ko = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20, color = [150,75,0])
+    dp3_ko = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20, color = [150,75,0])
+    dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game is combined", size = 20, color = [150,75,0])
+    dp_en2 = PRINTTEXT("the phenomenon of Quantum Mechanics.", size = 20, color = [150,75,0])
+    dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside.", size = 20, color = [150,75,0])
 
     theory_button = BUTTON("원리 Theory")
     Rule_button = BUTTON("게임규칙 Rule")
@@ -847,7 +850,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 def main_loop(): # Game main loop scene
     global num_players, stn, turn, YATT, RT, active2, uaan
-    screen.fill(WHITE)
+    screen.fill([240, 244, 195])
     done = False
     num_players = f_pn()
     stn = f_tn(num_players)
@@ -861,14 +864,16 @@ def main_loop(): # Game main loop scene
     
     f_ftile_color_arrnage(tii)
 
-    select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
+    select_card = PRINTTEXT("Select card", 20, color = [150,75,0])      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
     button_exit = BUTTON("Exit",active_color=RED)
     button_ability = BUTTON("using ability",active_color=RED)
     button_passive = BUTTON("ability",active_color=RED)
-    YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
+    button_point = BUTTON("show point information")
     
+    YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
+    point_state = 0 # 포인트를 분배하기 위해 맞췄는지 확인[맞춤 = 3, 빗나감 = 2, 실패함 = 1]
 
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn, YATT
@@ -964,8 +969,8 @@ def main_loop(): # Game main loop scene
                 quit()
 
         # 턴 관련
-        pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
-        pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
+        pygame.draw.rect(screen, [240, 244, 195], [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
+        pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25, color = [150,75,0])
         pl_turn._blit_(loc=(5,5),loc_center=False)  
         
         # 덱의 카드 정렬
@@ -973,11 +978,11 @@ def main_loop(): # Game main loop scene
         
         # 덱 그리기(플러이어 텍스트 포함)
         Ttext = list(range(num_players))
-        Ttext[0] = PRINTTEXT('Yours:', size= 20)
+        Ttext[0] = PRINTTEXT('Yours:', size= 20, color = [150,75,0])
         for i in range(1,num_players):
-            Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1), size= 15)
+            Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1), size= 15, color = [150,75,0])
             if i+turn+1 > num_players:
-                Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1-num_players), size= 15)
+                Ttext[i] = PRINTTEXT('Player: '+str(i+turn+1-num_players), size= 15, color = [150,75,0])
         f_draw_card(p, turn, Ttext)
         
         # 버튼 및 텍스트 그리기
@@ -987,6 +992,7 @@ def main_loop(): # Game main loop scene
         button_ability._draw_(loc = (SCREEN_WIDTH/10,SCREEN_HEIGHT*9/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = ability_activated)
         button_passive._draw_(loc = (SCREEN_WIDTH*1/10,SCREEN_HEIGHT*7.5/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = ability_show)
         select_card._blit_(loc=(5,30),loc_center=False) 
+#        button_point._blit_(loc = (SCREEN_WIDTH*1/10,SCREEN_HEIGHT*6/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = )
         
         pygame.display.update()
 
@@ -1063,7 +1069,21 @@ def ability_reset(): # 턴 지날때 능력 초기화
     if uaan == 1:
         uaan = 0
 
-def point
+def point():
+    global player_point
+    w_point = 15
+    f_ponit = 10
+    d_point = 5
+    player_point = list(range(0,num_players))
+    if point_state == 3:
+        player_point[turn] += w_point
+    elif point_state == 2:
+        player_point[turn] += d_point
+    elif point_state == 1:
+        player_point[turn] += f_point
+    
+def point_show():
+    point_now = PRINTTEXT("")    
 
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
