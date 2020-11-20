@@ -14,9 +14,7 @@ import platform # OS Environment module
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
 
-1) 내가 타일 먹고 상대 붕괴 시켰는데, 그게 방금 먹은 타일이랑 루프일 경우 뜨는 에러.
-2) 내가 먹은 타일이 붕괴된 타일인 경우. 추측실패시 붕괴해야할때 뜨는 에러. 음.. 해치웠나..?
-1차 완성 > 
+현재 발견된 버그 모두 해결
 '''
 
 # RGB color information
@@ -213,7 +211,7 @@ class CARD():
                     pass
                 elif YATT == 1: # 타일 먹은경우 클릭 허용.
                     self.f_click_tile()
-        
+
         if self in p[turn].deck_list:   # 내 덱의 경우. 숫자 확률 표기.
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
@@ -305,13 +303,12 @@ class CARD():
                         ct_tk.after(2100, ctd)
                         pass
 
-                    elif YATT == 1: # 이번 턴에 타일을 먹었을 때. (먹은 타일 붕괴)
+                    elif YATT == 1 or YATT == 3: # 이번 턴에 타일을 먹었을 때. (먹은 타일 붕괴)
                         YATT = 2
                         p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="Collapse and open the tile brought this turn.")
                         Notice = "추측에 실패하여 먹은 타일 붕괴 후 공개."
-                        NTC = RT.get_color()
 
                         if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
                             del p[turn].deck_list[p[turn].deck_list.index(RT)]  # 오픈 안된 RT 제거
@@ -319,6 +316,7 @@ class CARD():
                             p[turn].deck_list.append(RT)    # 오픈 후 다시 RT 추가.
 
                         elif len(RT.get_num()) == 2:    # 붕괴되지 않은 타일을 먹었다면, 붕괴후 공개.
+                            NTC = RT.get_color()
                             NTN = sf_p(RT.get_num(), RT.get_pro())
                             label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
                             label3.pack()
