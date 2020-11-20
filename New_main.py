@@ -220,12 +220,16 @@ class CARD():
 
         if self.opened == True:     # 오픈된 타일의 경우.
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))           # 숫자 표기.
-            self.probability = PRINTTEXT("opened", 10, color=self.font_color)       # 확률 텍스트 변경 후, 표기.
+            self.probability = PRINTTEXT("Opened", 10, color=self.font_color)       # 확률 텍스트 변경 후, 표기.
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
         if len(self.get_num()) == 2 and states[1] == True:                          # 확률 보기 사용 on/ 시 상대 확률 표기.
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
+        if len(self.get_num()) ==1 and self.opened == False:
+            self.probability = PRINTTEXT("Collapsed.", 10, color=self.font_color)       # 확률 텍스트 변경 후, 표기.
+            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+
     def f_click_tile(self):
         global RT, YATT, Notice
 
@@ -310,9 +314,9 @@ class CARD():
                         NTC = RT.get_color()
 
                         if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
-                            del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                            del p[turn].deck_list[p[turn].deck_list.index(RT)]  # 오픈 안된 RT 제거
                             RT.is_opened()
-                            p[turn].deck_list.append(RT)
+                            p[turn].deck_list.append(RT)    # 오픈 후 다시 RT 추가.
 
                         elif len(RT.get_num()) == 2:    # 붕괴되지 않은 타일을 먹었다면, 붕괴후 공개.
                             NTN = sf_p(RT.get_num(), RT.get_pro())
@@ -322,7 +326,8 @@ class CARD():
                             NT.is_opened()
                             p[turn].deck_list.append(NT)
                             del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                            collapse_loop(RT)
+                            collapse_loop(NT)
+                            RT = NT
                         
                         ct_tk.after(2100, ctd)
                         
