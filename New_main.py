@@ -258,7 +258,7 @@ class CARD():
                 global RT, YATT, Notice        # RT; class: CARD
                 PGN = int(entry.get()) # The player's guess number.
                 
-                if PGN in self.card_num:
+                if PGN in self.card_num:    # 추측 수가 타일에 존재.
                     if len(self.card_num) == 2:
                         self.card_num = sf_p(self.card_num, self.card_probability)
                         self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
@@ -287,8 +287,8 @@ class CARD():
                         Notice = "Continuous guessing is possible."
                         ct_tk.after(1200, ctd)
 
-                else:
-                    if YATT == 0:
+                else:   # 추측 수가 타일에 존재하지 않을 때.
+                    if YATT == 0:   # 이번 턴에 먹은 타일이 없을 때.
                         YATT = 2
                         p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
@@ -297,7 +297,7 @@ class CARD():
                         ct_tk.after(2100, ctd)
                         pass
 
-                    elif YATT == 1:
+                    elif YATT == 1: # 이번 턴에 타일을 먹었을 때.
                         YATT = 2
                         p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
@@ -305,19 +305,22 @@ class CARD():
                         Notice = "추측에 실패하여 먹은 타일 붕괴 후 공개."
                         NTC = RT.get_color()
 
-                        if RT.get_num() == 1:
-                            RT.is_opened() 
-                        elif RT.get_num() == 2:
+                        if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
+                            RT.is_opened()
+
+                        elif len(RT.get_num()) == 2:    # 붕괴되지 않은 타일을 먹었다면, 붕괴후 공개.
                             NTN = sf_p(RT.get_num(), RT.get_pro())
                             RT.is_opened()
                             label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
                             label3.pack()
 
-                        NT = CARD(NTC, NTN, None,  RT.get_loop())
-                        p[turn].deck_list.append(NT)
-                        del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                            NT = CARD(NTC, NTN, None,  RT.get_loop())
+                            p[turn].deck_list.append(NT)
+                            del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                            collapse_loop(RT)
+                        
                         ct_tk.after(2100, ctd)
-                        collapse_loop(RT)
+                        
 
             def ctd():
                 ct_tk.destroy()
