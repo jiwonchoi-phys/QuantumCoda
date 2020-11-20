@@ -14,9 +14,9 @@ import platform # OS Environment module
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
 
-지원 진행상황 : 루프 붕괴 계속 하는 중(20일 전까지 끝낼 예정)
-내가 타일 먹고 상대 붕괴 시켰는데 그게 방금 먹은 타일이랑 루프일 경우 에러 뜨는 듯.
-1차 완성 > 붕괴관련 디버깅 필요 버그 경우 2-3개 되는 듯.
+1) 내가 타일 먹고 상대 붕괴 시켰는데, 그게 방금 먹은 타일이랑 루프일 경우 뜨는 에러.
+2) 내가 먹은 타일이 붕괴된 타일인 경우. 추측실패시 붕괴해야할때 뜨는 에러. (세형) 진행 중..
+1차 완성 > 
 '''
 
 # RGB color information
@@ -303,11 +303,15 @@ class CARD():
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="Collapse and open the tile brought this turn.")
                         Notice = "추측에 실패하여 먹은 타일 붕괴 후 공개."
-                        NTC = RT.get_color() #
-                        NTN = sf_p(RT.get_num(), RT.get_pro()) #
-                        # 수정예정.
-                        label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
-                        label3.pack()
+                        NTC = RT.get_color()
+
+                        if RT.get_num() == 1:
+                            RT.is_opened() 
+                        elif RT.get_num() == 2:
+                            NTN = sf_p(RT.get_num(), RT.get_pro())
+                            RT.is_opened()
+                            label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
+                            label3.pack()
 
                         NT = CARD(NTC, NTN, None,  RT.get_loop())
                         p[turn].deck_list.append(NT)
