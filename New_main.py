@@ -15,7 +15,8 @@ import platform # OS Environment module
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
 
 지원 진행상황 : 루프 붕괴 계속 하는 중(20일 전까지 끝낼 예정)
-내가 타일 먹고 상대 붕괴 시켰는데 그게 방금 먹은 타일이랑 루프일 경우 에러 뜨는 듯
+내가 타일 먹고 상대 붕괴 시켰는데 그게 방금 먹은 타일이랑 루프일 경우 에러 뜨는 듯.
+1차 완성 > 붕괴관련 디버깅 필요 버그 경우 2-3개 되는 듯.
 '''
 
 # RGB color information
@@ -46,6 +47,7 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
+Notice = " " # Notice 첫 값.
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 cut_list=[]         # 각 loop당 카드의 갯수
@@ -169,14 +171,15 @@ class CARD():
         self.card_probability = prob
         self.card_loop = loop
         self.width, self.height = CARD_SIZE
-        self.opened = True
+        self.opened = False
         self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
         self.probability = PRINTTEXT("%s" % self.card_probability, 15, color=self.font_color)
-        self.opentext = PRINTTEXT("opened",20,color=self.font_color)
         
-
     def is_opened(self):
         self.opened = True
+    
+    def get_opened(self):
+        return self.opened
     
     def get_color(self):
         return self.color
@@ -215,18 +218,29 @@ class CARD():
                 elif YATT == 1:
                     self.f_click_tile()
         
+        if self in p[turn].deck_list:
+            self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+
         if self.opened == True:
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
-            self.opentext._blit_(loc=(x + self.width/2, y + self.height/4))
-            if len(self.get_num()) == 2:
-                self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+            self.probability = PRINTTEXT("opened", 10, color=self.font_color)
+            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+
+        if len(self.get_num()) == 2 and states[1] == True:
+            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+        
+        
+        if self in p[turn].deck_list:
+            self.number._blit_(loc=(x + self.width/2, y + self.height/2))
+
+
                 
         
     def f_click_tile(self):
         global RT, YATT, Notice
         if self in p[turn].deck_list: # 자신의 패 선택 불가.
             Notice = "You cannot select your card."
-            pass
         
         else:   # 타인의 패 선택시
             Notice = " "
@@ -238,7 +252,6 @@ class CARD():
             ct_tk.geometry("480x300+100+100")
             ct_tk.resizable(False, False)
 
-
             label1 = Label(ct_tk, text=str(t_num))
             label2 = Label(ct_tk, text=str(t_probability))
 
@@ -246,38 +259,49 @@ class CARD():
                 x = random.randint(1,101)
                 if x <= probability[0]:
                     del number[number.index(number[1])]
-
                 else:
                     del number[number.index(number[0])]
                 return number
+                
+
                 
             def ctcalc(event):
                 global RT, YATT, Notice        # RT; class: CARD
                 PGN = int(entry.get()) # The player's guess number.
                 
                 if PGN in self.card_num:
-                    self.card_num = sf_p(self.card_num, self.card_probability)
-                    self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-                    label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
-                
-                    if PGN == self.card_num[0]: # self.card_num class: list
+                    if len(self.card_num) == 2:
+                        self.card_num = sf_p(self.card_num, self.card_probability)
+                        self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+                    
+                        label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
+                    
+                        if PGN == self.card_num[0]: # self.card_num class: list
+                            YATT = 3
+                            self.is_opened()
+                            p[turn].put_point(200)
+                            label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                            Notice = "Continuous guessing is possible."
+                            ct_tk.after(1700, ctd)
+                            collapse_loop(self)
+                        else:
+                            YATT = 2
+                            p[turn].put_point(100)
+                            label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
+                            ct_tk.after(1700, ctd)
+                    
+                    elif len(self.card_num) == 1:
                         YATT = 3
-                        p[turn].put_point(20)
+                        self.is_opened()
+                        p[turn].put_point(200)
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
                         Notice = "Continuous guessing is possible."
                         ct_tk.after(1700, ctd)
-                        collapse_loop(self)
-                    else:
-                        YATT = 2
-                        p[turn].put_point(10)
-                        label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
-                        ct_tk.after(1700, ctd)
-                    
 
                 else:
                     if YATT == 0:
                         YATT = 2
-                        p[turn].put_point(2)
+                        p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="먹은 타일이 없어 붕괴 및 오픈 과정 생략.")
                         ct_tk.after(2100, ctd)
@@ -285,7 +309,7 @@ class CARD():
 
                     elif YATT == 1:
                         YATT = 2
-                        p[turn].put_point(2)
+                        p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="Collapse and open the tile brought this turn.")
                         NTC = RT.get_color() #
@@ -369,7 +393,7 @@ class BUTTON():
                 if action == None:
                     pass
                 else:
-                    #button_sound()
+                    button_sound()
                     action()
         
         else:
@@ -697,7 +721,7 @@ def f_win_page(): # 승리 페이지.
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Exit-game", inactive_color = WHITE, active_color=GRAY)
     wpbb = BUTTON("Level Setting")
-    #f_play_music(win_music)
+    f_play_music(win_music)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -734,6 +758,15 @@ def f_win_page(): # 승리 페이지.
             em[i]._blit_(loc= (SCREEN_WIDTH/10+10, SCREEN_HEIGHT/4+i*54), loc_center=False)
         
         pygame.display.update()
+
+def f_end_conditions(): # 승리 조건 함수.
+    for i in range(0,num_players): # 모든 플레이어에 대해
+        dummy = 0
+        for k in range(0,len(p[i].deck_list)): 
+            if p[i].deck_list[k].get_opened() == True:
+                dummy += 1
+            if dummy == len(p[i].deck_list): # 자신의 덱 카드가 모두 오픈이면 게임 끝냄.
+                f_win_page()
 
 def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위치를 지정한 함수.
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
@@ -877,15 +910,14 @@ def main_loop(): # Game main loop scene
     global num_players, stn, turn, YATT, RT
 
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
-    Notice = " "            # 상동.
-
+    
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    #f_play_music(main_music)
+    f_play_music(main_music)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
@@ -987,6 +1019,10 @@ def main_loop(): # Game main loop scene
         # 덱의 카드 정렬
         all_arrange(p)
 
+        # 승리 조건
+        f_end_conditions()
+        
+
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
         Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
@@ -1012,8 +1048,8 @@ def main_loop(): # Game main loop scene
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
         button_test._draw_(loc = (100,550), size = (130,30), action = f_win_page)
         button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = exit_window)
-        select_card._blit_(loc=(5,30),loc_center=False) 
-        
+        select_card._blit_(loc=(5,30),loc_center=False)
+
         pygame.display.update()
 
 #======== Initialize pygame ==========#
