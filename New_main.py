@@ -116,8 +116,6 @@ class PRINTTEXT():
 class PLAYER():
     def __init__(self):
         self.deck_list = []         # 덱 리스트
-        self.closed_deck = []
-        self.opened_deck = []       # 오픈덱 리스트
         self.point = 0
 
     def get_point(self):
@@ -205,37 +203,30 @@ class CARD():
         pygame.draw.rect(screen, WHITE, [x,y,self.width,self.height],1)
         
         if x < mouse_pos[0] < x + self.width and \
-            y < mouse_pos[1] < y + self.height:    
+            y < mouse_pos[1] < y + self.height:
             pygame.draw.rect(screen, RED, [x,y,self.width,self.height],1)
             
             if click[0] == 1:
-                if YATT != 1: # 카드 안먹으면 클릭 안됨. 아래 두 경우 제외
+                if YATT != 1: # 타일 안먹으면 클릭 안됨. 아래 두 경우 제외.
                     if YATT == 0 and len(fti_b) == 0 and len(fti_w) == 0: # 타일이 없어 못 먹은 경우 추측 가능.
                         self.f_click_tile()
                     elif YATT == 3:   # 추측 성공시 추가 추측 가능.
                         self.f_click_tile()
                     pass
-                elif YATT == 1:
+                elif YATT == 1: # 타일 먹은경우 클릭 허용.
                     self.f_click_tile()
         
-        if self in p[turn].deck_list:
+        if self in p[turn].deck_list:   # 내 덱의 경우.
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
-        if self.opened == True:
+        if self.opened == True:     # 오픈된 타일의 경우.
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
             self.probability = PRINTTEXT("opened", 10, color=self.font_color)
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
         if len(self.get_num()) == 2 and states[1] == True:
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
-        
-        
-        if self in p[turn].deck_list:
-            self.number._blit_(loc=(x + self.width/2, y + self.height/2))
-
-
-                
         
     def f_click_tile(self):
         global RT, YATT, Notice
@@ -262,8 +253,6 @@ class CARD():
                 else:
                     del number[number.index(number[0])]
                 return number
-                
-
                 
             def ctcalc(event):
                 global RT, YATT, Notice        # RT; class: CARD
@@ -296,7 +285,7 @@ class CARD():
                         p[turn].put_point(200)
                         label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
                         Notice = "Continuous guessing is possible."
-                        ct_tk.after(1700, ctd)
+                        ct_tk.after(1200, ctd)
 
                 else:
                     if YATT == 0:
@@ -304,6 +293,7 @@ class CARD():
                         p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="먹은 타일이 없어 붕괴 및 오픈 과정 생략.")
+                        Notice = "먹은 타일이 없어 붕괴 및 오픈 과정 생략."
                         ct_tk.after(2100, ctd)
                         pass
 
@@ -312,9 +302,10 @@ class CARD():
                         p[turn].put_point(20)
                         label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                         label2.config(text="Collapse and open the tile brought this turn.")
+                        Notice = "추측에 실패하여 먹은 타일 붕괴 후 공개."
                         NTC = RT.get_color() #
                         NTN = sf_p(RT.get_num(), RT.get_pro()) #
-                        
+                        # 수정예정.
                         label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
                         label3.pack()
 
@@ -474,7 +465,6 @@ def make_card(num_players, stn):
     field_white = []
     make_spooky(field_black)
     make_spooky(field_white)
-    
     
     ti = []                             # 전체 타일 묶음
     tb = []                             # Tile Black
