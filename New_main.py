@@ -369,7 +369,7 @@ class BUTTON():
                 if action == None:
                     pass
                 else:
-                    #button_sound()
+                    button_sound()
                     action()
         
         else:
@@ -697,7 +697,7 @@ def f_win_page(): # 승리 페이지.
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Exit-game", inactive_color = WHITE, active_color=GRAY)
     wpbb = BUTTON("Level Setting")
-    #f_play_music(win_music)
+    f_play_music(win_music)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -885,7 +885,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    #f_play_music(main_music)
+    f_play_music(main_music)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
