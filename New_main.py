@@ -240,7 +240,7 @@ class CARD():
     def f_click_tile(self):
         global RT, YATT, Notice
         if self in p[turn].deck_list: # 자신의 패 선택 불가.
-            Notice = "You cannot select your card."
+            Notice = "You cannot select your tiles."
         
         else:   # 타인의 패 선택시
             Notice = " "
@@ -908,9 +908,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
 def main_loop(): # Game main loop scene
     global num_players, stn, turn, YATT, RT
-
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
-    
     screen.fill(WHITE)
     done = False
     num_players = f_pn()
@@ -924,7 +922,6 @@ def main_loop(): # Game main loop scene
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
     button_exit = BUTTON("Exit",active_color=RED)
-    button_test = BUTTON("test",active_color=RED)
 
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
     
@@ -935,7 +932,6 @@ def main_loop(): # Game main loop scene
             turn += 1
             YATT = 0
             time.sleep(1.6)   # 임시 1.6초 딜레이
-            win = 0
             if turn == num_players:
                 turn = 0
         elif YATT == 0:
@@ -1022,7 +1018,6 @@ def main_loop(): # Game main loop scene
         # 승리 조건
         f_end_conditions()
         
-
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
         Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
@@ -1046,7 +1041,6 @@ def main_loop(): # Game main loop scene
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
-        button_test._draw_(loc = (100,550), size = (130,30), action = f_win_page)
         button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = exit_window)
         select_card._blit_(loc=(5,30),loc_center=False)
 
