@@ -683,10 +683,10 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.mainloop()
     return stn
 
-def f_play_music(name): # 음악 연속 재생 함수.
+def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
     pygame.mixer.init()
     pygame.mixer.music.load(name)
-    pygame.mixer.music.set_volume(0.8)
+    pygame.mixer.music.set_volume(vol)
     pygame.mixer.music.play(-1) # 무한재생.
 
 def f_level_set(): # 난이도 설정 Tk.
@@ -723,9 +723,8 @@ def f_win_page(): # 승리 페이지.
     dp = PRINTTEXT("The result of the game.", size = 50)
     wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
-    wpb3 = BUTTON("Exit-game", inactive_color = WHITE, active_color=GRAY)
-    wpbb = BUTTON("Level Setting")
-    f_play_music(win_music)
+    wpb3 = BUTTON("Level Setting", inactive_color = WHITE, active_color=GRAY)
+    f_play_music(win_music, 0.6)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -735,8 +734,8 @@ def f_win_page(): # 승리 페이지.
 
         wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=main_loop)
         wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=game_intro)
-        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=exit_window)
-        wpbb._draw_(loc = (SCREEN_WIDTH/5,SCREEN_HEIGHT*3/4), size = (150,30), action=f_level_set)
+        wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=f_level_set)
+        
         # text positions
         dp._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/10), loc_center=False)
 
@@ -919,7 +918,7 @@ def main_loop(): # Game main loop scene
     stn = f_tn(num_players)
     make_card(num_players, stn)
     
-    f_play_music(main_music)
+    f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
