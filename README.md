@@ -229,7 +229,13 @@ GUI branch, New_main.py
             기타 디버깅 및 CARD class에서 PLAYER class로 접근 방법 구상.
     > 지원; 오픈된 타일 클릭 막기(오픈 여부 나누는 선행작업 필요).  # 주말 까지(다음주 승리 페이지 연결 및 최종 디버깅 예정).
         > 오픈 여부 CARD class 확률란에 저장!!
-    
+
+### 201120 용 패치노트
+server branch, server.py, client.py, player.py, network.py
+
+- 서버 관련 파일 작업을 게임에 연동하기 위해, server branch 새로 생성
+- 실질적인 네트워크 플레이로 필요한 파일들은 player.py를 제외한 파일
+- 2인 플레이어는 코드에 적용하면 되겠지만 3인 플레이 이상은 어떻게 할지 테스트 중
 
 ## 13th Week (11.23~11.29)
 
