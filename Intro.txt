@@ -1,0 +1,21 @@
+Quantum Coda 이론 도움말에 오신것을 환영합니다.
+Quantum Coda 이론 도움말에서는 이 게임에 적용된 양자역학적 현상을 잘 모르는 분과, 어려울 수 있는 분을 위해 만들어졌습니다. 이 게임에서는 크게 3가지의 양자역학적 현상을 아이디어로 만들어졌습니다.
+
+1. 중첩
+2. 얽힘
+3. 측정과 붕괴
+
+게임의 재미를 돋우기 위해서 현상을 접목시켰기 때문에, 게임에 적용된 것과 실제 이론과는 차이가 있습니다. 위의 탭을 클릭하여 각 특징들에 대한 설명을 보실 수 있습니다.
+보다 자세한 설명은 Wikipedia의 'Quantum Game Theory'를 참조하세요.
+https://en.wikipedia.org/wiki/Quantum_game_theory
+
+Wecome to visit theroy help for understanding Quantum Coda.
+This page describes quantum mechanics theories for players briefly who don't know the phenomenon or have difficulties of understanding. The game mainly used three phenomena of quantum mechanics.
+
+1. Superposition
+2. Entanglement
+3. Measurement and Collapse
+
+Of course, there are differences between the acutal theories and the game. This is because the game for 'FUN' get the first priority. You can find a description of thoeries each by clicking on the 'Tabs'.
+If you want more specified explanation then see 'Quantum Game Theory' on the Wikipedia.
+https://en.wikipedia.org/wiki/Quantum_game_theory
