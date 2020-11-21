@@ -571,46 +571,86 @@ def theory_desc(): # 이론 Tk.
     notebook=Notebook(window, width = n_width, height = n_heigh)
     notebook.pack()
     
-    # 1
+    # Introduction
     frame1=Frame(window)
     notebook.add(frame1, text="Intro")
 
-    A = open('QM.txt', 'r')
-    QM =A.read()
+    A = open('Intro.txt', 'r')
+    Intro = A.read()
     
-    msg1=Message(frame1, width = n_width, text=QM)
+    msg1=Message(frame1, width = n_width, text=Intro)
     msg1.pack(side = "top", anchor = "w")
 
-    # 2
+    # Description tab for superposition in Korean
     frame2=Frame(window)
-    notebook.add(frame2, text="Superposition")
+    notebook.add(frame2, text="중첩")
 
-    B = open('superposition.txt', 'r')
-    superposition = B.read()
+    B = open('superposition_ko.txt', 'r')
+    sup_ko = B.read()
     
-    msg2=Message(frame2, width = n_width, text=superposition)
+    msg2=Message(frame2, width = n_width, text=sup_ko)
     msg2.pack(side = "top", anchor = "w")
                    
-    # 3
+    # Description tab for entanglement in Korean
     frame3=Frame(window)
-    notebook.add(frame3, text="entanglement")
+    notebook.add(frame3, text="얽힘")
 
-    C = open('entanglement.txt', 'r')
-    entanglement =C.read()
+    C = open('entanglement_ko.txt', 'r')
+    ent_ko = C.read()
     
-    msg3=Message(frame3, width = n_width, text=entanglement)
+    msg3 = Message(frame3, width = n_width, text=ent_ko)
     msg3.pack(side = "top", anchor = "w")
-                   
+
+    # Description tab for Observation & Collapse in Korean 
+    frame4 = Frame(window)
+    notebook.add(frame4, text="측정과 붕괴")
+
+    D = open('measurement_and_Collapse_ko.txt', 'r')
+    measncoll_ko = D.read()
+    
+    msg4 = Message(frame4, width = n_width, text=measncoll_ko)
+    msg4.pack(side = "top", anchor = "w")
+
+    # Description tab for superposition in English
+    frame5=Frame(window)
+    notebook.add(frame5, text="Superposition")
+
+    B = open('superposition_en.txt', 'r')
+    sup_en = B.read()
+    
+    msg5=Message(frame5, width = n_width, text=sup_en)
+    msg5.pack(side = "top", anchor = "w")
+
+    # Description tab for entanglement in English
+    frame6=Frame(window)
+    notebook.add(frame6, text="Entanglement")
+
+    C = open('entanglement_en.txt', 'r')
+    ent_ko = C.read()
+    
+    msg6 = Message(frame6, width = n_width, text=ent_ko)
+    msg6.pack(side = "top", anchor = "w")
+
+    # Description tab for OMeasurement & Collapse in English
+    frame7 = Frame(window)
+    notebook.add(frame7, text="Measurement & Collapse")
+
+    D = open('measurement_and_Collapse_en.txt', 'r')
+    measncoll_en = D.read()
+    
+    msg7 = Message(frame7, width = n_width, text=measncoll_en)
+    msg7.pack(side = "top", anchor = "w")
+
     # 4
-    frame4=Frame(window)
-    notebook.add(frame4, text="이미지 크기조절 및 출력 테스트")
+    frame8 = Frame(window)
+    notebook.add(frame8, text="이미지 크기조절 및 출력 테스트")
 
     image=Image.open("a.png")
     image = image.resize((n_width,n_heigh-20),Image.ANTIALIAS)
     r_img = ImageTk.PhotoImage(image)
     
-    msg4=Label(frame4, width = n_width, image=r_img)
-    msg4.pack(side = "top", anchor = "w")
+    msg8=Label(frame8, width = n_width, image=r_img)
+    msg8.pack(side = "top", anchor = "w")
 
     window.mainloop()
 
