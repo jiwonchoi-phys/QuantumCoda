@@ -243,15 +243,19 @@ class CARD():
             t_probability = self.card_probability
             def using_passive_ability(): # 패시브 능력 정의
                 global san_num
-                if player_ability[turn][0] == 1: # 1번 패시브 평균 보여주기
-                    san_num = (self.card_num[0] + self.card_num[1])/2
-                elif player_ability[turn][0] == 2: # 2번 패시브 차이 보여주기
-                    san_num = abs(self.card_num[0] - self.card_num[1]) 
-                elif player_ability[turn][0] == 3: # 3번 패시브 큰 확률 보여주기
-                    if self.card_probability[0] > self.card_probability[1]:
-                        san_num = self.card_probability[0]
-                    else:
-                        san_num = self.card_probability[1]
+                san_num = "" 
+                if len(self.card_num) == 1:
+                    pass
+                else:
+                    if player_ability[turn][0] == 1: # 1번 패시브 평균 보여주기
+                        san_num = (self.card_num[0] + self.card_num[1])/2
+                    elif player_ability[turn][0] == 2: # 2번 패시브 차이 보여주기
+                        san_num = abs(self.card_num[0] - self.card_num[1]) 
+                    elif player_ability[turn][0] == 3: # 3번 패시브 큰 확률 보여주기
+                        if self.card_probability[0] > self.card_probability[1]:
+                            san_num = self.card_probability[0]
+                        else:
+                            san_num = self.card_probability[1]
             using_passive_ability()            
             ct_tk=Tk()
             ct_tk.title("Please enter the number you are guessing.")
