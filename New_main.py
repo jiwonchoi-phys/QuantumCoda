@@ -302,8 +302,8 @@ class CARD():
                             YATT = 2
                             p[turn].put_point(20)
                             label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                            label2.config(text="먹은 타일이 없어 붕괴 및 오픈 과정 생략.")
-                            Notice = "먹은 타일이 없어 붕괴 및 오픈 과정 생략."
+                            label2.config(text="There are no tiles added this turn,\nso the collapse and open process is skipped.")
+                            Notice = "Collapse and Open process is skipped."
                             ct_tk.after(2100, ctd)
                             pass
 
@@ -312,14 +312,15 @@ class CARD():
                             p[turn].put_point(20)
                             label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
                             label2.config(text="Collapse and open the tile brought this turn.")
-                            Notice = "추측에 실패하여 먹은 타일 붕괴 후 공개."
 
                             if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
+                                Notice = "Failure to guess, opening an added tile."
                                 del p[turn].deck_list[p[turn].deck_list.index(RT)]  # 오픈 안된 RT 제거
                                 RT.is_opened()
                                 p[turn].deck_list.append(RT)    # 오픈 후 다시 RT 추가.
 
                             elif len(RT.get_num()) == 2:    # 붕괴되지 않은 타일을 먹었다면, 붕괴후 공개.
+                                Notice = "Failure to guess, opening after collapse of added tile."
                                 NTC = RT.get_color()
                                 NTN = sf_p(RT.get_num(), RT.get_pro())
                                 label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
@@ -541,7 +542,7 @@ def f_ftile_color_arrnage(tii):
 
 def exit_window(): # Exit Warning window Tk.
     ex = Tk()
-    ex.title("Warning")
+    ex.title("Warning.")
     ex.geometry("480x300+100+100")
     ex.resizable(False, False)
     exlabel = Label(ex, text="Do you want to end this game? \nIf you click Exit button then this behavior is not reversible...")
@@ -566,7 +567,7 @@ def exit_window(): # Exit Warning window Tk.
 
 def theory_desc(): # 이론 Tk.
     window=Tk()
-    window.title("Theory test")
+    window.title("Theory.")
     window.geometry("800x500+100+100")
     window.resizable(False, False)
     
@@ -696,23 +697,23 @@ def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
 def f_level_set(): # 난이도 설정 Tk.
     global states
     
-    name_box = ["색상 정렬 사용","확률 보기 사용","아이템 사용"]
+    name_box = ["Use color alignment","Use probability view","Use items"]
     chk = [0,0,0] # Dummy list for name.
     
     def onPress(i):                       
         states[i] = not states[i]   
     root = Tk()
-    root.title("Level setting test")
+    root.title("Level setting.")
     root.geometry("480x300+100+100")
     root.resizable(False, False)
-    t = Label(text="끌 수록 난이도 up (Check =  Use)")
+    t = Label(text="Difficulty increases if you don't use the features. (Check =  Use)")
     t.pack(pady=20)
-    a1 = Message(width = 480, text="색상 정렬:  검정, 하양의 두 타일이 spooky 숫자 2개가 모두 같은 경우, 검정이 왼쪽에 위치하게 합니다. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )")
-    a1.pack(anchor = "w", pady=2)
-    a2 = Message(width = 480, text="확률 보기:  상대방 타일의 확률 보기를 사용합니다.")
-    a2.pack(anchor = "w", pady=2)
-    a3 = Message(width = 480, text="아이템:  게임의 난이도를 낮추는 아이템을 사용합니다.")
-    a3.pack(anchor = "w", pady=2)
+    a1 = Message(width = 480, justify= "right", text="Color Alignment:   If both tiles black and white have the same spooky numbers,\nalways have black on the left. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )")
+    a1.pack(anchor = "w", pady=10)
+    a2 = Message(width = 480, text="Probability view:   Use the probability view of the opponent's tile.")
+    a2.pack(anchor = "w", pady=10)
+    a3 = Message(width = 480, text="Items:   Use an item that lowers the difficulty of the game.")
+    a3.pack(anchor = "w", pady=10)
     
     for i in range(3):
         chk[i] = Checkbutton(root, text=name_box[i], command=(lambda i=i: onPress(i)) )
@@ -1057,11 +1058,7 @@ def main_loop(): # Game main loop scene
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
-
 states = [True,True,True] # 초기 세팅 값(수정 엄금).
-
-screen.fill(WHITE)                          # 화면 흰색으로 채움
-pygame.display.update()                     # 화면 업데이트.
 
 game_intro()                                # 실행 장면을 위한 최초 함수.
 
