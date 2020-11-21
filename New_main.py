@@ -237,109 +237,114 @@ class CARD():
         
         # 타인의 패 선택시
         else:
-            Notice = " "
-            t_num = self.card_num
-            t_probability = self.card_probability
+            if self.opened == True: # 오픈된 타일 클릭 막음.
+                Notice = "You cannot select the opened tile."
+                pass
+            elif self.opened == False:  # 아직 오픈 아닌 타일.
+                Notice = " "
+                t_num = self.card_num
+                t_probability = self.card_probability
 
-            ct_tk=Tk()
-            ct_tk.title("Please enter the number you are guessing.")
-            ct_tk.geometry("480x300+100+100")
-            ct_tk.resizable(False, False)
+                ct_tk=Tk()
+                ct_tk.title("Please enter the number you are guessing.")
+                ct_tk.geometry("480x300+100+100")
+                ct_tk.resizable(False, False)
 
-            label1 = Label(ct_tk, text=str(t_num))
-            label2 = Label(ct_tk, text=str(t_probability))
+                label1 = Label(ct_tk, text=str(t_num))
+                label2 = Label(ct_tk, text=str(t_probability))
 
-            def sf_p(number, probability):
-                x = random.randint(1,101)
-                if x <= probability[0]:
-                    del number[number.index(number[1])]
-                else:
-                    del number[number.index(number[0])]
-                return number
-                
-            def ctcalc(event): 
-                global RT, YATT, Notice        # RT; type: CARD class
-                PGN = int(entry.get()) # The player's guess number.
-                
-                # 추측 수가 타일에 존재.
-                if PGN in self.card_num:
-
-                    if len(self.card_num) == 2:     # 추측 타일 상태가 붕괴되지 않음.
-                        self.card_num = sf_p(self.card_num, self.card_probability)
-                        self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+                def sf_p(number, probability):
+                    x = random.randint(1,101)
+                    if x <= probability[0]:
+                        del number[number.index(number[1])]
+                    else:
+                        del number[number.index(number[0])]
+                    return number
                     
-                        label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
+                def ctcalc(event): 
+                    global RT, YATT, Notice        # RT; type: CARD class
+                    PGN = int(entry.get()) # The player's guess number.
                     
-                        if PGN == self.card_num[0]: # 추측 성공 (self.card_num type: list) 
+                    # 추측 수가 타일에 존재.
+                    if PGN in self.card_num:
+
+                        if len(self.card_num) == 2:     # 추측 타일 상태가 붕괴되지 않음.
+                            self.card_num = sf_p(self.card_num, self.card_probability)
+                            self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
+                        
+                            label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
+                        
+                            if PGN == self.card_num[0]: # 추측 성공 (self.card_num type: list) 
+                                YATT = 3
+                                self.is_opened()
+                                p[turn].put_point(200)
+                                label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                                Notice = "Continuous guessing is possible."
+                                ct_tk.after(1700, ctd)
+                                collapse_loop(self)
+                            else:   # 붕괴는 하였으나 추측 실패. (오픈 상태 아님.)
+                                YATT = 2
+                                p[turn].put_point(100)
+                                label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
+                                ct_tk.after(1700, ctd)
+                        
+                        elif len(self.card_num) == 1: # 추측 타일 상태가 붕괴된 경우.
                             YATT = 3
                             self.is_opened()
                             p[turn].put_point(200)
                             label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
                             Notice = "Continuous guessing is possible."
-                            ct_tk.after(1700, ctd)
-                            collapse_loop(self)
-                        else:   # 붕괴는 하였으나 추측 실패. (오픈 상태 아님.)
+                            ct_tk.after(1200, ctd)
+
+                    # 추측 수가 타일에 존재하지 않을 때.
+                    else:
+                        if YATT == 0:   # 이번 턴에 먹은 타일이 없을 때.
                             YATT = 2
-                            p[turn].put_point(100)
-                            label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
-                            ct_tk.after(1700, ctd)
-                    
-                    elif len(self.card_num) == 1: # 추측 타일 상태가 붕괴된 경우.
-                        YATT = 3
-                        self.is_opened()
-                        p[turn].put_point(200)
-                        label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
-                        Notice = "Continuous guessing is possible."
-                        ct_tk.after(1200, ctd)
+                            p[turn].put_point(20)
+                            label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
+                            label2.config(text="There are no tiles added this turn,\nso the collapse and open process is skipped.")
+                            Notice = "Collapse and Open process is skipped."
+                            ct_tk.after(2100, ctd)
+                            pass
 
-                # 추측 수가 타일에 존재하지 않을 때.
-                else:
-                    if YATT == 0:   # 이번 턴에 먹은 타일이 없을 때.
-                        YATT = 2
-                        p[turn].put_point(20)
-                        label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                        label2.config(text="먹은 타일이 없어 붕괴 및 오픈 과정 생략.")
-                        Notice = "먹은 타일이 없어 붕괴 및 오픈 과정 생략."
-                        ct_tk.after(2100, ctd)
-                        pass
+                        elif YATT == 1 or YATT == 3: # 이번 턴에 타일을 먹었을 때. (먹은 타일 붕괴)
+                            YATT = 2
+                            p[turn].put_point(20)
+                            label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
+                            label2.config(text="Collapse and open the tile brought this turn.")
 
-                    elif YATT == 1 or YATT == 3: # 이번 턴에 타일을 먹었을 때. (먹은 타일 붕괴)
-                        YATT = 2
-                        p[turn].put_point(20)
-                        label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                        label2.config(text="Collapse and open the tile brought this turn.")
-                        Notice = "추측에 실패하여 먹은 타일 붕괴 후 공개."
+                            if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
+                                Notice = "Failure to guess, opening an added tile."
+                                del p[turn].deck_list[p[turn].deck_list.index(RT)]  # 오픈 안된 RT 제거
+                                RT.is_opened()
+                                p[turn].deck_list.append(RT)    # 오픈 후 다시 RT 추가.
 
-                        if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
-                            del p[turn].deck_list[p[turn].deck_list.index(RT)]  # 오픈 안된 RT 제거
-                            RT.is_opened()
-                            p[turn].deck_list.append(RT)    # 오픈 후 다시 RT 추가.
+                            elif len(RT.get_num()) == 2:    # 붕괴되지 않은 타일을 먹었다면, 붕괴후 공개.
+                                Notice = "Failure to guess, opening after collapse of added tile."
+                                NTC = RT.get_color()
+                                NTN = sf_p(RT.get_num(), RT.get_pro())
+                                label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
+                                label3.pack()
+                                NT = CARD(NTC, NTN, None,  RT.get_loop())
+                                NT.is_opened()
+                                p[turn].deck_list.append(NT)
+                                del p[turn].deck_list[p[turn].deck_list.index(RT)]
+                                collapse_loop(NT)
+                                RT = NT
+                            
+                            ct_tk.after(2100, ctd)
+                            
+                def ctd():
+                    ct_tk.destroy()
 
-                        elif len(RT.get_num()) == 2:    # 붕괴되지 않은 타일을 먹었다면, 붕괴후 공개.
-                            NTC = RT.get_color()
-                            NTN = sf_p(RT.get_num(), RT.get_pro())
-                            label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
-                            label3.pack()
-                            NT = CARD(NTC, NTN, None,  RT.get_loop())
-                            NT.is_opened()
-                            p[turn].deck_list.append(NT)
-                            del p[turn].deck_list[p[turn].deck_list.index(RT)]
-                            collapse_loop(NT)
-                            RT = NT
-                        
-                        ct_tk.after(2100, ctd)
-                        
-            def ctd():
-                ct_tk.destroy()
+                entry=Entry(ct_tk, bd = 20)
+                entry.bind("<Return>", ctcalc)
+                entry.pack(pady = 50)
 
-            entry=Entry(ct_tk, bd = 20)
-            entry.bind("<Return>", ctcalc)
-            entry.pack(pady = 50)
+                label1.pack()
+                label2.pack()
 
-            label1.pack()
-            label2.pack()
-
-            ct_tk.mainloop()
+                ct_tk.mainloop()
 
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
@@ -537,7 +542,7 @@ def f_ftile_color_arrnage(tii):
 
 def exit_window(): # Exit Warning window Tk.
     ex = Tk()
-    ex.title("Warning")
+    ex.title("Warning.")
     ex.geometry("480x300+100+100")
     ex.resizable(False, False)
     exlabel = Label(ex, text="Do you want to end this game? \nIf you click Exit button then this behavior is not reversible...")
@@ -562,7 +567,7 @@ def exit_window(): # Exit Warning window Tk.
 
 def theory_desc(): # 이론 Tk.
     window=Tk()
-    window.title("Theory test")
+    window.title("Theory.")
     window.geometry("800x500+100+100")
     window.resizable(False, False)
     
@@ -732,23 +737,23 @@ def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
 def f_level_set(): # 난이도 설정 Tk.
     global states
     
-    name_box = ["색상 정렬 사용","확률 보기 사용","아이템 사용"]
+    name_box = ["Use color alignment","Use probability view","Use items"]
     chk = [0,0,0] # Dummy list for name.
     
     def onPress(i):                       
         states[i] = not states[i]   
     root = Tk()
-    root.title("Level setting test")
+    root.title("Level setting.")
     root.geometry("480x300+100+100")
     root.resizable(False, False)
-    t = Label(text="끌 수록 난이도 up (Check =  Use)")
+    t = Label(text="Difficulty increases if you don't use the features. (Check =  Use)")
     t.pack(pady=20)
-    a1 = Message(width = 480, text="색상 정렬:  검정, 하양의 두 타일이 spooky 숫자 2개가 모두 같은 경우, 검정이 왼쪽에 위치하게 합니다. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )")
-    a1.pack(anchor = "w", pady=2)
-    a2 = Message(width = 480, text="확률 보기:  상대방 타일의 확률 보기를 사용합니다.")
-    a2.pack(anchor = "w", pady=2)
-    a3 = Message(width = 480, text="아이템:  게임의 난이도를 낮추는 아이템을 사용합니다.")
-    a3.pack(anchor = "w", pady=2)
+    a1 = Message(width = 480, justify= "right", text="Color Alignment:   If both tiles black and white have the same spooky numbers,\nalways have black on the left. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )")
+    a1.pack(anchor = "w", pady=10)
+    a2 = Message(width = 480, text="Probability view:   Use the probability view of the opponent's tile.")
+    a2.pack(anchor = "w", pady=10)
+    a3 = Message(width = 480, text="Items:   Use an item that lowers the difficulty of the game.")
+    a3.pack(anchor = "w", pady=10)
     
     for i in range(3):
         chk[i] = Checkbutton(root, text=name_box[i], command=(lambda i=i: onPress(i)) )
@@ -1093,11 +1098,7 @@ def main_loop(): # Game main loop scene
 pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
-
 states = [True,True,True] # 초기 세팅 값(수정 엄금).
-
-screen.fill(WHITE)                          # 화면 흰색으로 채움
-pygame.display.update()                     # 화면 업데이트.
 
 game_intro()                                # 실행 장면을 위한 최초 함수.
 
