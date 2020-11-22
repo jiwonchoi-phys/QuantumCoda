@@ -585,7 +585,7 @@ def exit_window(): # Exit Warning window Tk.
 
 def theory_desc(): # 이론 Tk.
     window=Tk()
-    window.title("Theory.")
+    window.title("Theory")
     window.geometry("800x500+100+100")
     window.resizable(False, False)
     
@@ -604,64 +604,64 @@ def theory_desc(): # 이론 Tk.
     msg1=Message(frame1, width = n_width, text=Intro)
     msg1.pack(side = "top", anchor = "w")
 
-    # Description tab for superposition in Korean
-    frame2=Frame(window)
-    notebook.add(frame2, text="중첩")
-
-    B = open('superposition_ko.txt', 'r')
-    sup_ko = B.read()
-    
-    msg2=Message(frame2, width = n_width, text=sup_ko)
-    msg2.pack(side = "top", anchor = "w")
-                   
-    # Description tab for entanglement in Korean
-    frame3=Frame(window)
-    notebook.add(frame3, text="얽힘")
-
-    C = open('entanglement_ko.txt', 'r')
-    ent_ko = C.read()
-    
-    msg3 = Message(frame3, width = n_width, text=ent_ko)
-    msg3.pack(side = "top", anchor = "w")
-
-    # Description tab for Observation & Collapse in Korean 
-    frame4 = Frame(window)
-    notebook.add(frame4, text="측정과 붕괴")
-
-    D = open('measurement_and_Collapse_ko.txt', 'r')
-    measncoll_ko = D.read()
-    
-    msg4 = Message(frame4, width = n_width, text=measncoll_ko)
-    msg4.pack(side = "top", anchor = "w")
-
     # Description tab for superposition in English
-    frame5=Frame(window)
-    notebook.add(frame5, text="Superposition")
+    frame2=Frame(window)
+    notebook.add(frame2, text="Superposition")
 
     B = open('superposition_en.txt', 'r')
     sup_en = B.read()
     
-    msg5=Message(frame5, width = n_width, text=sup_en)
-    msg5.pack(side = "top", anchor = "w")
-
+    msg2=Message(frame2, width = n_width, text=sup_en)
+    msg2.pack(side = "top", anchor = "w")
+                   
     # Description tab for entanglement in English
-    frame6=Frame(window)
-    notebook.add(frame6, text="Entanglement")
+    frame3=Frame(window)
+    notebook.add(frame3, text="Entanglement")
 
     C = open('entanglement_en.txt', 'r')
+    ent_en = C.read()
+    
+    msg3 = Message(frame3, width = n_width, text=ent_en)
+    msg3.pack(side = "top", anchor = "w")
+
+    # Description tab for Observation & Collapse in English 
+    frame4 = Frame(window)
+    notebook.add(frame4, text="Measurement & Collapse")
+
+    D = open('measurement_and_Collapse_en.txt', 'r')
+    measncoll_en = D.read()
+    
+    msg4 = Message(frame4, width = n_width, text=measncoll_en)
+    msg4.pack(side = "top", anchor = "w")
+
+    # Description tab for superposition in Korean 
+    frame5=Frame(window)
+    notebook.add(frame5, text="중첩")
+
+    B = open('superposition_ko.txt', 'r')
+    sup_ko = B.read()
+    
+    msg5=Message(frame5, width = n_width, text=sup_ko)
+    msg5.pack(side = "top", anchor = "w")
+
+    # Description tab for entanglement in Korean 
+    frame6=Frame(window)
+    notebook.add(frame6, text="얽힘")
+
+    C = open('entanglement_ko.txt', 'r')
     ent_ko = C.read()
     
     msg6 = Message(frame6, width = n_width, text=ent_ko)
     msg6.pack(side = "top", anchor = "w")
 
-    # Description tab for OMeasurement & Collapse in English
+    # Description tab for Measurement & Collapse in Korean 
     frame7 = Frame(window)
-    notebook.add(frame7, text="Measurement & Collapse")
+    notebook.add(frame7, text="측정과 붕괴")
 
-    D = open('measurement_and_Collapse_en.txt', 'r')
-    measncoll_en = D.read()
+    D = open('measurement_and_Collapse_ko.txt', 'r')
+    measncoll_ko = D.read()
     
-    msg7 = Message(frame7, width = n_width, text=measncoll_en)
+    msg7 = Message(frame7, width = n_width, text=measncoll_ko)
     msg7.pack(side = "top", anchor = "w")
 
     # 4
@@ -725,14 +725,14 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.title("Enter the number of starting tiles.")
     tn_tk.geometry("480x300+100+100")
     tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-    tlabel = Label(tn_tk, text="At the start of the game,\nplease enter the number of tiles players will start with.\
+    tlabel = Label(tn_tk, text="Please enter the number of tiles\nwhen players start the game.\
         \n\n 게임 시작할 때 받을 플레이어의 타일 수를 입력해주세요.")
     
     def tcalc(event):
         global num_players, stn
         stn = int(entry.get())
         if stn > fcn/num_players:
-            tlabel.config(text="Insufficient total tiles to divide cards. Please enter a small number.\
+            tlabel.config(text="Total tiles are not sufficient to divide cards. Please enter a small number.\
                 \n\n 전체 타일이 충분하지 않아 나눌 수 없습니다. 더 작은 수를 입력해주세요.")
         elif stn < 2:
             tlabel.config(text="Too few tiles. Please enter again.\
@@ -959,10 +959,12 @@ def how_to_play(): # scene for game description # 장면 테스트 중
     dp_en2 = PRINTTEXT("weird elements inspired on the phenomenon of Quantum Mechanics.", size = 20)
     dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside", size = 20)
     dp_en4 = PRINTTEXT("what you want to know.", size = 20)
+    dp_en5 = PRINTTEXT("", size = 20)
+    dp_en6 = PRINTTEXT("English and Korean are supported to understand our game.", size = 20)
 
-    theory_button = BUTTON("원리 Theory")
-    Rule_button = BUTTON("게임규칙 Rule")
-    prac_button = BUTTON("연습게임 Practice")
+    theory_button = BUTTON("Theory 이론")
+    Rule_button = BUTTON("Rule 게임규칙")
+    prac_button = BUTTON("Practice 연습게임")
     back_button = BUTTON("Back to Title")
     exit_button = BUTTON("Exit",active_color=RED)
 
@@ -972,8 +974,8 @@ def how_to_play(): # scene for game description # 장면 테스트 중
                 pygame.quit()
 
         # text positions
-        dp_en = [dp_en1,dp_en2,dp_en3,dp_en4]
-        for i in range (4):
+        dp_en = [dp_en1,dp_en2,dp_en3,dp_en4,dp_en5,dp_en6]
+        for i in range (6):
             dp_en[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
 
         theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
