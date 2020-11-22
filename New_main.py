@@ -56,10 +56,10 @@ idx=0
     ====================<<<     Util    >>>====================
 """
 class PRINTTEXT():
-    def __init__(self, msg, size, font=None, color=BLACK, antialias=True, background=None):
+    def __init__(self, msg, size, font=None, bold=False, color=BLACK, antialias=True, background=None):
         if font == None:                # OS별 폰트 문제 체크
             if platform.system() == 'Windows':
-                font = 'malgungothic'
+                font = 'calibri'
             elif platform.system() == 'Darwin':
                 font = 'applesdgothicneo'
             elif platform.system() == 'Linux':
@@ -70,10 +70,11 @@ class PRINTTEXT():
         self.msg = msg                  # 메세지
         self.font = font                # font 지정 (기본 conslas)
         self.size = size                # size 지정
-        self.antialias = antialias      # AA 지정 (기본 true)
+        self.bold = bold                # bold 지정 (기본 True)
+        self.antialias = antialias      # AA 지정 (기본 False)
         self.color = color              # 색상 지정 (기본 검정)
         self.background = background    # 바탕 지정 (기본 없음)
-        texts = pygame.font.SysFont(self.font, self.size)   # texts는 지정한 폰트와 사이즈 사용
+        texts = pygame.font.SysFont(self.font, self.size, self.bold)   # texts는 지정한 폰트와 사이즈 사용
         self.text = texts.render(self.msg, self.antialias, self.color, self.background) # 렌더링.
     
     def _blit_(self, loc=(0,0), loc_center=True):   # 좌표 지정 위치 0,0의 오른쪽
@@ -686,7 +687,7 @@ def f_pn(): # 플레이어 수를 입력 받는 Tk.
     pn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
     plabel = Label(pn_tk, \
         text="Please enter the number of players in the space above.\nThe minimum playable number is 2. The maximum is 4.\
-            \n\n 플레이어 숫자를 위의 칸에 입력해주세요. \n최소 플레이어 수는 2, 최대 플레이어 수는 4 입니다.")
+        \n\n플레이어 숫자를 위의 칸에 입력해주세요. \n최소 플레이어 수는 2, 최대 플레이어 수는 4 입니다.")
     
     def pcalc(event):
         global num_players
@@ -953,10 +954,6 @@ def how_to_play(): # scene for game description # 장면 테스트 중
     play = False
         
     # dp: description
-    dp_ko1 = PRINTTEXT("Quantum Coda는 기존의 Coda(다빈치 코드)게임에 양자역학적", size = 20)
-    dp_ko2 = PRINTTEXT("현상을 접목시켜 만든 게임입니다.", size = 20)
-    dp_ko3 = PRINTTEXT("오른쪽의 버튼을 클릭하면 원하시는 도움말을 볼 수 있습니다.", size = 20)
-    dp_ko4 = PRINTTEXT("", size = 20)
 
     dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game included", size = 20)
     dp_en2 = PRINTTEXT("weird elements inspired on the phenomenon of Quantum Mechanics.", size = 20)
@@ -975,11 +972,9 @@ def how_to_play(): # scene for game description # 장면 테스트 중
                 pygame.quit()
 
         # text positions
-        dp_ko = [dp_ko1,dp_ko2,dp_ko3,dp_ko4]
         dp_en = [dp_en1,dp_en2,dp_en3,dp_en4]
         for i in range (4):
-            dp_ko[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
-            dp_en[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 200 + 25*i))
+            dp_en[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
 
         theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
         Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
