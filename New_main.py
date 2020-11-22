@@ -702,11 +702,11 @@ def f_pn(): # 플레이어 수를 입력 받는 Tk.
             plabel.config(text="The number of players was determined to be "+str(eval(entry.get()))+".\
                 \n\n 플레이어 수가 "+str(eval(entry.get()))+"으로 결정이 되었습니다.")
             num_players = pn
-            
             pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
 
     def pnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
         pn_tk.destroy()
+        f_tn(num_players)
 
     entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", pcalc)      # 리턴값 calc 함수에 사용
@@ -715,8 +715,7 @@ def f_pn(): # 플레이어 수를 입력 받는 Tk.
     plabel.pack()
 
     pn_tk.mainloop()
-    return num_players
-
+    
 def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     global tlabel, stn, fcn, max_card_num
 
@@ -736,15 +735,16 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
                 \n\n 전체 타일이 충분하지 않아 나눌 수 없습니다. 더 작은 수를 입력해주세요.")
         elif stn < 2:
             tlabel.config(text="Too few tiles. Please enter again.\
-                \n\n 타일수가 너무 적습니다. 다시 입력하세요.")
+            \n\n 타일수가 너무 적습니다. 다시 입력하세요.")
         elif stn >= 2 and stn <= fcn/num_players:
             tlabel.config(text="The number of tiles per players was decided as "+str(stn)+".\
-                \n\n 타일수가 "+str(stn)+"으로 결정이 되었습니다.")
-
+            \n\n 타일수가 "+str(stn)+"으로 결정이 되었습니다.")
+            
             tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
-
+            
     def tnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
         tn_tk.destroy()
+        main_loop()
 
     entry=Entry(tn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
     entry.bind("<Return>", tcalc)      # 리턴값 calc 함수에 사용
@@ -753,7 +753,6 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tlabel.pack()
 
     tn_tk.mainloop()
-    return stn
 
 def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
     pygame.mixer.init()
@@ -942,7 +941,7 @@ def game_intro():   # Game intro scene
         
         # button _draw_ functions
         option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_level_set)
-        play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=main_loop)
+        play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=f_pn)
         how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
         title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=quit)
 
@@ -992,8 +991,6 @@ def main_loop(): # Game main loop scene
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
-    num_players = f_pn()
-    stn = f_tn(num_players)
     make_card(num_players, stn)
     
     f_play_music(main_music, 1)
