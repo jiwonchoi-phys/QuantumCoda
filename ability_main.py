@@ -154,7 +154,7 @@ class PLAYER():
                     self.deck_list = deck                   # 저장
 
 class CARD():
-    global RT, YATT, Notice
+    global RT, YATT, Notice, fake
     def __init__(self,color,num,prob,loop):
         # Set card & font color
         if color == 1: # Black
@@ -231,7 +231,7 @@ class CARD():
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
     def f_click_tile(self):
-        global RT, YATT, Notice, san_num
+        global RT, YATT, Notice, san_num, active4
 
         # 자신의 패 선택 불가.
         if self in p[turn].deck_list:
@@ -281,29 +281,42 @@ class CARD():
                     return number
                     
                 def ctcalc(event): 
-                    global RT, YATT, Notice        # RT; type: CARD class
+                    global RT, YATT, Notice, active4, fake       # RT; type: CARD class
                     PGN = int(entry.get()) # The player's guess number.
                     
                     # 추측 수가 타일에 존재.
                     if PGN in self.card_num:
-    
-                        if len(self.card_num) == 2:     # 추측 타일 상태가 붕괴되지 않음.
+                        if len(self.card_num) == 2:     # 추측 타일 상태가 붕괴되지 않음.                                    
+                            fake1 = 0
+                            print(self.card_num)
+                            print(p[fake].deck_list)
+                            if active4 == 1 and self.card_num in p[fake].deck_list:
+                                fake1 = 1
                             if active2 == 1:
                                 self.card_num = [PGN]
+                                self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
                                 label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
                             else:
                                 self.card_num = sf_p(self.card_num, self.card_probability)
                                 self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
                                 label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
                             if PGN == self.card_num[0]: # 추측 성공 (self.card_num type: list) 
-                                YATT = 3
-                                self.is_opened()
-                                p[turn].put_point(200)
-                                label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
-                                Notice = "Continuous guessing is possible."
-                                ct_tk.after(1700, ctd)
-                                collapse_loop(self)
-                            else:   # 붕괴는 하였으나 추측 실패. (오픈 상태 아님.)
+                                if fake1 == 1:
+                                    YATT = 2
+                                    p[turn].put_point(100)
+                                    label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
+                                    ct_tk.after(1700, ctd)
+                                    print(1)
+                                    active4 = 0
+                                else:
+                                    YATT = 3
+                                    self.is_opened()
+                                    p[turn].put_point(200)
+                                    label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                                    Notice = "Continuous guessing is possible."
+                                    ct_tk.after(1700, ctd)
+                                    collapse_loop(self)
+                            elif PGN != self.card_num[0]:   # 붕괴는 하였으나 추측 실패. (오픈 상태 아님.)
                                 YATT = 2
                                 p[turn].put_point(100)
                                 label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
@@ -367,9 +380,8 @@ class CARD():
                 ct_tk.mainloop()
         
     def using_active_ability(): # 액티브 능력 정의
-        global active2, a_ability_point
-        if uaan == 1 and p[turn].get_point() >= a_ability_point[player_ability[turn][1]-1]:
-            p[turn].put_point(-a_ability_point[player_ability[turn][1]-1])
+        global active2, a_ability_point, fake, active4
+        if uaan == 1:
             if player_ability[turn][1] == 1: # 1번 액티브 침묵
                 for i in range(0,num_players):
                     if i != turn:
@@ -384,6 +396,9 @@ class CARD():
                    fti_b.pop(fti_b.index(active3_1)) 
                 elif active3_1 in fti_w:
                    fti_w.pop(fti_w.index(active3_1))
+            elif player_ability[turn][1] == 4:
+                fake = turn
+                active4 = 1
                    
     
 
@@ -922,16 +937,25 @@ def ability_show():
     # 액티브 설명
     if player_ability[turn][1] == 1:
         a_a = "active ability : during one turn, opponents cannot use their abilities"
+        a_p = "Required point :" + str(a_ability_point[0])
     elif player_ability[turn][1] == 2:
         a_a = "active ability : collapse by analogy"
+        a_p = "Required point :" + str(a_ability_point[1])
     elif player_ability[turn][1] == 3:
         a_a = "active ability : take a random tile"
+        a_p = "Required point :" + str(a_ability_point[2])
+    elif player_ability[turn][1] == 4:
+        a_a = "active ability : fake the tile"
+        a_p = "Required point :" + str(a_ability_point[3])
     else:
         a_a = "oops! your silent now..."
     ability_text_p = PRINTTEXT(p_a, size = 20, color = [150,75,0])
     ability_text_a = PRINTTEXT(a_a, size = 20, color = [150,75,0])
+    ability_point_text = PRINTTEXT(a_p, size = 20, color = [150,75,0])
     ability_text_p._blit_(loc = (SCREEN_WIDTH/2,50))
-    ability_text_a._blit_(loc = (SCREEN_WIDTH/2,80))      
+    ability_text_a._blit_(loc = (SCREEN_WIDTH/2,80))
+    ability_point_text._blit_(loc = (SCREEN_WIDTH/2,110))
+    clock.tick(30)      
 
 def game_intro():   # Game intro scene
     screen.fill([240, 244, 195])
@@ -1011,7 +1035,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         clock.tick(15)
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn, YATT, RT, active2, uaan
+    global num_players, stn, turn, YATT, RT, active2, uaan, active4, fake
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill([240, 244, 195])
     done = False
@@ -1022,6 +1046,8 @@ def main_loop(): # Game main loop scene
     # 능력 관련
     active2 = 0
     uaan = 0
+    active4 = 0
+    fake = 0
     
     f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
@@ -1115,10 +1141,15 @@ def main_loop(): # Game main loop scene
     
     def ability_activated(): # 능력 누르면 창 하나 뜨면서 알려주고 싶은데 모르겠음
         global uaan
-        ability_text = PRINTTEXT("ability activated",size = 20)
-        ability_text._blit_(loc = (SCREEN_WIDTH/2,50))
-        uaan = 1
-        CARD.using_active_ability()
+        if p[turn].get_point() >= a_ability_point[player_ability[turn][1]-1]:
+            p[turn].put_point(-a_ability_point[player_ability[turn][1]-1])
+            ability_text = PRINTTEXT("ability activated",size = 20)
+            ability_text._blit_(loc = (SCREEN_WIDTH/2,50))
+            uaan = 1
+            CARD.using_active_ability()
+        else:
+            ability_text = PRINTTEXT("ability inactivated",size = 20)
+            ability_text._blit_(loc = (SCREEN_WIDTH/2,50))
         
     #========== main loop 창 실행 ==========#
     while not done:
@@ -1169,19 +1200,22 @@ def main_loop(): # Game main loop scene
 
 def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 연결시키면 난이도 조정 가능할듯
     global player_ability_backup, player_ability, a_ability_point
-    NoA = 3
-    p_ability_index = list(range(1,NoA+1)) # 패시브 능력 리스트
+    NoA = 4
+    NoP = 3
+    p_ability_index = list(range(1,NoP+1)) # 패시브 능력 리스트
     a_ability_index = list(range(1,NoA+1)) # 엑티브 능력 리스트
-    a_ability_point = [500,400,400] # 엑티브 능력 포인트 
+    a_ability_point = [500,400,400,600] # 엑티브 능력 포인트 
     player_ability = list(numpy.zeros(num_players))
     for i in range(0,num_players):
         player_ability[i] = [0,0]
         player_ability[i][0] = random.choice(p_ability_index)   
-        player_ability[i][1] = random.choice(a_ability_index)             
+        qwer = random.choice(a_ability_index)       
+        player_ability[i][1] = qwer
+        a_ability_index.remove(qwer)
     player_ability_backup = copy.deepcopy(player_ability)
 
 def ability_reset(): # 턴 지날때 능력 초기화
-    global active2, uaan
+    global active2, uaan, active4
     if player_ability[turn][0] == -1: # 침묵 걸렸었으면 턴 끝날때 풀어줌
         player_ability[turn][0] = player_ability_backup[turn][0]
         player_ability[turn][1] = player_ability_backup[turn][1]
@@ -1189,6 +1223,7 @@ def ability_reset(): # 턴 지날때 능력 초기화
         active2 = 0
     if uaan == 1:
         uaan = 0
+
 
 
 
