@@ -923,7 +923,7 @@ def game_intro():   # Game intro scene
     intro = False   # while문 돌리기 위함
 
     title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
-    version = PRINTTEXT("v.1.00", size = 15)
+    version = PRINTTEXT("v.0.10", size = 15)
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
