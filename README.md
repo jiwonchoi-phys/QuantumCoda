@@ -7,6 +7,51 @@ Wecome to visit our repository! This repository is for **QuantumCoda (양자 다
 - Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
 - Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
+# Download: v0.10
+
+Now we released QuantumCoda version 0.10. This version is currently test version so we focused on being able to play the QuantumCoda. 
+
+You can play our game in English and Korean. 
+
+게임 언어는 영어와 한국어로 제공됩니다.
+
+## System Requirements
+- Windows 10, Linux (Ubuntu) (We tested only two OS. It will probably run on macOS too.)
+    > **FOR WSL USERS**; If you want to run our game you'll need to set X11 Forwarding and PulseAudio to send GUI & audio information to your PC. If you not set them, you can not run the game due to an interpreter error.
+- Python 3.8.5
+- Python Modules
+    > Pygame
+    >> maybe you'll need to install using pip.
+    >
+    > Python tkinter, Pillow
+    >> maybe you'll need to install this module if you are Linux user. Turn on the bash and type 'apt install python3-tk'. With same context type 'pip3 install pillow' using pip.
+    >
+    > math, random, numpy, time, platform
+    >> This modules are provided by python. If the modules are not installed, use pip to get modules.
+- System fonts (for Korean Users)
+    > Windows: 'Calibri' or 'malgungothic'
+    >
+    > macOS: 'AppleSDGothicNeo'
+    >
+    > Linux: 'notosanscjkkr'
+
+    If you don't have the fonts above in your PC then written words in Hangul may look broken. Sure, there is no problem with running the game.
+
+## Release Notes
+### v0.10
+* First release the development version for users.
+* Single Player game
+    - You can play the game with 2 players up to 4 players.
+    - But you can't play the game with computers. Take turns your PC playing the games with your friends!
+* Game Options
+    - You can turn on or turn off the 2 options of our game.
+    - Black-White Alignment, Watching the collapse probabilites of any opponent's tiles.
+* Help Menu
+    - Provides theory explanations briefly for those who are not familiar with quantum mechanics.
+    - Another Helps will be updated.
+
+# Development Notes
+
 We'll write recent development notes here. The notes can be written in Korean. If you want to watch previous update notes, see [Here](https://github.com/jiwonchoi-phys/QuantumCoda/tree/master/UpdateNotes)
 
 ## 1st Week ~ 4th Week
