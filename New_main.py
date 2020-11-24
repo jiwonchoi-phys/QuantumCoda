@@ -252,7 +252,8 @@ class CARD():
                 ct_tk.geometry("480x300+100+100")
                 ct_tk.resizable(False, False)
 
-                label1 = Label(ct_tk, text=str(t_num))
+
+                label1 = Label(ct_tk, text=" ")
                 label2 = Label(ct_tk, text=str(t_probability))
 
                 def sf_p(number, probability):
@@ -274,27 +275,31 @@ class CARD():
                             self.card_num = sf_p(self.card_num, self.card_probability)
                             self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
                         
-                            label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
+                            label1.config(anchor="e", justify= CENTER, text="The guessed number "+str(PGN)+" exists on the tile!\
+                            \n추측한 숫자 "+str(PGN)+"가 타일에 존재합니다!")
                         
                             if PGN == self.card_num[0]: # 추측 성공 (self.card_num type: list) 
                                 YATT = 3
                                 self.is_opened()
                                 p[turn].put_point(200)
-                                label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                                label2.config(anchor="e", justify= CENTER, text="The tile collapsed to the guessed number.\nContinuous guessing is possible.\
+                                \n추측한 숫자로 타일이 붕괴되었습니다.\n다른 타일의 숫자 추정이 가능합니다.")
                                 Notice = "Continuous guessing is possible."
                                 ct_tk.after(1700, ctd)
                                 collapse_loop(self)
                             else:   # 붕괴는 하였으나 추측 실패. (오픈 상태 아님.)
                                 YATT = 2
                                 p[turn].put_point(100)
-                                label2.config(text="The tile collapsed, but did not collapse with the guessed number.")
+                                label2.config(anchor="e", justify= CENTER, text="The tile collapsed, but did not collapse \nwith the guessed number.\
+                                \n타일은 붕괴되었지만, 추측한 숫자로 붕괴되지 않았습니다.")
                                 ct_tk.after(1700, ctd)
                         
                         elif len(self.card_num) == 1: # 추측 타일 상태가 붕괴된 경우.
                             YATT = 3
                             self.is_opened()
                             p[turn].put_point(200)
-                            label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.")
+                            label2.config(anchor="e", justify= CENTER, text="The tile collapsed to the guessed number.\nContinuous guessing is possible.\
+                            \n추측한 숫자로 타일이 붕괴되었습니다.\n다른 타일의 숫자 추정이 가능합니다.")
                             Notice = "Continuous guessing is possible."
                             ct_tk.after(1200, ctd)
 
@@ -303,8 +308,10 @@ class CARD():
                         if YATT == 0:   # 이번 턴에 먹은 타일이 없을 때.
                             YATT = 2
                             p[turn].put_point(20)
-                            label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                            label2.config(text="There are no tiles added this turn,\nso the collapse and open process is skipped.")
+                            label1.config(anchor="e", justify= CENTER, text="The guessed number "+str(PGN)+" does not exist on the tile.\
+                            \n추측한 숫자 "+str(PGN)+"는 타일에 존재하지 않습니다.")
+                            label2.config(anchor="e", justify= CENTER, text="There are no tiles added this turn,\nso the collapse and open process is skipped.\
+                            \n이번 턴에 타일이 더 이상 없었으므로,\n붕괴 및 카드 공개과정은 생략합니다.")
                             Notice = "Collapse and Open process is skipped."
                             ct_tk.after(2100, ctd)
                             pass
@@ -312,8 +319,10 @@ class CARD():
                         elif YATT == 1 or YATT == 3: # 이번 턴에 타일을 먹었을 때. (먹은 타일 붕괴)
                             YATT = 2
                             p[turn].put_point(20)
-                            label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n")
-                            label2.config(text="Collapse and open the tile brought this turn.")
+                            label1.config(anchor="e", justify= CENTER, text="The guessed number "+str(PGN)+" does not exist on the tile.\
+                            \n추측한 숫자 "+str(PGN)+"는 타일에 존재하지 않습니다.")
+                            label2.config(anchor="e", justify= CENTER, text="The tile that you brought a new this turn\n now be collapsed and opened.\
+                            \n이번 턴에서 새로 가져온 타일을 붕괴하고 공개합니다.")
 
                             if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
                                 Notice = "Failure to guess, opening an added tile."
@@ -325,7 +334,7 @@ class CARD():
                                 Notice = "Failure to guess, opening after collapse of added tile."
                                 NTC = RT.get_color()
                                 NTN = sf_p(RT.get_num(), RT.get_pro())
-                                label3 = Label(ct_tk, text="The collapsed number is "+str(NTN))
+                                label3 = Label(ct_tk, anchor="e", justify= CENTER, text="The collapsed number is "+str(NTN)+"\n붕괴된 숫자는 "+str(NTN)+"입니다.")
                                 label3.pack()
                                 NT = CARD(NTC, NTN, None,  RT.get_loop())
                                 NT.is_opened()
@@ -556,32 +565,29 @@ def exit_window(): # Exit Warning window Tk.
     else:
         ex.destroy()
 
-    # 아래는 문제 없을시 삭제 예정
-    """
-    ex = Tk()
-    ex.title("Warning.")
-    ex.geometry("480x300+100+100")
-    ex.resizable(False, False)
-    exlabel = Label(ex, text="Do you want to end this game? \nIf you click Exit button then this behavior is not reversible...")
+def tbu_window(): # To Be Updated window tk
+    tbu = Tk()
+    tbu.withdraw()
 
-    def click_exit(event):
-        pygame.quit()
-        quit()
-    def click_cancel(event):
-        ex.destroy()
+    msgbox = messagebox.showerror("To Be Updated", "Currently this feature is not available. To be updated.\n현재 이 기능은 사용할 수 없습니다. 업데이트 예정입니다.")
 
-    bt1 = Button(ex, text="Exit")
-    bt2 = Button(ex, text="Cancel")
-    
-    bt1.place(x= SCREEN_WIDTH // 5 - 100,y= SCREEN_HEIGHT // 5, width = 100, height = 50)
-    bt2.place(x= SCREEN_WIDTH // 5 + 50,y= SCREEN_HEIGHT // 5, width = 100, height = 50)
+    if msgbox == 'ok':
+        tbu.destroy()
+    else:
+        pass
 
-    bt1.bind("<Button-1>", click_exit)
-    bt2.bind("<Button-1>", click_cancel)
+def bati_window(): # Back to the Title window tk
+    bati = Tk()
+    bati.withdraw()
 
-    exlabel.place(x= SCREEN_WIDTH // 20, y= SCREEN_HEIGHT // 10)
-    ex.mainloop()
-    """
+    msgbox = messagebox.askyesno("Back to Title", "Do you want to back to the title?\n타이틀로 돌아가시겠습니까?")
+
+    if msgbox == True:
+        pygame.mixer.music.stop()
+        bati.destroy()
+        game_intro()
+    else:
+        bati.destroy()
 
 def theory_desc(): # 이론 Tk.
     window=Tk()
@@ -814,7 +820,7 @@ def f_win_page(): # 승리 페이지.
                 quit()
 
         wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=main_loop)
-        wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=game_intro)
+        wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=bati_window)
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=f_level_set)
         
         # text positions
@@ -917,15 +923,17 @@ def game_intro():   # Game intro scene
     intro = False   # while문 돌리기 위함
 
     title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
+    version = PRINTTEXT("v.1.00", size = 15)
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
     credits_name = PRINTTEXT("Jong hee Kim, Yong chul Lee, Yong Kwon, Se hyoung Jo, Ji won Choi", size = 20)
 
     # Button Texts
-    option = BUTTON("level test")
+    gsettings_button = BUTTON("Game settings")
     title_exit_button = BUTTON("Exit",active_color=RED)
-    play_button = BUTTON("Play!")
+    splay_button = BUTTON("Single Player")
+    mplay_button = BUTTON("Multi Player")
     how_button = BUTTON("How to Play?")
 
     while not intro:
@@ -935,15 +943,17 @@ def game_intro():   # Game intro scene
         
         # text _blit_ location
         title._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
+        version._blit_(loc=(SCREEN_WIDTH-40, SCREEN_HEIGHT-20))
         credits_title._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-100))
         credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-70))
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
         
         # button _draw_ functions
-        option._draw_(loc = (800,SCREEN_HEIGHT*3 // 8), size = (180,30), action=f_level_set)
-        play_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 8), size = (140,60),action=f_pn)
-        how_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*4 // 8), size = (140,60),action=how_to_play)
-        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (140,60),action=quit)
+        splay_button._draw_(loc = (SCREEN_WIDTH*4 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=f_pn)
+        mplay_button._draw_(loc = (SCREEN_WIDTH*6 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=tbu_window)
+        how_button._draw_(loc = (SCREEN_WIDTH*4 // 10, SCREEN_HEIGHT*4 // 8), size = (160,60),action=how_to_play)
+        gsettings_button._draw_(loc = (SCREEN_WIDTH*6 // 10,SCREEN_HEIGHT*4 // 8), size = (160,60), action=f_level_set)
+        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (160,60),action=quit)
 
         pygame.display.update()
         clock.tick(15)
@@ -978,8 +988,8 @@ def how_to_play(): # scene for game description # 장면 테스트 중
             dp_en[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
 
         theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
-        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
-        prac_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*3 // 4), size = (SCREEN_WIDTH // 4,100), action = None)
+        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = tbu_window)
+        prac_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*3 // 4), size = (SCREEN_WIDTH // 4,100), action = tbu_window)
         back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
         exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
 
@@ -999,6 +1009,7 @@ def main_loop(): # Game main loop scene
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("take a tile")             # button sample
     button_turn = BUTTON("Next")
+    button_back = BUTTON("Back to Title")
     button_exit = BUTTON("Exit",active_color=RED)
 
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
@@ -1119,6 +1130,7 @@ def main_loop(): # Game main loop scene
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
+        button_back._draw_(loc = (SCREEN_WIDTH-250,50), size = (130,30), action = bati_window)
         button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = exit_window)
         select_card._blit_(loc=(5,30),loc_center=False)
 
