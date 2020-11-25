@@ -17,7 +17,7 @@ s.listen(3)
 print("Waiting for a connection, Server Started")
 
 
-players = [Player(0,0,50,50,(255,0,0)), Player(100,100, 50,50, (0,0,255)), Player(200,200, 50,50, (0,255,255))] # Server arranges players.
+players = [Player(0,0,50,50,(255,0,0)), Player(100,100, 50,50, (0,0,255))] # Server arranges players.
 
 def threaded_client(conn, player):
     conn.send(pickle.dumps(players[player]))
@@ -33,10 +33,8 @@ def threaded_client(conn, player):
             else:
                 if player == 1:
                     reply = players[0]
-                elif player == 2:
-                    reply = players[1]
                 else:
-                    reply = players[2]
+                    reply = players[1]
 
                 #print("Received: ", data)
                 #print("Sending : ", reply)

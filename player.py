@@ -9,6 +9,14 @@ class Player():
         self.color = color
         self.rect = (x,y,width,height)
         self.vel = 3
+        self.ready = False
+
+    def onpress(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_r]:
+            print("Checked")
+            self.ready = not self.ready
+            
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, self.rect)
@@ -16,16 +24,16 @@ class Player():
     def move(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_a]:
             self.x -= self.vel
 
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_d]:
             self.x += self.vel
 
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_w]:
             self.y -= self.vel
 
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_s]:
             self.y += self.vel
 
         self.update()
