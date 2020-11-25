@@ -1,10 +1,9 @@
 import pygame
 from network import Network
-from player import Player
+from player import *
 
 win = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("Client")
-
 
 def redrawWindow(win,player, player2): # draw player 1 and player 2 in pygame 
     win.fill((255,255,255))

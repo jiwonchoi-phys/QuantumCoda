@@ -121,7 +121,7 @@ class Player():
         pygame.draw.rect(win, self.color, self.rect)
         if self.t == 1:
             IamREADY = PRINTTEXT("READY", size = 50)
-            IamREADY_blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
+            IamREADY._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
 
     def move(self):
         keys = pygame.key.get_pressed()
