@@ -53,6 +53,8 @@ idx=0
 """
     ====================<<<     Util    >>>====================
 """
+
+
 class PRINTTEXT():
     def __init__(self, msg, size, font=None, bold=False, color=BLACK, antialias=True, background=None):
         if font == None:                # OS별 폰트 문제 체크
@@ -115,6 +117,7 @@ class PLAYER():
     def __init__(self):
         self.deck_list = []     # 덱 리스트
         self.point = 0
+        self.num_list = []
 
     def get_point(self):
         return self.point
@@ -124,7 +127,11 @@ class PLAYER():
 
     def draw_card(self,x,y):
         for i, card in enumerate(self.deck_list):
-            card.draw_img(loc=(x + i*CARD_WIDTH,y)) # 같은 행에 카드 폭만큼 다른 열로 이어 붙임.
+            card.draw_img(loc=(x + i*CARD_WIDTH,y)) # 같은 행에 카드 폭만큼 다른 열로 이어 붙임.\
+
+    def make_numlist(self):
+        self.num_list = [card.card_num for card in self.deck_list]
+        #print(self.num_list)
     
     def tile_arrange(self):
         deck = self.deck_list                   # 임시 리스트 생성.
@@ -374,11 +381,11 @@ class BUTTON():
         self.inactive = inactive_color
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
-        
+        '''
         def button_sound():
             b_s = pygame.mixer.Sound("18V Cordless Drill Switch.wav")
             b_s.play()
-
+        '''
         # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
         if loc_center == True:
             if loc == 'top center':
@@ -407,7 +414,7 @@ class BUTTON():
                 if action == None:
                     pass
                 else:
-                    button_sound()
+                    #button_sound()
                     action()
         
         else:
@@ -576,7 +583,7 @@ def bati_window(): # Back to the Title window tk
     msgbox = messagebox.askyesno("Back to Title", "Do you want to back to the title?\n타이틀로 돌아가시겠습니까?")
 
     if msgbox == True:
-        pygame.mixer.music.stop()
+        #pygame.mixer.music.stop()
         bati.destroy()
         game_intro()
     else:
@@ -748,13 +755,13 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tlabel.pack()
 
     tn_tk.mainloop()
-
+'''
 def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
     pygame.mixer.init()
     pygame.mixer.music.load(name)
     pygame.mixer.music.set_volume(vol)
     pygame.mixer.music.play(-1) # 무한재생.
-
+'''
 def f_level_set(): # 난이도 설정 Tk.
     global states
     
@@ -800,7 +807,7 @@ def f_win_page(): # 승리 페이지.
     wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Level Setting", inactive_color = WHITE, active_color=GRAY)
-    f_play_music(win_music, 0.6)
+    #f_play_music(win_music, 0.6)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -988,7 +995,7 @@ def main_loop(): # Game main loop scene
     done = False
     make_card(num_players, stn)
     
-    f_play_music(main_music, 1)
+    #f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
@@ -1013,6 +1020,9 @@ def main_loop(): # Game main loop scene
             
         elif YATT == 1:
             Notice = "Guess the number of tiles on your opponent."
+        
+        for player in p:
+            player.make_numlist()
  
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
         global fti_b, fti_w, YATT, RT, Notice
@@ -1074,6 +1084,11 @@ def main_loop(): # Game main loop scene
             wtt.after(1000, wttd)
 
         wtt.mainloop()
+
+
+    for i,player in enumerate(p):
+        print(i+1)
+        print(player.num_list)
 
     #========== main loop 창 실행 ==========#
     while not done:
