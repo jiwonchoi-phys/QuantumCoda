@@ -31,6 +31,7 @@ def threaded_client(conn, player):
                 print("Disconnected")
                 break
             else:
+                print(str(players[0].g_ready()))
                 if player == 1:
                     reply = players[0]
                 else:

@@ -14,9 +14,11 @@ class Player():
     def onpress(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
-            print("Checked")
+            print(str(self.ready))
             self.ready = not self.ready
-            
+
+    def g_ready(self):
+        return  self.ready
 
     def draw(self, win):
         pygame.draw.rect(win, self.color, self.rect)
