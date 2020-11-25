@@ -153,9 +153,39 @@ def redrawWindow(win,player, player2): # draw player 1 and player 2 in pygame
         IamREADY._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*1//2))
     pygame.display.update()
 
-def main():
+
+def f_rn(): # 룸 넘버 입력 받는 tk 임시.
+    global room
+    rn_tk=Tk()
+    rn_tk.title("test.")
+    rn_tk.geometry("480x300+100+100")
+    rn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+    dum = Label(rn_tk, text = "\n")
+    dum.pack()
+    label = Label(rn_tk, text="방 번호 1~3")
+    
+    def pcalc(event):
+        global room
+        rn = int(entry.get())
+        if rn >= 1 and rn <= 3:
+            label.config(text=str(rn))
+            room = rn
+            rn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
+
+    def pnd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+        rn_tk.destroy()
+
+    entry=Entry(rn_tk, bd = 20)     # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", pcalc)   # 리턴값 calc 함수에 사용
+    entry.pack(pady = 20)           # 위아래 간격 20
+
+    label.pack()
+
+    rn_tk.mainloop()
+
+def main(room):
     run = True
-    n = Network()
+    n = Network(room)
     p = n.getP()
     clock = pygame.time.Clock()
 
@@ -173,4 +203,5 @@ def main():
         #print(p.g_t())
         redrawWindow(screen, p, p2)
 
-main()
+f_rn()
+main(room)
