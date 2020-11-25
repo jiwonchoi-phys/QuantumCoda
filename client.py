@@ -1,14 +1,156 @@
-import pygame
-from network import Network
-from player import *
 
-win = pygame.display.set_mode(SCREEN_SIZE)
+from network import Network
+from tkinter import * 
+from tkinter import messagebox
+from tkinter.ttk import Notebook
+from PIL import ImageTk, Image
+import math
+import random
+import numpy
+import time
+import pygame
+
+# RGB color information
+BLACK   = (  0,  0,  0)
+WHITE   = (255,255,255)
+
+# Music
+main_music = "White River - Aakash Gandhi.wav"
+win_music = "Trimmed & Taught - Dan Lebowitz.wav"
+
+# Object size
+SCREEN_WIDTH  = 500
+SCREEN_HEIGHT = 300
+SCREEN_SIZE   = (SCREEN_WIDTH, SCREEN_HEIGHT)
+
+#pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
+
+CARD_WIDTH = 60
+CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
+Notice = " "        # Notice 첫 값.
+
+max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
+cut_list=[]         # 각 loop당 카드의 갯수
+pln=0               # 아이템 쓸 플레이어
+clicked = False
+
+class PRINTTEXT():
+    def __init__(self, msg, size, font="calibri", bold=False, color=BLACK, antialias=True, background=None):
+        self.msg = msg                  # 메세지
+        self.font = font                # font 지정 (기본 conslas)
+        self.size = size                # size 지정
+        self.bold = bold                # bold 지정 (기본 True)
+        self.antialias = antialias      # AA 지정 (기본 False)
+        self.color = color              # 색상 지정 (기본 검정)
+        self.background = background    # 바탕 지정 (기본 없음)
+        texts = pygame.font.SysFont(self.font, self.size, self.bold)   # texts는 지정한 폰트와 사이즈 사용
+        self.text = texts.render(self.msg, self.antialias, self.color, self.background) # 렌더링.
+    
+    def _blit_(self, loc=(0,0), loc_center=True):   # 좌표 지정 위치 0,0의 오른쪽
+        if loc_center == True:
+            if loc == 'top center': 
+                text_rect = self.text.get_rect()                                # 사각형 텍스트
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4)      # 중간 위에서 1/4 지점(= top)
+                screen.blit(self.text,text_rect)                                # 텍스트를 지정 위치에 블럭전송
+            
+            elif loc == 'center':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)      # 위치 중간
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'bottom center':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*3 // 4)    # 위치 아래
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'bottom left':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH // 4, SCREEN_HEIGHT*3 // 4)
+                screen.blit(self.text,text_rect)
+            
+            elif loc == 'bottom right':
+                text_rect = self.text.get_rect()
+                text_rect.center = (SCREEN_WIDTH * 3 // 4, SCREEN_HEIGHT*3 // 4)
+                screen.blit(self.text,text_rect)
+            
+            elif type(loc) == tuple: # User input of location 튜플이면 그 값을 위치로 받음. ex. (5,10)
+                text_rect = self.text.get_rect()
+                text_rect.center = loc
+                screen.blit(self.text,text_rect)        
+        
+        else:
+            if type(loc) == tuple: # User input of location
+                screen.blit(self.text,loc)
+
+class Player():
+    def __init__(self, x, y, width, height, color):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.color = color
+        self.rect = (x,y,width,height)
+        self.vel = 3
+        self.ready = False
+        self.t = 0
+
+    def onpress(self):
+        global ck
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_r]:
+            if ck == 0:
+                self.ready = not self.ready
+                print(str(self.ready))
+                ck = 1
+        else:
+            ck = 0
+    
+    def g_t(self):
+        return self.t
+
+    def g_ready(self):
+        return  self.ready
+    
+    def aa(self):
+        self.t = 1
+
+    def draw(self, win):
+        pygame.draw.rect(win, self.color, self.rect)
+        if self.ready == True:
+            pygame.draw.rect(win, YELLOW, (self.x+25,self.y+25,50,50))
+        
+    def move(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_a]:
+            self.x -= self.vel
+
+        if keys[pygame.K_d]:
+            self.x += self.vel
+
+        if keys[pygame.K_w]:
+            self.y -= self.vel
+
+        if keys[pygame.K_s]:
+            self.y += self.vel
+
+        self.update()
+
+    def update(self):
+        self.rect = (self.x, self.y, self.width, self.height)
+
+screen = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("Client")
 
 def redrawWindow(win,player, player2): # draw player 1 and player 2 in pygame 
+    pygame.init()
     win.fill((255,255,255))
-    player.draw(win)
-    player2.draw(win)
+    player.draw(screen)
+    player2.draw(screen)
+
+    if player.g_t() == 1:
+        IamREADY = PRINTTEXT("READY", size = 50)
+        IamREADY._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*1//2))
     pygame.display.update()
 
 def main():
@@ -26,8 +168,9 @@ def main():
                 run = False
                 pygame.quit()
 
-        p.move()
+        #p.move()
         p.onpress()
-        redrawWindow(win, p, p2)
+        #print(p.g_t())
+        redrawWindow(screen, p, p2)
 
 main()

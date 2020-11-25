@@ -17,7 +17,7 @@ s.listen(3)
 print("Waiting for a connection, Server Started")
 
 
-players = [Player(0,0,50,50,(255,0,0)), Player(100,100, 50,50, (0,0,255))] # Server arranges players.
+players = [Player(100,100,100,100,(255,0,0)), Player(300,100,100,100, (0,0,255))] # Server arranges players.
 
 
 def threaded_client(conn, player):
@@ -32,17 +32,17 @@ def threaded_client(conn, player):
                 print("Disconnected")
                 break
             else:
-                print(players[0].g_ready())
-                print(players[1].g_ready())
+                
+                if players[0].g_ready() == True and players[1].g_ready() == True:
+                    #players[0].aa()
+                    #players[1].aa()
+                    print("all ready")
+
                 if player == 1:
                     reply = players[0]
                 else:
                     reply = players[1]
                 
-                if players[0].g_ready() == True and players[1].g_ready() == True:
-                    players[0].aa()
-                    players[1].aa()
-                    print("all ready")
                 #print("Received: ", data)
                 #print("Sending : ", reply)
 
