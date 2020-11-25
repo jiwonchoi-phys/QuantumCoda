@@ -392,11 +392,11 @@ class BUTTON():
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
         global asdf
-        '''
+
         def button_sound():
             b_s = pygame.mixer.Sound("18V Cordless Drill Switch.wav")
             b_s.play()
-        '''
+
         # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
         if loc_center == True:
             if loc == 'top center':
@@ -424,7 +424,7 @@ class BUTTON():
                 if action == None:
                     pass
                 elif asdf == 0:
-                    #button_sound()
+                    button_sound()
                     action()
                     asdf = 1
                     print(1)
@@ -600,7 +600,7 @@ def bati_window(): # Back to the Title window tk
     msgbox = messagebox.askyesno("Back to Title", "Do you want to back to the title?\n타이틀로 돌아가시겠습니까?")
 
     if msgbox == True:
-        #pygame.mixer.music.stop()
+        pygame.mixer.music.stop()
         bati.destroy()
         game_intro()
     else:
@@ -651,7 +651,7 @@ def theory_desc(): # 이론 Tk.
     frame4 = Frame(window)
     notebook.add(frame4, text="Measurement & Collapse")
 
-    D = open('measurement_and_Collapse_en.txt', 'r', encoding='UTF8')
+    D = open('measurement_and_collapse_en.txt', 'r', encoding='UTF8')
     measncoll_en = D.read()
     
     msg4 = Message(frame4, width = n_width, text=measncoll_en)
@@ -681,7 +681,7 @@ def theory_desc(): # 이론 Tk.
     frame7 = Frame(window)
     notebook.add(frame7, text="측정과 붕괴")
 
-    D = open('measurement_and_Collapse_ko.txt', 'r', encoding='UTF8')
+    D = open('measurement_and_collapse_ko.txt', 'r', encoding='UTF8')
     measncoll_ko = D.read()
     
     msg7 = Message(frame7, width = n_width, text=measncoll_ko)
@@ -772,13 +772,13 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tlabel.pack()
 
     tn_tk.mainloop()
-'''
+
 def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
     pygame.mixer.init()
     pygame.mixer.music.load(name)
     pygame.mixer.music.set_volume(vol)
     pygame.mixer.music.play(-1) # 무한재생.
-'''
+
 def f_level_set(): # 난이도 설정 Tk.
     global states
     
@@ -824,7 +824,7 @@ def f_win_page(): # 승리 페이지.
     wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Level Setting", inactive_color = WHITE, active_color=GRAY)
-    #f_play_music(win_music, 0.6)
+    f_play_music(win_music, 0.6)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -933,7 +933,7 @@ def game_intro():   # Game intro scene
     intro = False   # while문 돌리기 위함
 
     title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
-    version = PRINTTEXT("v.0.10", size = 15)
+    version = PRINTTEXT("v.0.11", size = 15)
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
@@ -1013,7 +1013,7 @@ def main_loop(): # Game main loop scene
     done = False
     make_card(num_players, stn)
     asdf = 0
-    #f_play_music(main_music, 1)
+    f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
