@@ -3,8 +3,8 @@ from _thread import *
 from player import Player
 import pickle
 
-server = "192.168.0.30"
-port = 5555
+server = "localhost"        # server IP
+port = 5555                 # server Port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # use IPv4 for connection and process any datas as Binary (TCP)
 
