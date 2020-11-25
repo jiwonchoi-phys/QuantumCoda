@@ -764,33 +764,33 @@ def f_level_set(): # 난이도 설정 Tk.
     def onPress(i):                       
         states[i] = not states[i]   
     root = Tk()
-    root.title("Level Settings")
+    root.title("Level Settings.")
     root.geometry("480x300+100+100")
     root.resizable(False, False)
-    t = Label(text="Difficulty increases if you don't use the features. (Check =  Use) \n 난이도는 아래의 기능들을 사용하지 않으면 올라갑니다.")
+    t = Label(text="Difficulty increases if you don't use the features. (Check =  Use)\n난이도는 아래의 기능들을 사용하지 않으면 올라갑니다.")
     t.pack(pady=10)
-    a1 = Message(width = 480, text="† Color Alignment (색상 정렬)")
+    a1 = Message(width = 480, text="# Color Alignment (색상 정렬) :")
     a1.pack(anchor = "w")
-    a2 = Message(width = 480, justify= "left", text="If both tiles black and white have the same spooky numbers, always have black on the left. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )\
-        \n검정색과 흰색 두 타일이 같은 추정 숫자를 가지는 경우, 항상 검은색 타일이 왼쪽으로 정렬되도록 합니다.")
+    a2 = Message(width = 480, justify= "left", text="If both tiles black and white have the same spooky numbers, always have black on the left. (ex. Wh[1, 4], Bl[1, 4] >> Bl[1, 4] , Wh[1, 4] )\n검정색과 흰색 두 타일이 같은 추정 숫자를 가지는 경우, 항상 검은색 타일이 왼쪽으로 정렬되도록 합니다.")
     a2.pack(anchor = "w")
-    a3 = Message(width = 480, text="† Probability view (확률 보기)")
+    a3 = Message(width = 480, text="# Probability view (확률 보기) :")
     a3.pack(anchor = "w", pady=0)
-    a4 = Message(width = 480, justify= "left", text="Watch the probability of tiles on your opponent. \n 상대방이 소유한 타일의 확률을 봅니다.")
+    a4 = Message(width = 480, justify= "left", text="Watch the probability of tiles on your opponent.\n상대방이 소유한 타일의 확률을 봅니다.")
     a4.pack(anchor = "w", pady=0)
-    a5 = Message(width = 480, text="† Items (아이템)")
+    a5 = Message(width = 480, text="# Items (아이템) :")
     a5.pack(anchor = "w", pady=0)
-    a6 = Message(width = 480, justify= "left", text="Use an item that lowers the difficulty of the game. \n 게임의 난이도를 낮추는 아이템을 사용합니다.")
+    a6 = Message(width = 480, justify= "left", text="Use an item that lowers the difficulty of the game.\n게임의 난이도를 낮추는 아이템을 사용합니다.")
     a6.pack(anchor = "w", pady=0)
     
     for i in range(3):
         chk[i] = Checkbutton(root, text=name_box[i], command=(lambda i=i: onPress(i)) )
         if states[i] == True:
             chk[i].select()
-        chk[i].place(x=220)
-    chk[0].place(y=60)
-    chk[1].place(y=160)
-    chk[2].place(y=230)
+        chk[i].place(x=240)
+    
+    chk[0].place(y=56)
+    chk[1].place(y=144)
+    chk[2].place(y=209)
 
     root.mainloop()
 
