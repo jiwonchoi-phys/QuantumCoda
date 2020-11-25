@@ -49,6 +49,7 @@ Notice = " "        # Notice 첫 값.
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 cut_list=[]         # 각 loop당 카드의 갯수
 pln=0               # 아이템 쓸 플레이어
+clicked = False
 
 """
     ====================<<<     Util    >>>====================
@@ -386,9 +387,11 @@ class BUTTON():
 
     def get_i(self):
         pln = self.i
+        print(pln)
         return self.i
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
+        global asdf
         '''
         def button_sound():
             b_s = pygame.mixer.Sound("18V Cordless Drill Switch.wav")
@@ -417,17 +420,20 @@ class BUTTON():
         
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
-            
             if click[0] == 1:
                 if action == None:
                     pass
-                else:
+                elif asdf == 0:
                     #button_sound()
                     action()
+                    asdf = 1
+                    print(1)
+            else:
+                asdf = 0
         
         else:
             pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
-        
+            clicked == False
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
         text._blit_(loc=(x,y))
@@ -1001,12 +1007,12 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         clock.tick(15)
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn, YATT, RT
+    global num_players, stn, turn, YATT, RT, asdf
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
     make_card(num_players, stn)
-    
+    asdf = 0
     #f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
