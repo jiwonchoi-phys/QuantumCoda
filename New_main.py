@@ -14,7 +14,7 @@ import platform # OS Environment module
 '''
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
-멘트 정리중
+멘트 >> 정리중...
 '''
 
 # RGB color information
@@ -114,7 +114,7 @@ class PRINTTEXT():
 
 class PLAYER():
     def __init__(self):
-        self.deck_list = []         # 덱 리스트
+        self.deck_list = []     # 덱 리스트
         self.point = 0
 
     def get_point(self):
@@ -226,7 +226,7 @@ class CARD():
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
         if len(self.get_num()) ==1 and self.opened == False:
-            self.probability = PRINTTEXT("Collapsed.", 10, color=self.font_color)       # 확률 텍스트 변경 후, 표기.
+            self.probability = PRINTTEXT("Collapsed.", 10, color=self.font_color)   # 확률 텍스트 변경 후, 표기.
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
     def f_click_tile(self):
@@ -267,8 +267,8 @@ class CARD():
                     return number
                     
                 def ctcalc(event): 
-                    global RT, YATT, Notice        # RT; type: CARD class
-                    PGN = int(entry.get()) # The player's guess number.
+                    global RT, YATT, Notice     # RT; type: CARD class
+                    PGN = int(entry.get())      # The player's guess number.
                     
                     # 추측 수가 타일에 존재.
                     if PGN in self.card_num:
@@ -283,40 +283,39 @@ class CARD():
                                 YATT = 3
                                 self.is_opened()
                                 p[turn].put_point(200)
-                                label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.\n\n추측한 숫자로 타일이 붕괴되었습니다.\n다른 타일의 숫자 추정이 가능합니다.")
+                                label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.\n추측한 숫자로 타일이 붕괴되었습니다.\n다른 타일의 숫자 추정이 가능합니다.")
                                 Notice = "Continuous guessing is possible."
                                 ct_tk.after(1700, ctd)
                                 collapse_loop(self)
                             else:   # 붕괴는 하였으나 추측 실패. (오픈 상태 아님.)
                                 YATT = 2
                                 p[turn].put_point(100)
-                                label2.config(text="The tile collapsed, but did not collapse \nwith the guessed number.\n\n타일은 붕괴되었지만, 추측한 숫자로 붕괴되지 않았습니다.")
+                                label2.config(text="The tile collapsed, but did not collapse \nwith the guessed number.\n타일은 붕괴되었지만, 추측한 숫자로 붕괴되지 않았습니다.")
                                 ct_tk.after(1700, ctd)
                         
                         elif len(self.card_num) == 1: # 추측 타일 상태가 붕괴된 경우.
                             YATT = 3
                             self.is_opened()
                             p[turn].put_point(200)
-                            label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.\n\n추측한 숫자로 타일이 붕괴되었습니다.\n다른 타일의 숫자 추정이 가능합니다.")
+                            label2.config(text="The tile collapsed to the guessed number.\nContinuous guessing is possible.\n추측한 숫자로 타일이 붕괴되었습니다.\n다른 타일의 숫자 추정이 가능합니다.")
                             Notice = "Continuous guessing is possible."
                             ct_tk.after(1200, ctd)
 
                     # 추측 수가 타일에 존재하지 않을 때.
                     else:
+                        label1.config(text="The guessed number "+str(PGN)+" does not exist on the tile.\n추측한 숫자 "+str(PGN)+"는 타일에 존재하지 않습니다.")
                         if YATT == 0:   # 이번 턴에 먹은 타일이 없을 때.
                             YATT = 2
                             p[turn].put_point(20)
-                            label1.config(anchor="e", justify= CENTER, text="The guessed number "+str(PGN)+" does not exist on the tile.\n추측한 숫자 "+str(PGN)+"는 타일에 존재하지 않습니다.")
-                            label2.config(anchor="e", justify= CENTER, text="There are no tiles added this turn,\nso the collapse and open process is skipped.\n이번 턴에 타일이 더 이상 없었으므로,\n붕괴 및 카드 공개과정은 생략합니다.")
+                            label2.config(text="There are no tiles added this turn,\nso the collapse and open process is skipped.\n이번 턴에 타일이 더 이상 없었으므로\n붕괴 및 카드 공개과정은 생략합니다.")
                             Notice = "Collapse and Open process is skipped."
-                            ct_tk.after(2100, ctd)
+                            ct_tk.after(1700, ctd)
                             pass
 
                         elif YATT == 1 or YATT == 3: # 이번 턴에 타일을 먹었을 때. (먹은 타일 붕괴)
                             YATT = 2
                             p[turn].put_point(20)
-                            label1.config(anchor="e", justify= CENTER, text="The guessed number "+str(PGN)+" does not exist on the tile.\n추측한 숫자 "+str(PGN)+"는 타일에 존재하지 않습니다.")
-                            label2.config(anchor="e", justify= CENTER, text="The tile that you brought a new this turn\n now be collapsed and opened.\n이번 턴에서 새로 가져온 타일을 붕괴하고 공개합니다.")
+                            label2.config(text="The tile that you brought a new this turn\n now be collapsed and opened.\n이번 턴에서 새로 가져온 타일을 붕괴하고 공개합니다.")
 
                             if len(RT.get_num()) == 1:  # 붕괴된 타일을 먹었다면, 공개만.
                                 Notice = "Failure to guess, opening an added tile."
@@ -328,7 +327,7 @@ class CARD():
                                 Notice = "Failure to guess, opening after collapse of added tile."
                                 NTC = RT.get_color()
                                 NTN = sf_p(RT.get_num(), RT.get_pro())
-                                label3 = Label(ct_tk, anchor="e", justify= CENTER, text="The collapsed number is "+str(NTN)+"\n붕괴된 숫자는 "+str(NTN)+"입니다.")
+                                label3 = Label(ct_tk, text="The collapsed number is "+str(NTN)+"\n붕괴된 숫자는 "+str(NTN)+"입니다.")
                                 label3.pack()
                                 NT = CARD(NTC, NTN, None,  RT.get_loop())
                                 NT.is_opened()
@@ -685,18 +684,20 @@ def f_pn(): # 플레이어 수를 입력 받는 Tk.
     pn_tk.title("Please enter the number of players.")
     pn_tk.geometry("480x300+100+100")
     pn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
+    dum = Label(pn_tk, text = "\n")
+    dum.pack()
     plabel = Label(pn_tk, \
-        text="Please enter the number of players in the space above.\nThe minimum playable number is 2. The maximum is 4.\n\n플레이어 숫자를 위의 칸에 입력해주세요. \n최소 플레이어 수는 2, 최대 플레이어 수는 4 입니다.")
+        text="Please enter the number of players in the space above.\nThe minimum playable number is 2. The maximum is 4.\n\n플레이어 숫자를 위의 칸에 입력해주세요.\n최소 플레이어 수는 2, 최대 플레이어 수는 4 입니다.")
     
     def pcalc(event):
         global num_players
         pn = int(entry.get())
         if pn > player_num_max:
-            plabel.config(text="Too many players. Please enter again.\n\n 너무 많은 플레이어 숫자를 입력했습니다. 다시 입력하세요.")
+            plabel.config(text="Too many players. Please enter again.\n\n너무 많은 플레이어 숫자를 입력했습니다. 다시 입력하세요.")
         elif pn < 2:
-            plabel.config(text="Too few players. Please enter again.\n\n 너무 적은 플레이어 숫자를 입력했습니다. 다시 입력하세요.")
+            plabel.config(text="Too few players. Please enter again.\n\n너무 적은 플레이어 숫자를 입력했습니다. 다시 입력하세요.")
         elif pn >=2 and pn <= player_num_max:
-            plabel.config(text="The number of players was determined to be "+str(eval(entry.get()))+".\n\n 플레이어 수가 "+str(eval(entry.get()))+"(으)로 결정 되었습니다.")
+            plabel.config(text="The number of players was determined to be "+str(eval(entry.get()))+".\n\n플레이어 수가 "+str(eval(entry.get()))+"(으)로 결정 되었습니다.")
             num_players = pn
             pn_tk.after(1000, pnd)          # 1000ms 이후 pnd 함수 연결
 
@@ -704,9 +705,9 @@ def f_pn(): # 플레이어 수를 입력 받는 Tk.
         pn_tk.destroy()
         f_tn(num_players)
 
-    entry=Entry(pn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
-    entry.bind("<Return>", pcalc)      # 리턴값 calc 함수에 사용
-    entry.pack(pady = 50)             # 위아래 간격 50
+    entry=Entry(pn_tk, bd = 20)     # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", pcalc)   # 리턴값 calc 함수에 사용
+    entry.pack(pady = 20)           # 위아래 간격 20
 
     plabel.pack()
 
@@ -720,17 +721,19 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
     tn_tk.title("Enter the number of starting tiles.")
     tn_tk.geometry("480x300+100+100")
     tn_tk.resizable(False, False)       # 창 크기 조절 가능 여부 거부
-    tlabel = Label(tn_tk, text="Please enter the number of tiles\nwhen players start the game.\n\n 게임 시작할 때 받을 플레이어의 타일 수를 입력해주세요.")
+    dum = Label(tn_tk, text = "\n")
+    dum.pack()
+    tlabel = Label(tn_tk, text="Please enter the number of tiles\nwhen players start the game.\n\n게임 시작할 때 받을 플레이어의 타일 수를 입력해주세요.")
     
     def tcalc(event):
         global num_players, stn
         stn = int(entry.get())
         if stn > fcn/num_players:
-            tlabel.config(text="Total tiles are not sufficient to divide cards. Please enter a small number.\n\n 전체 타일이 충분하지 않아 나눌 수 없습니다. 더 작은 수를 입력해주세요.")
+            tlabel.config(text="Total tiles are not sufficient to divide cards. Please enter a small number.\n\n전체 타일이 충분하지 않아 나눌 수 없습니다. 더 작은 수를 입력해주세요.")
         elif stn < 2:
-            tlabel.config(text="Too few tiles. Please enter again.\n\n 타일수가 너무 적습니다. 다시 입력하세요.")
+            tlabel.config(text="Too few tiles. Please enter again.\n\n타일수가 너무 적습니다. 다시 입력하세요.")
         elif stn >= 2 and stn <= fcn/num_players:
-            tlabel.config(text="The number of tiles per players was decided as "+str(stn)+".\n\n 타일수가 "+str(stn)+"(으)로 결정 되었습니다.")
+            tlabel.config(text="The number of tiles per players was decided as "+str(stn)+".\n\n타일수가 "+str(stn)+"(으)로 결정 되었습니다.")
             
             tn_tk.after(1000, tnd)          # 1000ms 이후 pnd 함수 연결
             
@@ -738,9 +741,9 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
         tn_tk.destroy()
         main_loop()
 
-    entry=Entry(tn_tk, bd = 20)      # 기입창, 크기 기본 위아래폭의 30배
-    entry.bind("<Return>", tcalc)      # 리턴값 calc 함수에 사용
-    entry.pack(pady = 50)             # 위아래 간격 50
+    entry=Entry(tn_tk, bd = 20)     # 기입창, 크기 기본 위아래폭의 30배
+    entry.bind("<Return>", tcalc)   # 리턴값 calc 함수에 사용
+    entry.pack(pady = 20)           # 위아래 간격 20
 
     tlabel.pack()
 
@@ -1015,12 +1018,12 @@ def main_loop(): # Game main loop scene
         global fti_b, fti_w, YATT, RT, Notice
         Notice = " "
         wtt = Tk()                             # 윈도우 창을 생성
-        wtt.title("Get Tiles") # 타이틀
+        wtt.title("Get Tiles.")                # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
 
-        label1 = Label(wtt, text="Take a new tile from the decks.\n 새로운 타일을 덱에서 가져가세요.")    # 라벨 등록
+        label1 = Label(wtt, text="Take a new tile from the decks.\n새로운 타일을 덱에서 가져가세요.")    # 라벨 등록
         label1.pack(pady=10)
-        label2 = Label(wtt, text="Choose the color of the tile to take.\n 가져갈 타일의 색상을 선택하세요.")   # 라벨 등록
+        label2 = Label(wtt, text="Choose the color of the tile to take.\n가져갈 타일의 색상을 선택하세요.")   # 라벨 등록
         label2.pack(pady=10)
         
         pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
@@ -1065,7 +1068,7 @@ def main_loop(): # Game main loop scene
             wtt.after(1000, wttd)
         
         if YATT != 0:
-            label2.config(text="You have already taken a tile this turn.\n이번차례에 이미 타일을 가져갔습니다.")
+            label2.config(text="You have already taken a tile this turn.\n이번 차례에 이미 타일을 가져갔습니다.")
             bb.destroy()
             bw.destroy()
             wtt.after(1000, wttd)
