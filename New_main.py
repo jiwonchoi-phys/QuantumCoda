@@ -14,7 +14,6 @@ import platform # OS Environment module
 '''
 현재 순서 고정 바람. 변동시 에러 가능성 높음.
 사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
-멘트 >> 정리중...
 '''
 
 # RGB color information
@@ -215,18 +214,19 @@ class CARD():
 
         if self in p[turn].deck_list:   # 내 덱의 경우. 숫자 확률 표기.
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))
-            self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
+            if states[1] == False:
+                self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
         if self.opened == True:     # 오픈된 타일의 경우.
             self.number._blit_(loc=(x + self.width/2, y + self.height/2))           # 숫자 표기.
-            self.probability = PRINTTEXT("Opened", 10, color=self.font_color)       # 확률 텍스트 변경 후, 표기.
+            self.probability = PRINTTEXT("Opened", 12, color=self.font_color)       # 확률 텍스트 변경 후, 표기.
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
         if len(self.get_num()) == 2 and states[1] == True:                          # 확률 보기 사용 on/ 시 상대 확률 표기.
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
         
         if len(self.get_num()) ==1 and self.opened == False:
-            self.probability = PRINTTEXT("Collapsed.", 10, color=self.font_color)   # 확률 텍스트 변경 후, 표기.
+            self.probability = PRINTTEXT("Collapsed.", 12, color=self.font_color)   # 확률 텍스트 변경 후, 표기.
             self.probability._blit_(loc=(x + self.width/2, y + self.height*3/4))
 
     def f_click_tile(self):
@@ -252,7 +252,7 @@ class CARD():
                 ct_tk.resizable(False, False)
 
 
-                label1 = Label(ct_tk, text=str(t_num))
+                label1 = Label(ct_tk, text="Please enter the number you are guessing.")
                 if len(self.card_num) == 2:
                     label2 = Label(ct_tk, text="probability: "+str(t_probability)+" (%).")
                 elif len(self.card_num) == 1:
@@ -849,7 +849,7 @@ def f_end_conditions(): # 승리 조건 함수.
 
 def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위치를 지정한 함수.
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
-    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4),loc_center=False)
+    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=False)
 
     if num_players == 2:
         p[T[1]].draw_card(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
@@ -992,7 +992,7 @@ def main_loop(): # Game main loop scene
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
-    button_take = BUTTON("take a tile")             # button sample
+    button_take = BUTTON("Take a tile")             # button sample
     button_turn = BUTTON("Next")
     button_back = BUTTON("Back to Title")
     button_exit = BUTTON("Exit",active_color=RED)
@@ -1106,17 +1106,17 @@ def main_loop(): # Game main loop scene
         Ttext[0] = PRINTTEXT('Yours:', size= 20)
 
         Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
-        Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-50, SCREEN_HEIGHT*3/4+50))
+        Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
         
         for i in range(1,num_players):
             Ttext[i] = PRINTTEXT('Player: '+str(T[i]+1)+' ( point: '+str((p[T[i]].get_point()))+' )', size= 15)
         f_draw_card(p, turn, T, Ttext)
         
         # 버튼 및 텍스트 그리기
-        button_take._draw_(loc = (SCREEN_WIDTH-100,100), size = (130,30), action = f_take_tile)
+        button_take._draw_(loc = (SCREEN_WIDTH-100,105), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
-        button_back._draw_(loc = (SCREEN_WIDTH-250,50), size = (130,30), action = bati_window)
-        button_exit._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = exit_window)
+        button_back._draw_(loc = (SCREEN_WIDTH-180,40), size = (130,30), action = bati_window)
+        button_exit._draw_(loc = (SCREEN_WIDTH-67,40), size = (64,30), action = exit_window)
         select_card._blit_(loc=(5,30),loc_center=False)
 
         pygame.display.update()
