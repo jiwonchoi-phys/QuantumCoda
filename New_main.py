@@ -44,7 +44,7 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
-Notice = " " # Notice 첫 값.
+Notice = " "        # Notice 첫 값.
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 cut_list=[]         # 각 loop당 카드의 갯수
@@ -597,7 +597,7 @@ def theory_desc(): # 이론 Tk.
     frame1=Frame(window)
     notebook.add(frame1, text="Intro")
 
-    A = open('Intro.txt', 'r')
+    A = open('Intro.txt', 'r', encoding='UTF8')
     Intro = A.read()
     
     msg1=Message(frame1, width = n_width, text=Intro)
@@ -607,7 +607,7 @@ def theory_desc(): # 이론 Tk.
     frame2=Frame(window)
     notebook.add(frame2, text="Superposition")
 
-    B = open('superposition_en.txt', 'r')
+    B = open('superposition_en.txt', 'r', encoding='UTF8')
     sup_en = B.read()
     
     msg2=Message(frame2, width = n_width, text=sup_en)
@@ -617,7 +617,7 @@ def theory_desc(): # 이론 Tk.
     frame3=Frame(window)
     notebook.add(frame3, text="Entanglement")
 
-    C = open('entanglement_en.txt', 'r')
+    C = open('entanglement_en.txt', 'r', encoding='UTF8')
     ent_en = C.read()
     
     msg3 = Message(frame3, width = n_width, text=ent_en)
@@ -627,7 +627,7 @@ def theory_desc(): # 이론 Tk.
     frame4 = Frame(window)
     notebook.add(frame4, text="Measurement & Collapse")
 
-    D = open('measurement_and_Collapse_en.txt', 'r')
+    D = open('measurement_and_Collapse_en.txt', 'r', encoding='UTF8')
     measncoll_en = D.read()
     
     msg4 = Message(frame4, width = n_width, text=measncoll_en)
@@ -637,7 +637,7 @@ def theory_desc(): # 이론 Tk.
     frame5=Frame(window)
     notebook.add(frame5, text="중첩")
 
-    B = open('superposition_ko.txt', 'r')
+    B = open('superposition_ko.txt', 'r', encoding='UTF8')
     sup_ko = B.read()
     
     msg5=Message(frame5, width = n_width, text=sup_ko)
@@ -647,7 +647,7 @@ def theory_desc(): # 이론 Tk.
     frame6=Frame(window)
     notebook.add(frame6, text="얽힘")
 
-    C = open('entanglement_ko.txt', 'r')
+    C = open('entanglement_ko.txt', 'r', encoding='UTF8')
     ent_ko = C.read()
     
     msg6 = Message(frame6, width = n_width, text=ent_ko)
@@ -657,7 +657,7 @@ def theory_desc(): # 이론 Tk.
     frame7 = Frame(window)
     notebook.add(frame7, text="측정과 붕괴")
 
-    D = open('measurement_and_Collapse_ko.txt', 'r')
+    D = open('measurement_and_Collapse_ko.txt', 'r', encoding='UTF8')
     measncoll_ko = D.read()
     
     msg7 = Message(frame7, width = n_width, text=measncoll_ko)
