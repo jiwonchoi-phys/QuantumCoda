@@ -2,9 +2,7 @@ import pygame
 from network import Network
 from player import Player
 
-width = 700
-height = 500
-win = pygame.display.set_mode((width, height))
+win = pygame.display.set_mode(SCREEN_SIZE)
 pygame.display.set_caption("Client")
 
 

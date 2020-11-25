@@ -48,7 +48,8 @@ Notice = " "        # Notice 첫 값.
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 cut_list=[]         # 각 loop당 카드의 갯수
-idx=0
+pln=0               # 아이템 쓸 플레이어
+clicked = False
 
 """
     ====================<<<     Util    >>>====================
@@ -118,6 +119,7 @@ class PLAYER():
         self.deck_list = []     # 덱 리스트
         self.point = 0
         self.num_list = []
+        self.p_num=0
 
     def get_point(self):
         return self.point
@@ -360,6 +362,8 @@ class CARD():
 class BUTTON():
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
         font_color=BLACK, font=None, font_size=20, action=None):
+        global pln
+
         if font == None:                # OS별 폰트 문제 체크
             if platform.system() == 'Windows':
                 font = 'malgungothic'
@@ -379,8 +383,15 @@ class BUTTON():
         self.action = action
         self.active = active_color
         self.inactive = inactive_color
+        self.i = 0
+
+    def get_i(self):
+        pln = self.i
+        print(pln)
+        return self.i
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
+        global asdf
         '''
         def button_sound():
             b_s = pygame.mixer.Sound("18V Cordless Drill Switch.wav")
@@ -409,17 +420,20 @@ class BUTTON():
         
         if x-w/2 < mouse_pos[0] < x+w/2 and y-h/2 < mouse_pos[1] < y+h/2:
             pygame.draw.rect(screen,self.active,(x-w/2,y-h/2,w,h))
-            
             if click[0] == 1:
                 if action == None:
                     pass
-                else:
+                elif asdf == 0:
                     #button_sound()
                     action()
+                    asdf = 1
+                    print(1)
+            else:
+                asdf = 0
         
         else:
             pygame.draw.rect(screen,self.inactive,(x-w/2,y-h/2,w,h))
-        
+            clicked == False
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
         text._blit_(loc=(x,y))
@@ -517,6 +531,9 @@ def make_card(num_players, stn):
 
     # num_players만큼 플레이어 생성
     p = [PLAYER() for i in range(num_players)]
+    for i,player in enumerate(p):
+        player.p_num = i
+
 
     # PLAYER의 덱에 생성된 카드를 랜덤으로 추가
     for i in range(num_players):
@@ -856,25 +873,26 @@ def f_end_conditions(): # 승리 조건 함수.
 
 def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위치를 지정한 함수.
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
-    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=False)
+    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=True)
 
     if num_players == 2:
         p[T[1]].draw_card(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
-        Ttext[1]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)
+        Ttext[1]._draw_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
 
     if num_players == 3:
         p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4)
-        Ttext[1]._blit_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4-15),loc_center=False)
+        Ttext[1]._draw_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
         p[T[2]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4)
-        Ttext[2]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4-15),loc_center=False)
+        Ttext[2]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[2].get_i)
             
     if num_players == 4:
         p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
-        Ttext[1]._blit_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+        Ttext[1]._draw_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
         p[T[2]].draw_card(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
-        Ttext[2]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),loc_center=False)    
+        Ttext[2]._draw_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[2].get_i)    
         p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
-        Ttext[3]._blit_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),loc_center=False)
+        Ttext[3]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(120,20),loc_center=True,action=Ttext[3].get_i)
+
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
     global fti_w, fti_b
@@ -989,12 +1007,12 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         clock.tick(15)
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn, YATT, RT
+    global num_players, stn, turn, YATT, RT, asdf
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
     make_card(num_players, stn)
-    
+    asdf = 0
     #f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
@@ -1118,13 +1136,15 @@ def main_loop(): # Game main loop scene
                 T[i] = T[i]-num_players
 
         Ttext = list(range(num_players))
-        Ttext[0] = PRINTTEXT('Yours:', size= 20)
+        Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
 
         Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
         Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
         
         for i in range(1,num_players):
-            Ttext[i] = PRINTTEXT('Player: '+str(T[i]+1)+' ( point: '+str((p[T[i]].get_point()))+' )', size= 15)
+            Ttext[i] = BUTTON(msg='Player: '+str(T[i]+1)+' ( point: '+str((p[T[i]].get_point()))+' )',\
+                inactive_color=WHITE,font_size=15,action=None)
+            Ttext[i].i = T[i]
         f_draw_card(p, turn, T, Ttext)
         
         # 버튼 및 텍스트 그리기
