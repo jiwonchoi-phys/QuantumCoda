@@ -1,6 +1,6 @@
 import socket
 import pickle
-
+import time
 
 class Network:
     def __init__(self,room):
@@ -12,10 +12,19 @@ class Network:
 
     def getP(self):
         return self.p
+    
+    def check_conn(self):
+        try:
+            self.client.connect(self.addr)
+            self.client.shutdown(2)
+            return True
+        except:
+            return False
 
     def connect(self):
         try:
             self.client.connect(self.addr)
+            print("Connected to",self.server,self.port)
             return pickle.loads(self.client.recv(2048))
         except:
             pass

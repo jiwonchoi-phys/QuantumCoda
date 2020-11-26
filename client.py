@@ -189,10 +189,14 @@ def main(room):
     p = n.getP()
     clock = pygame.time.Clock()
 
+    print(n.check_conn())
+    if n.check_conn() == False:
+        print("Connected.")
+
     while run:
         clock.tick(60)
         p2 = n.send(p)
- 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False

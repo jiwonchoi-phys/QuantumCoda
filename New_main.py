@@ -960,7 +960,7 @@ def game_intro():   # Game intro scene
         
         # button _draw_ functions
         splay_button._draw_(loc = (SCREEN_WIDTH*4 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=f_pn)
-        mplay_button._draw_(loc = (SCREEN_WIDTH*6 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=tbu_window)
+        mplay_button._draw_(loc = (SCREEN_WIDTH*6 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=multi_player)
         how_button._draw_(loc = (SCREEN_WIDTH*4 // 10, SCREEN_HEIGHT*4 // 8), size = (160,60),action=how_to_play)
         gsettings_button._draw_(loc = (SCREEN_WIDTH*6 // 10,SCREEN_HEIGHT*4 // 8), size = (160,60), action=f_level_set)
         title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (160,60),action=quit)
@@ -1005,6 +1005,19 @@ def how_to_play(): # scene for game description # 장면 테스트 중
 
         pygame.display.flip()
         clock.tick(15)
+
+def multi_player():             # 만들 예정
+    mtk = Tk()
+    mtk.withdraw()
+    msgbox = messagebox.showinfo("Checking Connection", "Check the connection through the server.Do not click OK button if you want to play the multi player game.")
+
+    if msgbox == True:
+        mtk.destroy()
+    else:
+        check_connection()
+
+    def check_connection():
+        pass
 
 def main_loop(): # Game main loop scene
     global num_players, stn, turn, YATT, RT, asdf
