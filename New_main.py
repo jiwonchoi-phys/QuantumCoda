@@ -55,7 +55,6 @@ clicked = False
     ====================<<<     Util    >>>====================
 """
 
-
 class PRINTTEXT():
     def __init__(self, msg, size, font=None, bold=False, color=BLACK, antialias=True, background=None):
         if font == None:                # OS별 폰트 문제 체크
@@ -893,7 +892,6 @@ def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위�
         p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
         Ttext[3]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(120,20),loc_center=True,action=Ttext[3].get_i)
 
-
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
     global fti_w, fti_b
     loop_num=x.card_num[0]      
@@ -1007,12 +1005,11 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         clock.tick(15)
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn, YATT, RT, asdf
+    global num_players, stn, turn, YATT, RT
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
     make_card(num_players, stn)
-    asdf = 0
     f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
