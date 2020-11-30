@@ -273,6 +273,8 @@ class CARD():
                                 san_num = self.card_probability[0]
                             else:
                                 san_num = self.card_probability[1]
+                        else:
+                            pass
                 
                 using_passive_ability()
                 ct_tk=Tk()
@@ -410,6 +412,8 @@ class CARD():
                    fti_w.pop(fti_w.index(active3_1))
             elif player_ability[turn][1] == 4:
                 active4 = 1
+            else:
+                pass
                 
 
 class BUTTON():
@@ -1255,27 +1259,33 @@ def main_loop(): # Game main loop scene
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
         button_back._draw_(loc = (SCREEN_WIDTH-180,40), size = (130,30), action = bati_window)
         button_exit._draw_(loc = (SCREEN_WIDTH-67,40), size = (64,30), action = exit_window)
-        button_ability._draw_(loc = (SCREEN_WIDTH/10,SCREEN_HEIGHT*9/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = ability_activated)
-        button_passive._draw_(loc = (SCREEN_WIDTH*1/10,SCREEN_HEIGHT*7.5/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = ability_show)
+        if states[2] == True:
+            button_ability._draw_(loc = (SCREEN_WIDTH/10,SCREEN_HEIGHT*9/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = ability_activated)
+            button_passive._draw_(loc = (SCREEN_WIDTH*1/10,SCREEN_HEIGHT*7.5/10), size = (SCREEN_WIDTH/9,SCREEN_HEIGHT*1/10), action = ability_show)
         select_card._blit_(loc=(5,30),loc_center=False)
 
         pygame.display.update()
 
 def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 연결시키면 난이도 조정 가능할듯
     global player_ability_backup, player_ability, a_ability_point
-    NoA = 4
-    NoP = 3
-    p_ability_index = list(range(1,NoP+1)) # 패시브 능력 리스트
-    a_ability_index = list(range(1,NoA+1)) # 엑티브 능력 리스트
-    a_ability_point = [0,0,0,0] # 엑티브 능력 포인트[500,400,400,600]
     player_ability = list(numpy.zeros(num_players))
-    for i in range(0,num_players):
-        player_ability[i] = [0,0]
-        player_ability[i][0] = random.choice(p_ability_index)   
-        qwer = random.choice(a_ability_index)       
-        player_ability[i][1] = qwer
-        a_ability_index.remove(qwer)
-    player_ability_backup = copy.deepcopy(player_ability)
+    if states[2] == True:
+        NoA = 4
+        NoP = 3
+        p_ability_index = list(range(1,NoP+1)) # 패시브 능력 리스트
+        a_ability_index = list(range(1,NoA+1)) # 엑티브 능력 리스트
+        a_ability_point = [0,0,0,0] # 엑티브 능력 포인트[500,400,400,600]
+        for i in range(0,num_players):
+            player_ability[i] = [0,0]
+            player_ability[i][0] = random.choice(p_ability_index)   
+            qwer = random.choice(a_ability_index)       
+            player_ability[i][1] = qwer
+            a_ability_index.remove(qwer)
+        player_ability_backup = copy.deepcopy(player_ability)
+    else:
+        for i in range(0,num_players):
+            player_ability[i] = [-2,-2]
+            
 
 def ability_reset(): # 턴 지날때 능력 초기화
     global active2, uaan, active4, fake
