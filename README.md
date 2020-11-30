@@ -391,14 +391,14 @@ GUI branch, New_main.py
 GUI branch, New_main.py
 - 불필요한 변수 제거.
 
-sever branch, client.py, sever.py, New_client.py, player.py, Network.py
+sever branch, client.py, sever.py, New_client.py, player.py, network.py
 - 방 3개 생성 완(서버에서 터미널 3개 열어야함).
 - 각각의 방에서 레디 실시간으로 데이터 정상 이동 확인.
     > 레디 버튼; 한번만 클릭되는 코드 적용.   
-- 방에 2인 모두 레디시 서버에서 정상적으로 확인 가능.
+- 방에 2인 모두 레디 시 서버에서 정상적으로 확인 가능.
     > 서버에서 클라이언트 변수 변경 불가능한 문제 발견.
 - New_client.py 생성.
-    > 멀티 - 방 버튼 글릭시 서버 연결 확인(멀티 제외 모든 활동 인터넷 없이 가능).
+    > 멀티 - 방 버튼 클릭시 서버 연결(멀티 제외 모든 활동 인터넷 없이 가능).
 
 ----
 ========== TODO ==========
