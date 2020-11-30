@@ -201,10 +201,8 @@ def main(room):
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
-
         #p.move()
         p.onpress()
-        #print(p.g_t())
         redrawWindow(screen, p, p2)
 
 f_rn()

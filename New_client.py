@@ -12,11 +12,10 @@ import time
 import platform # OS Environment module
 #=======================
 
+# 버전 0.10 최신아님 !!
 '''
-현재 순서 고정 바람. 변동시 에러 가능성 높음.
-사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
+========================================================유틸========================================
 '''
-
 # RGB color information
 BLACK   = (  0,  0,  0)
 WHITE   = (255,255,255)
@@ -51,11 +50,6 @@ max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. m
 cut_list=[]         # 각 loop당 카드의 갯수
 pln=0               # 아이템 쓸 플레이어
 clicked = False
-
-"""
-    ====================<<<     Util    >>>====================
-"""
-
 
 class PRINTTEXT():
     def __init__(self, msg, size, font=None, bold=False, color=BLACK, antialias=True, background=None):
