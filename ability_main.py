@@ -116,11 +116,14 @@ class PRINTTEXT():
                 screen.blit(self.text,loc)
 
 class PLAYER():
+    global turnnum
     def __init__(self):
+        global turnnum
         self.deck_list = []     # 덱 리스트
         self.point = 0
         self.num_list = []
         self.p_num=0
+        turnnum = self.p_num
 
     def get_point(self):
         return self.point
@@ -268,11 +271,11 @@ class CARD():
                             san_num = (self.card_num[0] + self.card_num[1])/2
                         elif player_ability[turn][0] == 2: # 2번 패시브 차이 보여주기
                             san_num = abs(self.card_num[0] - self.card_num[1]) 
-                        elif player_ability[turn][0] == 3: # 3번 패시브 큰 확률 보여주기
-                            if self.card_probability[0] > self.card_probability[1]:
-                                san_num = self.card_probability[0]
-                            else:
-                                san_num = self.card_probability[1]
+                    #    elif player_ability[turn][0] == 3: # 3번 패시브 큰 확률 보여주기
+                    #        if self.card_probability[0] > self.card_probability[1]:
+                    #            san_num = self.card_probability[0]
+                    #        else:
+                    #            san_num = self.card_probability[1]
                         else:
                             pass
                 
@@ -394,7 +397,7 @@ class CARD():
                 ct_tk.mainloop()
     
     def using_active_ability(): # 액티브 능력 정의
-        global active2, a_ability_point, fake, active4
+        global active2, a_ability_point, fake, active4, Notice
         if uaan == 1:
             if player_ability[turn][1] == 1: # 1번 액티브 침묵
                 for i in range(0,num_players):
@@ -412,15 +415,22 @@ class CARD():
                    fti_w.pop(fti_w.index(active3_1))
             elif player_ability[turn][1] == 4:
                 active4 = 1
+            elif player_ability[turn][1] == 5:
+                print(pln,turn)
+                if pln != turn:
+                    PLAYER.make_numlist(p[pln])
+                    Notice = str(random.choice(p[pln].num_list))
+                else:
+                    Notice = "select player first"
+                    p[turn].put_point(a_ability_point[player_ability[turn][1]-1])
             else:
                 pass
                 
 
 class BUTTON():
+    global pln, Notice
     def __init__(self, msg, inactive_color=GRAY, active_color=GRAY_2,\
         font_color=BLACK, font=None, font_size=20, action=None):
-        global pln
-
         if font == None:                # OS별 폰트 문제 체크
             if platform.system() == 'Windows':
                 font = 'malgungothic'
@@ -443,8 +453,11 @@ class BUTTON():
         self.i = 0
 
     def get_i(self):
+        global pln, Notice
         pln = self.i
         print(pln)
+        if player_ability[turn][1] == 5:
+            Notice = "select "+str(pln+1)+" player"
         return self.i
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
@@ -484,7 +497,6 @@ class BUTTON():
                     button_sound()
                     action()
                     asdf = 1
-                    print(1)
             else:
                 asdf = 0
         
@@ -494,10 +506,10 @@ class BUTTON():
         text = PRINTTEXT(self.msg, self.fs, font=self.f, color=self.fc, \
                          antialias=True, background=None)
         text._blit_(loc=(x,y))
-
+    
 def make_spooky(x):
     global max_card_num # 패의 최대 숫자 전역변수
-    min_loop_num = 2 # 최소 루프 개수
+    min_loop_num = 3 # 최소 루프 개수
     cut_num = list(range(0,math.ceil((max_card_num+1)/min_loop_num)-2)) # math.ceil함수는 숫자 올림
     cut = []                     # cut1을 보관하는 장소
     card_list = list(range(0,max_card_num+1)) # 0~5 총 6개
@@ -1010,6 +1022,9 @@ def ability_show():
     elif player_ability[turn][1] == 4:
         a_a = "active ability : fake the tile"
         a_p = "Required point :" + str(a_ability_point[3])
+    elif player_ability[turn][1] == 5:
+        a_a = "active ability : show the random tile of  pointed player"
+        a_p = "Required point :" + str(a_ability_point[4])
     else:
         a_a = "oops! your silent now..."
     Notice = p_a + a_a + a_p
@@ -1108,6 +1123,7 @@ def main_loop(): # Game main loop scene
     active4 = 0
     active4_card = [-1,-1]
     fake = 0
+    cp = 0
     
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
     button_take = BUTTON("Take a tile")             # button sample
@@ -1214,13 +1230,12 @@ def main_loop(): # Game main loop scene
             CARD.using_active_ability()
         else:
             Notice = "ability inactivated"
-
+    
     #========== main loop 창 실행 ==========#
     while not done:
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
                 exit_window()
-
         # 턴 관련
         pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
         pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
@@ -1270,17 +1285,17 @@ def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 
     global player_ability_backup, player_ability, a_ability_point
     player_ability = list(numpy.zeros(num_players))
     if states[2] == True:
-        NoA = 4
-        NoP = 3
+        NoA = 5
+        NoP = 2
         p_ability_index = list(range(1,NoP+1)) # 패시브 능력 리스트
         a_ability_index = list(range(1,NoA+1)) # 엑티브 능력 리스트
-        a_ability_point = [0,0,0,0] # 엑티브 능력 포인트[500,400,400,600]
+        a_ability_point = [0,0,0,0,0] # 엑티브 능력 포인트[500,400,400,600,?]
         for i in range(0,num_players):
             player_ability[i] = [0,0]
             player_ability[i][0] = random.choice(p_ability_index)   
             qwer = random.choice(a_ability_index)       
             player_ability[i][1] = qwer
-            a_ability_index.remove(qwer)
+#            a_ability_index.remove(qwer)
         player_ability_backup = copy.deepcopy(player_ability)
     else:
         for i in range(0,num_players):
@@ -1288,7 +1303,7 @@ def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 
             
 
 def ability_reset(): # 턴 지날때 능력 초기화
-    global active2, uaan, active4, fake
+    global active2, uaan, active4, fake, turnnum
     if player_ability[turn][0] == -1: # 침묵 걸렸었으면 턴 끝날때 풀어줌
         player_ability[turn][0] = player_ability_backup[turn][0]
         player_ability[turn][1] = player_ability_backup[turn][1]
@@ -1298,6 +1313,8 @@ def ability_reset(): # 턴 지날때 능력 초기화
         uaan = 0
     if fake == 1:
         fake = 0
+    if cp != 0:
+        cp = 0
 
 #======== Initialize pygame ==========#
 pygame.init()                               # pygame library 초기화.
