@@ -7,9 +7,13 @@ Wecome to visit our repository! This repository is for **QuantumCoda (양자 다
 - Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
 - Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
-# Download: v0.10
+# Download: v0.11 
 
-Now we released QuantumCoda version 0.10. This version is currently test version so we focused on being able to play the QuantumCoda. 
+Now we released QuantumCoda version 0.11. This version is currently test version so we focused on being able to play the QuantumCoda. 
+
+**[Download](https://github.com/jiwonchoi-phys/QuantumCoda/releases)**
+
+Download latest version on zip file from **'Assets'**
 
 You can play our game in English and Korean. 
 
@@ -38,17 +42,14 @@ You can play our game in English and Korean.
     If you don't have the fonts above in your PC then written words in Hangul may look broken. Sure, there is no problem with running the game.
 
 ## Release Notes
-### v0.10
-* First release the development version for users.
+### v0.11
 * Single Player game
-    - You can play the game with 2 players up to 4 players.
-    - But you can't play the game with computers. Take turns your PC playing the games with your friends!
+    - You can select rivals for future updates - using items.
 * Game Options
-    - You can turn on or turn off the 2 options of our game.
-    - Black-White Alignment, Watching the collapse probabilites of any opponent's tiles.
-* Help Menu
-    - Provides theory explanations briefly for those who are not familiar with quantum mechanics.
-    - Another Helps will be updated.
+    - Fixed an issue where the explanation window did not appear and ended in the Windows OS.
+* System
+    - Fixed an issue where the button was repeatedly pressed.
+    - Fixed an issue where the text are not aligned on center of the window.
 
 # Development Notes
 
