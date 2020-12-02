@@ -943,7 +943,8 @@ class mButton:
         if self.x <= x1 <= self.x + self.width and self.y <= y1 <= self.y + self.height:
             return True
         else:
-            return Falsepygame.font.init()
+            return False
+        pygame.font.init()
 #
 def redrawWindow(win, game, p):
     win.fill((128,128,128))
@@ -990,7 +991,7 @@ def redrawWindow(win, game, p):
         for btn in btns:
             btn.draw(win)
 
-    pygame.display.update()
+    pygame.display.flip()
 #
 def main(room):
     run = True
@@ -1093,8 +1094,12 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
     
     def bmain1():
         run = True
+        rn_tk.destroy()
+        start(1)
+        '''
+        커넥션 체킹 용인데 소켓을 두 번 전송해서 player 0로 접속하고 1로 접속하는 상황 발생함.
         n = Network(room=1)
-
+        
         while run:
             clock.tick(60)
             try:
@@ -1106,42 +1111,14 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
                 run = False
                 print("Couldn't get game")
                 break
+        '''
 
     def bmain2():
         run = True
-        n = Network(room=2)
-
-        while run:
-            clock.tick(60)
-            try:
-                game = n.send("get")
-                print("Room 2 OK Chekced")
-                rn_tk.destroy()
-                start(2)
-            except:
-                run = False
-                print("Couldn't get game")
-                break
         rn_tk.destroy()
         
     def bmain3():
         run = True
-        n = Network(room=3)
-
-        while run:
-            clock.tick(60)
-            try:
-                game = n.send("get")
-                print("Room3 OK Chekced")
-                rn_tk.destroy()
-                start(3)
-            except:
-                run = False
-                print("Couldn't get game")
-                break
-        rn_tk.destroy()
-
-    def rnd():
         rn_tk.destroy()
 
     r1 = Button(rn_tk, text="1", command = bmain1)
