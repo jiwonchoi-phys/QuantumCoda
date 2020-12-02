@@ -4,6 +4,7 @@ import pickle
 from game import Game
 
 def start_room(room):
+    global idCount
     server = "localhost"
     port = 5555 + room 
 

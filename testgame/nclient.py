@@ -921,7 +921,7 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
                         del card_w.card_num[card_w.card_num.index(loop_num)]
                         card_w.number = PRINTTEXT("%s" % card_w.card_num, 18, color=card_w.font_color)
                         loop_num = card_w.card_num[0]
-
+#
 class mButton:
     def __init__(self, text, x, y, color):
         self.text = text
@@ -944,7 +944,7 @@ class mButton:
             return True
         else:
             return Falsepygame.font.init()
-
+#
 def redrawWindow(win, game, p):
     win.fill((128,128,128))
 
