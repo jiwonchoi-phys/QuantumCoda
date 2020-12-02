@@ -946,14 +946,171 @@ class mButton:
             return False
         pygame.font.init()
 #
+def multi_main(): # Game multi main loop scene
+    global num_players, stn, turn, YATT, RT
+    turn , RT = 0, 0        # 첫값 0. 수정 금지.
+    screen.fill(WHITE)
+    done = False
+    make_card(num_players, stn)
+    f_play_music(main_music, 1)
+    f_ftile_color_arrnage(tii)
+
+    select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
+    button_take = BUTTON("Take a tile")             # button sample
+    button_turn = BUTTON("Next")
+    button_back = BUTTON("Back to Title")
+    button_exit = BUTTON("Exit",active_color=RED)
+
+    YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
+    
+    def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
+        global turn, pl_turn, YATT, Notice
+        if YATT == 2 or YATT == 3: # 추측 이후 턴넘김 활성화
+            Notice = " "
+            turn += 1
+            YATT = 0
+            time.sleep(1.6)   # 임시 1.6초 딜레이
+            if turn == num_players:
+                turn = 0
+        elif YATT == 0:
+            Notice = "Take the tile first this turn."
+            
+        elif YATT == 1:
+            Notice = "Guess the number of tiles on your opponent."
+        
+        for player in p:
+            player.make_numlist()
+ 
+    def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
+        global fti_b, fti_w, YATT, RT, Notice
+        Notice = " "
+        wtt = Tk()                             # 윈도우 창을 생성
+        wtt.title("Get Tiles.")                # 타이틀
+        wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
+
+        label1 = Label(wtt, text="Take a new tile from the decks.\n새로운 타일을 덱에서 가져가세요.")    # 라벨 등록
+        label1.pack(pady=10)
+        label2 = Label(wtt, text="Choose the color of the tile to take.\n가져갈 타일의 색상을 선택하세요.")   # 라벨 등록
+        label2.pack(pady=10)
+        
+        pixelVirtual = PhotoImage(width=1, height=1) # 기준 픽셀 추가
+
+        def sf_bb():
+            global fti_b, p, YATT, RT
+
+            if len(fti_b) == 0:
+                label2.config(text="There are no more tiles of this color.\n이 색상의 타일은 더 이상 없습니다.")
+            else:
+                RT = random.choice(fti_b)
+                p[turn].deck_list.append(RT)
+                fti_b.pop(fti_b.index(RT))
+                YATT += 1
+                wtt.after(1000, wttd)
+
+        def sf_bw():
+            global fti_w, p, YATT, RT
+        
+            if len(fti_w) == 0:
+                label2.config(text="There are no more tiles of this color.\n이 색상의 타일은 더 이상 없습니다.")
+            else:
+                RT = random.choice(fti_w)
+                p[turn].deck_list.append(RT)
+                fti_w.pop(fti_w.index(RT))
+                YATT += 1
+                wtt.after(1000, wttd)
+    
+        bb = Button(wtt, text='Get Black\n'+'remaining tiles: '+str(len(fti_b)), command = sf_bb, fg = 'white', bg = "black",
+                    image=pixelVirtual, width=100, height=160, compound="c")                # 크기 텍스트 기준이 아닌 기준 픽셀 기준, 텍스트는 중앙표기.
+        bw = Button(wtt, text='Get White\n'+'remaining tiles: '+str(len(fti_w)), command = sf_bw, fg = 'black', bg = "ghost white",
+                    image=pixelVirtual, width=100, height=160, compound="c")
+        bb.pack(side = LEFT, padx = 50)
+        bw.pack(side = RIGHT, padx = 50)
+
+        def wttd():              # tk 파괴. 위 elif에 바로 연결시 라벨 변경 안멱혀서 따로 뗌
+            wtt.destroy()
+
+        if len(fti_b) == 0 and len(fti_w) == 0:
+            label2.config(text="There are no more tiles.\n더 이상의 타일이 없습니다.")
+            
+            wtt.after(1000, wttd)
+        
+        if YATT != 0:
+            label2.config(text="You have already taken a tile this turn.\n이번 차례에 이미 타일을 가져갔습니다.")
+            bb.destroy()
+            bw.destroy()
+            wtt.after(1000, wttd)
+
+        wtt.mainloop()
+
+
+    for i,player in enumerate(p):
+        print(i+1)
+        print(player.num_list)
+
+    #========== main loop 창 실행 ==========#
+    while not done:
+        for event in pygame.event.get():        # 닫기 전까지 계속 실행.
+            if event.type == pygame.QUIT:       # 종료 if문
+                exit_window()
+
+        # 턴 관련
+        pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
+        pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
+        pl_turn._blit_(loc=(5,5),loc_center=False)  
+        
+        # 덱의 카드 정렬
+        all_arrange(p)
+
+        # 승리 조건
+        f_end_conditions()
+        
+        # 공지
+        Notice_box = PRINTTEXT(Notice, 20)
+        Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
+        
+        # 덱 그리기(플러이어 텍스트 포함)
+        T = list(range(turn,turn+num_players))
+        for i in range(num_players):
+            if T[i] >= num_players:
+                T[i] = T[i]-num_players
+
+        Ttext = list(range(num_players))
+        Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
+
+        Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
+        Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
+        
+        for i in range(1,num_players):
+            Ttext[i] = BUTTON(msg='Player: '+str(T[i]+1)+' ( point: '+str((p[T[i]].get_point()))+' )',\
+                inactive_color=WHITE,font_size=15,action=None)
+            Ttext[i].i = T[i]
+        f_draw_card(p, turn, T, Ttext)
+        
+        # 버튼 및 텍스트 그리기
+        button_take._draw_(loc = (SCREEN_WIDTH-100,105), size = (130,30), action = f_take_tile)
+        button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
+        button_back._draw_(loc = (SCREEN_WIDTH-180,40), size = (130,30), action = bati_window)
+        button_exit._draw_(loc = (SCREEN_WIDTH-67,40), size = (64,30), action = exit_window)
+        select_card._blit_(loc=(5,30),loc_center=False)
+
+        pygame.display.update()        
+#
 def redrawWindow(win, game, p):
     win.fill((128,128,128))
+    global num_players, stn
 
     if not(game.connected()):
         font = pygame.font.SysFont("comicsans", 80)
         text = font.render("Waiting for Player...", 1, (255,0,0), True)
         win.blit(text, (width/2 - text.get_width()/2, height/2 - text.get_height()/2))
     else:
+        pygame.init()
+        screen = pygame.display.set_mode(SCREEN_SIZE)
+        num_players = 2
+        stn = 5
+        main_loop()
+
+        '''
         font = pygame.font.SysFont("comicsans", 60)
         text = font.render("Your Move", 1, (0, 255,255))
         win.blit(text, (80, 200))
@@ -990,6 +1147,7 @@ def redrawWindow(win, game, p):
 
         for btn in btns:
             btn.draw(win)
+        '''
 
     pygame.display.flip()
 #
