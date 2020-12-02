@@ -943,7 +943,9 @@ class mButton:
         if self.x <= x1 <= self.x + self.width and self.y <= y1 <= self.y + self.height:
             return True
         else:
-            return Falsepygame.font.init()
+            return False
+        pygame.font.init()
+        
 #
 def redrawWindow(win, game, p):
     win.fill((128,128,128))
@@ -1070,16 +1072,16 @@ def menu_screen(room):
     main(room)
 #
 def start(room):
-    global width, height, win, btns
+    global width, height, win, btns, rn
     pygame.font.init()
     width = 700
     height = 700
     win = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Client")
     btns = [mButton("Rock", 50, 500, (0,0,0)), mButton("Scissors", 250, 500, (255,0,0)), mButton("Paper", 450, 500, (0,255,0))]
-
+    rn = room
     while True:
-        menu_screen(room)
+        menu_screen(rn)
 #
 def f_rn(): # 룸 넘버 입력 받는 tk 임시.
     rn_tk=Tk()
