@@ -1093,7 +1093,6 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
     label.pack()
     
     def bmain1():
-        run = True
         rn_tk.destroy()
         start(1)
         '''
