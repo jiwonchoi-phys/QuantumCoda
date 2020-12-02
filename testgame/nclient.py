@@ -1101,12 +1101,11 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
                 game = n.send("get")
                 print("Room 1 OK Chekced")
                 rn_tk.destroy()
+                start(1)
             except:
                 run = False
                 print("Couldn't get game")
                 break
-        rn_tk.destroy()
-        start(1)
 
     def bmain2():
         run = True
@@ -1118,12 +1117,12 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
                 game = n.send("get")
                 print("Room 2 OK Chekced")
                 rn_tk.destroy()
+                start(2)
             except:
                 run = False
                 print("Couldn't get game")
                 break
         rn_tk.destroy()
-        start(2)
         
     def bmain3():
         run = True
@@ -1135,12 +1134,12 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
                 game = n.send("get")
                 print("Room3 OK Chekced")
                 rn_tk.destroy()
+                start(3)
             except:
                 run = False
                 print("Couldn't get game")
                 break
         rn_tk.destroy()
-        start(3)
 
     def rnd():
         rn_tk.destroy()
