@@ -77,5 +77,3 @@ def start_room(room):
         start_new_thread(threaded_client, (conn, p, gameId))
 
 start_room(1)
-start_room(2)
-start_room(3)
