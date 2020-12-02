@@ -946,12 +946,16 @@ class mButton:
             return False
         pygame.font.init()
 #
-def multi_main(): # Game multi main loop scene
+def multi_main(game, mp): # Game multi main loop scene
     global num_players, stn, turn, YATT, RT
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
     make_card(num_players, stn)
+    print(p[0])
+    game.put1_deck(p[0])
+    print(game.deck1)
+    game.put2_deck(p[1])
     f_play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
 
@@ -1069,23 +1073,31 @@ def multi_main(): # Game multi main loop scene
         Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
         
         # 덱 그리기(플러이어 텍스트 포함)
-        T = list(range(turn,turn+num_players))
-        for i in range(num_players):
-            if T[i] >= num_players:
-                T[i] = T[i]-num_players
-
         Ttext = list(range(num_players))
-        Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
+        #print(game.id)
+        if game.p1Went and mp == 0:
+            Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
+            Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=True)
+            Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
+            Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
 
-        Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
-        Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
+            p[0].draw_card(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
+            
+            Ttext[1] = BUTTON(msg='Player: '+str(1)+' ( point: '+str((p[1].get_point()))+' )', inactive_color=WHITE,font_size=15,action=None)
+            p[1].draw_card(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
+            Ttext[1]._draw_(loc=(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
         
-        for i in range(1,num_players):
-            Ttext[i] = BUTTON(msg='Player: '+str(T[i]+1)+' ( point: '+str((p[T[i]].get_point()))+' )',\
-                inactive_color=WHITE,font_size=15,action=None)
-            Ttext[i].i = T[i]
-        f_draw_card(p, turn, T, Ttext)
-        
+        elif game.p1Went and mp == 1:
+            Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
+            Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
+            Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
+
+            p[1].draw_card(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
+            Ttext[1]._blit_(loc=(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=True)
+
+            Ttext[1] = BUTTON(msg='Player: '+str(1)+' ( point: '+str((p[0].get_point()))+' )', inactive_color=WHITE,font_size=15,action=None)
+            p[0].draw_card(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
+            Ttext[0]._draw_(loc=(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
         # 버튼 및 텍스트 그리기
         button_take._draw_(loc = (SCREEN_WIDTH-100,105), size = (130,30), action = f_take_tile)
         button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
@@ -1095,7 +1107,7 @@ def multi_main(): # Game multi main loop scene
 
         pygame.display.update()        
 #
-def redrawWindow(win, game, p):
+def redrawWindow(win, game, mp):
     win.fill((128,128,128))
     global num_players, stn
 
@@ -1108,7 +1120,7 @@ def redrawWindow(win, game, p):
         screen = pygame.display.set_mode(SCREEN_SIZE)
         num_players = 2
         stn = 5
-        main_loop()
+        multi_main(game, mp)
 
         '''
         font = pygame.font.SysFont("comicsans", 60)

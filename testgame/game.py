@@ -7,6 +7,14 @@ class Game:
         self.moves = [None, None]
         self.wins = [0,0]
         self.ties = 0
+        self.deck1 = ""
+        self.deck2 = ""
+
+    def put1_deck(self, p):
+        self.deck1 = p
+    
+    def put2_deck(self, p):
+        self.deck2 = p
 
     def get_player_move(self, p):
         """
@@ -52,3 +60,4 @@ class Game:
     def resetWent(self):
         self.p1Went = False
         self.p2Went = False
+    
