@@ -7,15 +7,11 @@ class Game:
         self.moves = [None, None]
         self.wins = [0,0]
         self.ties = 0
-        self.deck1 = ""
-        self.deck2 = ""
+        self.p = [0]
 
-    def put1_deck(self, p):
-        self.deck1 = p
+    def put_deck(self, new_p):
+        self.p = new_p
     
-    def put2_deck(self, p):
-        self.deck2 = p
-
     def get_player_move(self, p):
         """
         :param p: [0,1]

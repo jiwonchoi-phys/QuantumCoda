@@ -387,7 +387,6 @@ class BUTTON():
 
     def get_i(self):
         pln = self.i
-        print(pln)
         return self.i
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
@@ -427,7 +426,6 @@ class BUTTON():
                     button_sound()
                     action()
                     asdf = 1
-                    print(1)
             else:
                 asdf = 0
         
@@ -497,9 +495,6 @@ def make_spooky(x):
         for j in range(len(x)):
             if x[j] == 0:
                 del x[j]
-
-    print(cut_list)
-    
     return x      
 
 def make_card(num_players, stn):
@@ -520,9 +515,6 @@ def make_card(num_players, stn):
         ti.append(tb[i])
         ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
 
-    for i in ti:
-        print(i)
-
     random.shuffle(ti)                  # 모든 타일 섞음
     spooky_arrange(ti)                  # util 참고.
     
@@ -533,7 +525,6 @@ def make_card(num_players, stn):
     p = [PLAYER() for i in range(num_players)]
     for i,player in enumerate(p):
         player.p_num = i
-
 
     # PLAYER의 덱에 생성된 카드를 랜덤으로 추가
     for i in range(num_players):
@@ -896,7 +887,7 @@ def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위�
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
     global fti_w, fti_b
     loop_num=x.card_num[0]      
-    print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
+    #print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
 
     for iter in range(10):  # 충분히 많이 반복
         for player in p:    # 모든 플레이어의
@@ -951,12 +942,7 @@ def multi_main(game, mp): # Game multi main loop scene
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
-    make_card(num_players, stn)
-    print(p[0])
-    game.put1_deck(p[0])
-    print(game.deck1)
-    game.put2_deck(p[1])
-    f_play_music(main_music, 1)
+    make_card(2, 5)
     f_ftile_color_arrnage(tii)
 
     select_card = PRINTTEXT("Select card", 20)      # msg, font 크기
@@ -1046,66 +1032,34 @@ def multi_main(game, mp): # Game multi main loop scene
 
         wtt.mainloop()
 
-
-    for i,player in enumerate(p):
-        print(i+1)
-        print(player.num_list)
-
     #========== main loop 창 실행 ==========#
-    while not done:
-        for event in pygame.event.get():        # 닫기 전까지 계속 실행.
-            if event.type == pygame.QUIT:       # 종료 if문
-                exit_window()
+    
+    # 턴 관련
+    pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
+    pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
+    pl_turn._blit_(loc=(5,5),loc_center=False)  
+    
+    # 덱의 카드 정렬
+    all_arrange(p)
 
-        # 턴 관련
-        pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
-        pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
-        pl_turn._blit_(loc=(5,5),loc_center=False)  
-        
-        # 덱의 카드 정렬
-        all_arrange(p)
+    # 승리 조건
+    f_end_conditions()
+    
+    # 공지
+    Notice_box = PRINTTEXT(Notice, 20)
+    Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
+    
+    # 덱 그리기(플러이어 텍스트 포함)
+    
 
-        # 승리 조건
-        f_end_conditions()
-        
-        # 공지
-        Notice_box = PRINTTEXT(Notice, 20)
-        Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
-        
-        # 덱 그리기(플러이어 텍스트 포함)
-        Ttext = list(range(num_players))
-        #print(game.id)
-        if game.p1Went and mp == 0:
-            Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
-            Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=True)
-            Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
-            Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
+    # 버튼 및 텍스트 그리기
+    button_take._draw_(loc = (SCREEN_WIDTH-100,105), size = (130,30), action = f_take_tile)
+    button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
+    button_back._draw_(loc = (SCREEN_WIDTH-180,40), size = (130,30), action = bati_window)
+    button_exit._draw_(loc = (SCREEN_WIDTH-67,40), size = (64,30), action = exit_window)
+    select_card._blit_(loc=(5,30),loc_center=False)
 
-            p[0].draw_card(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
-            
-            Ttext[1] = BUTTON(msg='Player: '+str(1)+' ( point: '+str((p[1].get_point()))+' )', inactive_color=WHITE,font_size=15,action=None)
-            p[1].draw_card(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
-            Ttext[1]._draw_(loc=(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
-        
-        elif game.p1Went and mp == 1:
-            Ttext[0] = PRINTTEXT(msg='Yours: ',size=20)
-            Ptext = PRINTTEXT('point: '+str((p[turn].get_point())), size= 15)
-            Ptext._blit_(loc=(SCREEN_WIDTH//2-len(p[turn].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4+30))
-
-            p[1].draw_card(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
-            Ttext[1]._blit_(loc=(SCREEN_WIDTH//2-len(p[0].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=True)
-
-            Ttext[1] = BUTTON(msg='Player: '+str(1)+' ( point: '+str((p[0].get_point()))+' )', inactive_color=WHITE,font_size=15,action=None)
-            p[0].draw_card(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
-            Ttext[0]._draw_(loc=(SCREEN_WIDTH//2-len(p[1].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
-        # 버튼 및 텍스트 그리기
-        button_take._draw_(loc = (SCREEN_WIDTH-100,105), size = (130,30), action = f_take_tile)
-        button_turn._draw_(loc = (SCREEN_WIDTH-100,570), size = (130,30), action = next_turn)
-        button_back._draw_(loc = (SCREEN_WIDTH-180,40), size = (130,30), action = bati_window)
-        button_exit._draw_(loc = (SCREEN_WIDTH-67,40), size = (64,30), action = exit_window)
-        select_card._blit_(loc=(5,30),loc_center=False)
-
-        pygame.display.update()        
+    pygame.display.update()        
 #
 def redrawWindow(win, game, mp):
     win.fill((128,128,128))
@@ -1169,7 +1123,7 @@ def main(room):
     n = Network(room)
     player = int(n.getP())
     print("You are player", player)
-
+    f_play_music(main_music, 1)
     while run:
         clock.tick(60)
         try:
@@ -1290,9 +1244,9 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
         run = True
         rn_tk.destroy()
 
-    r1 = Button(rn_tk, text="1", command = bmain1)
-    r2 = Button(rn_tk, text="2", command = bmain2)
-    r3 = Button(rn_tk, text="3", command = bmain3)               
+    r1 = Button(rn_tk, text="room 1", command = bmain1)
+    r2 = Button(rn_tk, text="room 2", command = bmain2)
+    r3 = Button(rn_tk, text="room 3", command = bmain3)               
 
     r1.pack()
     r2.pack()
@@ -1473,11 +1427,6 @@ def main_loop(): # Game main loop scene
             wtt.after(1000, wttd)
 
         wtt.mainloop()
-
-
-    for i,player in enumerate(p):
-        print(i+1)
-        print(player.num_list)
 
     #========== main loop 창 실행 ==========#
     while not done:
