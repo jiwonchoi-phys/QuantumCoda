@@ -934,14 +934,53 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
     label.pack()
     
     def bmain1():
+        run = True
+        n = Network(room=1)
+
+        while run:
+            clock.tick(60)
+            try:
+                game = n.send("get")
+                print("Room 1 OK Chekced")
+                rn_tk.destroy()
+            except:
+                run = False
+                print("Couldn't get game")
+                break
         rn_tk.destroy()
         start(1)
-        
+
     def bmain2():
+        run = True
+        n = Network(room=2)
+
+        while run:
+            clock.tick(60)
+            try:
+                game = n.send("get")
+                print("Room 2 OK Chekced")
+                rn_tk.destroy()
+            except:
+                run = False
+                print("Couldn't get game")
+                break
         rn_tk.destroy()
         start(2)
         
     def bmain3():
+        run = True
+        n = Network(room=3)
+
+        while run:
+            clock.tick(60)
+            try:
+                game = n.send("get")
+                print("Room3 OK Chekced")
+                rn_tk.destroy()
+            except:
+                run = False
+                print("Couldn't get game")
+                break
         rn_tk.destroy()
         start(3)
 
