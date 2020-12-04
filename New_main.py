@@ -132,7 +132,6 @@ class PLAYER():
 
     def make_numlist(self):
         self.num_list = [card.card_num for card in self.deck_list]
-        #print(self.num_list)
     
     def tile_arrange(self):
         deck = self.deck_list                   # 임시 리스트 생성.
@@ -819,7 +818,7 @@ def f_win_page(): # 승리 페이지.
     wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Level Setting", inactive_color = WHITE, active_color=GRAY)
-    f_play_music(win_music, 0.6)
+    f_play_music(win_music, 0.5)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
@@ -832,8 +831,8 @@ def f_win_page(): # 승리 페이지.
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=f_level_set)
         
         # text positions
-        dp._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/10), loc_center=False)
-
+        dp._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-30), loc_center=False)
+        
         # rank 
         def sf_calculate_rank(vector):
             a={}
@@ -853,7 +852,7 @@ def f_win_page(): # 승리 페이지.
 
         for i in range(0,num_players):
             em[i] = PRINTTEXT("Player "+str(i+1)+":  >>> rank: "+str(cbox[i])+" [point: "+str(p[i].get_point())+"].", size = 26)
-            em[i]._blit_(loc= (SCREEN_WIDTH/10+10, SCREEN_HEIGHT/4+i*54), loc_center=False)
+            em[i]._blit_(loc= (SCREEN_WIDTH/10+10, SCREEN_HEIGHT/3+i*54), loc_center=False)
         
         pygame.display.update()
 
@@ -1112,6 +1111,22 @@ def main_loop(): # Game main loop scene
         # 승리 조건
         f_end_conditions()
         
+        # 음악 조절
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                v = pygame.mixer.music.get_volume()
+                pygame.mixer.music.set_volume(v + 0.05)
+
+            if event.key == pygame.K_DOWN:
+                v = pygame.mixer.music.get_volume()
+                pygame.mixer.music.set_volume(v - 0.05)
+
+            if event.key == pygame.K_LEFT:
+                pygame.mixer.music.pause()
+
+            if event.key == pygame.K_RIGHT:
+                pygame.mixer.music.unpause()
+
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
         Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
