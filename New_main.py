@@ -386,7 +386,6 @@ class BUTTON():
 
     def get_i(self):
         pln = self.i
-        print(pln)
         return self.i
 
     def _draw_(self, loc=(0,0),loc_center=True, size=(60,40),action=None): # 각각 self, 위치, 버튼 크기, 실행함수
@@ -426,7 +425,7 @@ class BUTTON():
                     button_sound()
                     action()
                     asdf = 1
-                    print(1)
+                    
             else:
                 asdf = 0
         
@@ -497,7 +496,6 @@ def make_spooky(x):
             if x[j] == 0:
                 del x[j]
 
-    print(cut_list)
     
     return x      
 
@@ -519,8 +517,6 @@ def make_card(num_players, stn):
         ti.append(tb[i])
         ti.append(tw[i])                # ti에 0과 1로 구분하고 넣음
 
-    for i in ti:
-        print(i)
 
     random.shuffle(ti)                  # 모든 타일 섞음
     spooky_arrange(ti)                  # util 참고.
@@ -895,7 +891,6 @@ def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위�
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
     global fti_w, fti_b
     loop_num=x.card_num[0]      
-    print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
 
     for iter in range(10):  # 충분히 많이 반복
         for player in p:    # 모든 플레이어의
@@ -1099,11 +1094,6 @@ def main_loop(): # Game main loop scene
             wtt.after(1000, wttd)
 
         wtt.mainloop()
-
-
-    for i,player in enumerate(p):
-        print(i+1)
-        print(player.num_list)
 
     #========== main loop 창 실행 ==========#
     while not done:
