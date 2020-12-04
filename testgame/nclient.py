@@ -133,7 +133,6 @@ class PLAYER():
 
     def make_numlist(self):
         self.num_list = [card.card_num for card in self.deck_list]
-        #print(self.num_list)
     
     def tile_arrange(self):
         deck = self.deck_list                   # 임시 리스트 생성.
@@ -886,8 +885,7 @@ def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위�
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
     global fti_w, fti_b
-    loop_num=x.card_num[0]      
-    #print("x[0]: ",x.card_num[0])   # loop_num을 방금 붕괴된 카드의 숫자로 받아옴
+    loop_num=x.card_num[0]
 
     for iter in range(10):  # 충분히 많이 반복
         for player in p:    # 모든 플레이어의
