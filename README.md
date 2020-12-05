@@ -42,14 +42,16 @@ You can play our game in English and Korean.
     If you don't have the fonts above in your PC then written words in Hangul may look broken. Sure, there is no problem with running the game.
 
 ## Release Notes
-### v0.11
+### v0.12
 * Single Player game
-    - You can select rivals for future updates - using items.
-* Game Options
-    - Fixed an issue where the explanation window did not appear and ended in the Windows OS.
+    - Now you can control the volume of background music. Use arrow keys on your keyboard (Up arrow: Turn up the Volume, Down arrow: Turn down the Volume, Left arrow: Pause, Right arrow: Play).
 * System
-    - Fixed an issue where the button was repeatedly pressed.
-    - Fixed an issue where the text are not aligned on center of the window.
+    - Modified a text position on the win page.
+    - Fixed an issue where the new game button function was incorrectly linked on the win page.
+
+### 201205 용 패치노트
+gui branch, New_main.py
+- 승리 페이지에서 새 게임 버튼 함수가 잘못 연결된 문제 수정.
 
 # Development Notes
 
@@ -430,3 +432,9 @@ server branch, testgame 폴더
 gui branch, New_main.py
 - 음악 컨트롤 추가. 키보드 방향키 사용(위: 볼륨업, 아래: 볼륨다운, 왼쪽: 일시정지, 오른쪽: 재생).
 - 승리 페이지 텍스트 위치 수정.
+
+### 201205 용 패치노트
+gui branch, New_main.py
+- 승리 페이지에서 새 게임 버튼 함수가 잘못 연결된 문제 수정.
+- 그외 자잘한 부분 수정.
+- v0.12 Release
