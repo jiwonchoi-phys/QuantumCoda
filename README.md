@@ -7,9 +7,9 @@ Wecome to visit our repository! This repository is for **QuantumCoda (양자 다
 - Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
 - Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
-# Download: v0.11 
+# Download: v0.12
 
-Now we released QuantumCoda version 0.11. This version is currently test version so we focused on being able to play the QuantumCoda. 
+Now we released QuantumCoda version 0.12. This version is currently test version so we focused on being able to play the QuantumCoda. 
 
 **[Download](https://github.com/jiwonchoi-phys/QuantumCoda/releases)**
 
@@ -48,10 +48,6 @@ You can play our game in English and Korean.
 * System
     - Modified a text position on the win page.
     - Fixed an issue where the new game button function was incorrectly linked on the win page.
-
-### 201205 용 패치노트
-gui branch, New_main.py
-- 승리 페이지에서 새 게임 버튼 함수가 잘못 연결된 문제 수정.
 
 # Development Notes
 
