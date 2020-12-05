@@ -259,11 +259,11 @@ class CARD():
                 ct_tk.resizable(False, False)
 
 
-                label1 = Label(ct_tk, text="Please enter the number you are guessing.")
+                label1 = Label(ct_tk, text="Please enter the number you are guessing.\n추정하려는 숫자를 입력해주세요.")
                 if len(self.card_num) == 2:
-                    label2 = Label(ct_tk, text="probability: "+str(t_probability)+" (%).")
+                    label2 = Label(ct_tk, text="probability 확률: "+str(t_probability)+" (%).")
                 elif len(self.card_num) == 1:
-                    label2 = Label(ct_tk, text="probability: [100] (%).")
+                    label2 = Label(ct_tk, text="probability 확률: [100] (%).")
 
                 def sf_p(number, probability):
                     x = random.randint(1,101)
@@ -826,7 +826,7 @@ def f_win_page(): # 승리 페이지.
                 pygame.quit()
                 quit()
 
-        wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=main_loop)
+        wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=f_pn)
         wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=bati_window)
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=f_level_set)
         
@@ -925,7 +925,7 @@ def game_intro():   # Game intro scene
     intro = False   # while문 돌리기 위함
 
     title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
-    version = PRINTTEXT("v.0.11", size = 15)
+    version = PRINTTEXT("v.0.12", size = 15)
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
