@@ -49,6 +49,11 @@ You can play our game in English and Korean.
     - Modified a text position on the win page.
     - Fixed an issue where the new game button function was incorrectly linked on the win page.
 
+## QuantumCoda Legacy
+You can play the CLI-based version of Quantum Coda. Just download 'QCodalegacy.py (No joker card version)' then execute the file. this game used only 4 modules - random, numpy, copy, math. But the game is available in Korean only.
+
+CLI 기반의 Quantum Coda를 즐겨볼 수 있습니다. 현재 브랜치에 있는 'Qcodalegacy.py'를 다운로드 하고 실행하면 됩니다. 또한 GUI 버전에 비해서 요구하는 모듈은 단지 random, numpy, copy, math 밖에 없어 쾌적하게 게임할 수 있습니다. 이 게임은 한국어로만 제공됩니다.
+
 # Development Notes
 
 We'll write recent development notes here. The notes can be written in Korean. If you want to watch previous update notes, see [Here](https://github.com/jiwonchoi-phys/QuantumCoda/tree/master/UpdateNotes)
