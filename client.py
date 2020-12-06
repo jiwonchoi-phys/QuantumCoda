@@ -1,20 +1,24 @@
-#======건들지 마시오=====
+#===========<서버용 시작>===========
+import pygame
+from network import Network
+import pickle
+#===========<서버용 끝>=============
+
+#===========<main용 시작>===========
 from tkinter import * 
 from tkinter import messagebox
 from tkinter.ttk import Notebook
 from PIL import ImageTk, Image
-import pygame
 import math
 import random
 import numpy
 import time
 import platform # OS Environment module
 import copy
-#=======================
+#===========<main용 끝>=============
 
 '''
-현재 순서 고정 바람. 변동시 에러 가능성 높음.
-사운드 파일 추가시 .wav, .ogg 사용바람. .mp3 사용시 에러 가능성 높음
+12/06 2205
 '''
 
 # RGB color information
