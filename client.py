@@ -975,10 +975,6 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
                         card_w.number = PRINTTEXT("%s" % card_w.card_num, 18, color=card_w.font_color)
                         loop_num = card_w.card_num[0]
                         
-"""
-    ====================<<<     Main    >>>====================
-"""
-
 #========== functions for pygame ==========#
 def ability_show():
     global Notice
@@ -1011,7 +1007,7 @@ def ability_show():
         a_a = "oops! your silent now..."
         a_p = " "
     Notice = str(p_a)+str(a_a)+str(a_p)
-#
+# 서버
 class mButton:
     def __init__(self, text, x, y, color):
         self.text = text
@@ -1035,7 +1031,7 @@ class mButton:
         else:
             return False
         pygame.font.init()
-#
+# 서버
 def multi_main(game, mp): # Game multi main loop scene
     global num_players, stn, turn, YATT, RT
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
@@ -1308,9 +1304,9 @@ def f_rn(): # 룸 넘버 입력 받는 tk 임시.
     r2 = Button(rn_tk, text="room 2", command = bmain2)
     r3 = Button(rn_tk, text="room 3", command = bmain3)               
 
-    r1.pack()
-    r2.pack()
-    r3.pack()
+    r1.pack(pady = 10)
+    r2.pack(pady = 10)
+    r3.pack(pady = 10)
 
     rn_tk.mainloop()
 # 서버
