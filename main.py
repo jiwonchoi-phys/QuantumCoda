@@ -300,7 +300,7 @@ class CARD():
                             if active2 == 1:
                                 self.card_num = [PGN]
                                 self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
-                                label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n")
+                                label1.config(text="The guessed number "+str(PGN)+" exists on the tile!\n추측한 숫자 "+str(PGN)+"가 타일에 존재합니다!")
                             else:
                                 self.card_num = sf_p(self.card_num, self.card_probability)
                                 self.number = PRINTTEXT("%s" % self.card_num, 18, color=self.font_color)
@@ -1005,6 +1005,7 @@ def ability_show():
         a_p = "Required point :" + str(a_ability_point[4])
     else:
         a_a = "oops! your silent now..."
+        a_p = " "
     Notice = str(p_a)+str(a_a)+str(a_p)
 
 def game_intro():   # Game intro scene
@@ -1042,7 +1043,7 @@ def game_intro():   # Game intro scene
         mplay_button._draw_(loc = (SCREEN_WIDTH*6 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=tbu_window)
         how_button._draw_(loc = (SCREEN_WIDTH*4 // 10, SCREEN_HEIGHT*4 // 8), size = (160,60),action=how_to_play)
         gsettings_button._draw_(loc = (SCREEN_WIDTH*6 // 10,SCREEN_HEIGHT*4 // 8), size = (160,60), action=f_level_set)
-        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (160,60),action=quit)
+        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (160,60),action=pygame.quit)
 
         pygame.display.update()
         clock.tick(15)
@@ -1086,7 +1087,7 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         clock.tick(15)
 
 def main_loop(): # Game main loop scene
-    global num_players, stn, turn, YATT, RT, asdf, fake, active4, active2, active4_card
+    global num_players, stn, turn, YATT, RT, asdf, fake, active4, active2, active4_card, uaan, cp
     turn , RT = 0, 0        # 첫값 0. 수정 금지.
     screen.fill(WHITE)
     done = False
@@ -1116,6 +1117,7 @@ def main_loop(): # Game main loop scene
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
         global turn, pl_turn, YATT, Notice
         if YATT == 2 or YATT == 3: # 추측 이후 턴넘김 활성화
+            ability_reset()    
             Notice = " "
             turn += 1
             YATT = 0
@@ -1209,7 +1211,7 @@ def main_loop(): # Game main loop scene
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
                 exit_window()
-
+        
         # 턴 관련
         pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
         pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
@@ -1284,7 +1286,7 @@ def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 
             player_ability[i] = [0,0]
             player_ability[i][0] = random.choice(p_ability_index)   
             qwer = random.choice(a_ability_index)       
-            player_ability[i][1] = qwer
+            player_ability[i][1] = 2
             a_ability_index.remove(qwer)
         player_ability_backup = copy.deepcopy(player_ability)
     else:
