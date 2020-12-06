@@ -923,25 +923,25 @@ def f_end_conditions(): # 승리 조건 함수.
 
 def f_draw_card(p, turn, T, Ttext): # 플레이 인원 수에 따라 덱의 위치를 지정한 함수.
     p[T[0]].draw_card(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT*3/4)
-    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-54, SCREEN_HEIGHT*3/4),loc_center=True)
+    Ttext[0]._blit_(loc=(SCREEN_WIDTH//2-len(p[T[0]].deck_list)/2*CARD_WIDTH-44, SCREEN_HEIGHT*3/4),loc_center=True)
 
     if num_players == 2:
         p[T[1]].draw_card(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
-        Ttext[1]._draw_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
+        Ttext[1]._draw_(loc=(SCREEN_WIDTH//2-len(p[T[1]].deck_list)/2*CARD_WIDTH+80, SCREEN_HEIGHT/4-15),size=(160,20),loc_center=True,action=Ttext[1].get_i)
 
     if num_players == 3:
         p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4)
-        Ttext[1]._draw_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
+        Ttext[1]._draw_(loc=(CARD_WIDTH/2+80, SCREEN_HEIGHT/4-15),size=(160,20),loc_center=True,action=Ttext[1].get_i)
         p[T[2]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4)
-        Ttext[2]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list)), SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[2].get_i)
+        Ttext[2]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[2]].deck_list))+80, SCREEN_HEIGHT/4-15),size=(160,20),loc_center=True,action=Ttext[2].get_i)
             
     if num_players == 4:
         p[T[1]].draw_card(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
-        Ttext[1]._draw_(loc=(CARD_WIDTH/2, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(120,20),loc_center=True,action=Ttext[1].get_i)
+        Ttext[1]._draw_(loc=(CARD_WIDTH/2+80, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(160,20),loc_center=True,action=Ttext[1].get_i)
         p[T[2]].draw_card(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4)
-        Ttext[2]._draw_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH, SCREEN_HEIGHT/4-15),size=(120,20),loc_center=True,action=Ttext[2].get_i)    
+        Ttext[2]._draw_(loc=(SCREEN_WIDTH//2-len(p[T[2]].deck_list)/2*CARD_WIDTH+80, SCREEN_HEIGHT/4-15),size=(160,20),loc_center=True,action=Ttext[2].get_i)    
         p[T[3]].draw_card(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20)
-        Ttext[3]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list)), SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(120,20),loc_center=True,action=Ttext[3].get_i)
+        Ttext[3]._draw_(loc=(SCREEN_WIDTH-CARD_WIDTH*(0.5+len(p[T[3]].deck_list))+80, SCREEN_HEIGHT/4+CARD_WIDTH*1.6+20-15),size=(160,20),loc_center=True,action=Ttext[3].get_i)
 
 def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타냄
     global fti_w, fti_b
@@ -1241,7 +1241,7 @@ def main_loop(): # Game main loop scene
 
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
-        Notice_box._blit_(loc=(SCREEN_WIDTH/2,50))
+        Notice_box._blit_(loc=(SCREEN_WIDTH/2,70))
         
         # 덱 그리기(플러이어 텍스트 포함)
         T = list(range(turn,turn+num_players))
@@ -1293,7 +1293,6 @@ def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 
         for i in range(0,num_players):
             player_ability[i] = [-2,-2]
             
-
 def ability_reset(): # 턴 지날때 능력 초기화
     global active2, uaan, active4, fake, cp
     if player_ability[turn][0] == -1: # 침묵 걸렸었으면 턴 끝날때 풀어줌
