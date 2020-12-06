@@ -1005,7 +1005,7 @@ def ability_show():
         a_p = "Required point :" + str(a_ability_point[4])
     else:
         a_a = "oops! your silent now..."
-    Notice = p_a + a_a + a_p
+    Notice = str(p_a)+str(a_a)+str(a_p)
 
 def game_intro():   # Game intro scene
     screen.fill(WHITE)
@@ -1284,8 +1284,8 @@ def select_ability(): # 능력 고르는 함수 여기에 if문을 난이도와 
             player_ability[i] = [0,0]
             player_ability[i][0] = random.choice(p_ability_index)   
             qwer = random.choice(a_ability_index)       
-            player_ability[i][1] = 5
-#            a_ability_index.remove(qwer)
+            player_ability[i][1] = qwer
+            a_ability_index.remove(qwer)
         player_ability_backup = copy.deepcopy(player_ability)
     else:
         for i in range(0,num_players):
