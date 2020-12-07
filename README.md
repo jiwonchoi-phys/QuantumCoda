@@ -38,6 +38,8 @@ You can play our game in English and Korean.
     > macOS: 'AppleSDGothicNeo'
     >
     > Linux: 'notosanscjkkr'
+    >
+    > Others: 'nanumgothic'
 
     If you don't have the fonts above in your PC then written words in Hangul may look broken. Sure, there is no problem with running the game.
 
@@ -439,6 +441,7 @@ gui branch, New_main.py
 - 승리 페이지에서 새 게임 버튼 함수가 잘못 연결된 문제 수정.
 - 그외 자잘한 부분 수정.
 - v0.12 Release
+- 0.12 Release부터는 master branch에서 작업, main.py를 수정.
 
 ### 201206 영철 패치노트
 구이 메인 파일에 능력을 추가함
@@ -449,3 +452,12 @@ gui branch, New_main.py
 5. 뽑을 타일 더미에서 랜덤타일을 1개 가져온다
 6. 내 타일에 페이크를 걸어 정확히 유추 못하게 한다
 7. 지목한 상대방의 랜덤한 타일 1개를 본다
+
+### 201207 용 패치노트
+main.py
+- 음악 컨트롤 하는 것을 함수로 뺌.
+    > 다만 버튼을 누르는 시간이 이벤트를 받아오는 시간보다 빨라서 버튼 클래스에 딜레이를 넣었음.
+- 게임에서 PRINTTEXT로 출력되는 능력설명이 길어 한 줄 더 추가함
+- 게임 규칙 부분 추가 중
+    > 일단은 기존의 다빈치 코드 규칙에 대해서는 설명을 달았음.
+- 변경사항 없으면 v0.13 Release 예정.
