@@ -6,7 +6,7 @@ from game import Game
 def start_room(room):
     global idCount
     server = "localhost"
-    port = 5555 + room 
+    port = 5554 + room
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
