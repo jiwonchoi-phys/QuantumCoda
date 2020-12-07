@@ -47,6 +47,7 @@ pygame.display.set_caption("Quantum Coda")  # 타일틀바에 텍스트 출력.
 CARD_WIDTH = 60
 CARD_SIZE = (CARD_WIDTH, 1.6*CARD_WIDTH)
 Notice = " "        # Notice 첫 값.
+Notice1 = " "
 
 max_card_num = 10   # 13까지 가능하나 10 완성 전까지 고정할 것. make_spooky 함수 안으로 넣지 말 것. 
 cut_list=[]         # 각 loop당 카드의 갯수
@@ -752,39 +753,121 @@ def theory_desc(): # 이론 Tk.
 
     window.mainloop()
 
-def rule_desc(): # Rule Description
+def rule_desc1(): # Rule Description
     screen.fill([255, 255, 255])
     title = PRINTTEXT("Game Rule Description", size = 50)
-    sub_title = PRINTTEXT("1. General Rule of Coda game", size = 30)
-    dp1 = PRINTTEXT("1", size = 20)
-    dp2 = PRINTTEXT("2", size = 20)
-    dp3 = PRINTTEXT("3", size = 20)
-    dp4 = PRINTTEXT("4", size = 20)
+    sub_title = PRINTTEXT("I. General Rule of Coda game", size = 30)
+    dp1 = PRINTTEXT("Required Player numbers: 2 to 4", size = 20)
+    dp2 = PRINTTEXT("Draw at least 2 tiles per player on the first turn", size = 20)
+    dp3 = PRINTTEXT("Black and White Tiles, 13 each", size = 20)
+    dp4 = PRINTTEXT("The numbers start 0 to 12 per tile, not overlapped", size = 20)
     dp5 = PRINTTEXT("5", size = 20)
     dp6 = PRINTTEXT("6", size = 20)
     back_button = BUTTON("Back")
     next_button = BUTTON("Next")
+    image_rp = pygame.image.load("images/rule_player.png")
+    image_rp = pygame.transform.scale(image_rp, (100,100))
+    image_rbt = pygame.image.load("images/rule_black_tile.png")
+    image_rbt = pygame.transform.scale(image_rbt, (100,100))
+    image_rbw = pygame.image.load("images/rule_white_tile.png")
+    image_rbw = pygame.transform.scale(image_rbw, (100,100))
+    image_rn = pygame.image.load("images/rule_numbers.png")
+    image_rn = pygame.transform.scale(image_rn, (100,100))
 
-    play = False
-    while not play:
+    done = False
+    while not done:
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
 
         back_button._draw_(loc = (800,50), size = (130,30), action = how_to_play)
-        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = None)
+        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc2)
         
-        # text positions
         # text positions
         dp = [dp1,dp2,dp3,dp4,dp5,dp6]
         for i in range (6):
-            dp[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
+            dp[i]._blit_(loc= (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
+        sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
+        title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
+        screen.blit(image_rp, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4))
+        screen.blit(image_rbt, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4+100))
+        screen.blit(image_rbw, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4+200))
+        screen.blit(image_rn, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4+300))
+        
+        clock.tick(15)
+        pygame.display.flip()
+
+def rule_desc2(): # Rule Description
+    screen.fill([255, 255, 255])
+    title = PRINTTEXT("Game Rule Description", size = 50)
+    sub_title = PRINTTEXT("I. General Rule of Coda game", size = 30)
+    dp1 = PRINTTEXT(" ", size = 20)
+    dp2 = PRINTTEXT(" ", size = 20)
+    dp3 = PRINTTEXT(" ", size = 20)
+    dp4 = PRINTTEXT(" ", size = 20)
+    dp5 = PRINTTEXT(" ", size = 20)
+    dp6 = PRINTTEXT(" ", size = 20)
+    back_button = BUTTON("Back")
+    next_button = BUTTON("Next")
+    image_flow = pygame.image.load("images/rule_flowchart.png")
+    image_flow = pygame.transform.scale(image_flow, (600,400))
+
+    done = False
+    while not done:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+
+        back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc1)
+        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc3)
+        
+        # text positions
+        dp = [dp1,dp2,dp3,dp4,dp5,dp6]
+        for i in range (6):
+            dp[i]._blit_(loc= (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
+        sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
+        title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
+        screen.blit(image_flow, (SCREEN_WIDTH//2 - 250, SCREEN_HEIGHT/4))
+        
+        clock.tick(15) 
+        pygame.display.flip()
+
+def rule_desc3(): # Rule Description
+    screen.fill([255, 255, 255])
+    title = PRINTTEXT("Game Rule Description", size = 50)
+    sub_title = PRINTTEXT("II. Rule of Quantum Coda game", size = 30)
+    dp1 = PRINTTEXT("Any tiles contain two numbers.", size = 20)
+    dp1_1 = PRINTTEXT("It also exists with the same number on one other tile of the same color, except for the same tile.", size = 20)
+    dp2 = PRINTTEXT(" ", size = 20)
+    dp3 = PRINTTEXT(" ", size = 20)
+    dp4 = PRINTTEXT(" ", size = 20)
+    dp5 = PRINTTEXT(" ", size = 20)
+    dp6 = PRINTTEXT(" ", size = 20)
+    back_button = BUTTON("Back")
+    next_button = BUTTON("Next")
+
+    done = False
+    while not done:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+
+        back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc2)
+        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = quit)
+        
+        # text positions
+        dp = [dp1,dp2,dp3,dp4,dp5,dp6]
+        for i in range (6):
+            dp[i]._blit_(loc= (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
+        dp1_1._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*0 + 25), loc_center=False)
         sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
         title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
         
-        clock.tick(15)
-        pygame.display.flip()    
+        clock.tick(15) 
+        pygame.display.flip()
 
 def f_pn(): # 플레이어 수를 입력 받는 Tk.
     global plabel, num_players
@@ -1030,7 +1113,7 @@ def collapse_loop(x):   # 변수 x는 방금 붕괴된 카드(class)를 나타�
 
 #========== functions for pygame ==========#
 def ability_show():
-    global Notice
+    global Notice, Notice1
     # 패시브 설명
     if player_ability[turn][0] == 1:
         p_a = "passive ability : show the average number of pointed tile"
@@ -1059,7 +1142,8 @@ def ability_show():
     else:
         a_a = "oops! your silent now..."
         a_p = " "
-    Notice = str(p_a)+str(a_a)+str(a_p)
+    Notice = str(p_a)
+    Notice1 = str(a_a)+str(" ")+str(a_p)
 
 def game_intro():   # Game intro scene
     screen.fill(WHITE)
@@ -1139,7 +1223,7 @@ def how_to_play(): # Scene for game description
         title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
 
         theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
-        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = rule_desc)
+        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = rule_desc1)
         prac_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*3 // 4), size = (SCREEN_WIDTH // 4,100), action = tbu_window)
         back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
         exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = quit)
@@ -1176,7 +1260,8 @@ def main_loop(): # Game main loop scene
     YATT = 0    # You already took the tile. [먹기전: 0, 먹음(추측전): 1, 추측실패: 2, 추측성공: 3]
     
     def next_turn(): # 메인 루프 밖으로 절대 빼지 마시오.
-        global turn, pl_turn, YATT, Notice
+        global turn, pl_turn, YATT, Notice, Notice1
+        Notice1 = " "
         if YATT == 2 or YATT == 3: # 추측 이후 턴넘김 활성화
             ability_reset()    
             Notice = " "
@@ -1195,8 +1280,9 @@ def main_loop(): # Game main loop scene
             player.make_numlist()
  
     def f_take_tile(): # 메인 루프 밖으로 절대 빼지 마시오. + 함수 위치 고정.
-        global fti_b, fti_w, YATT, RT, Notice
+        global fti_b, fti_w, YATT, RT, Notice, Notice1
         Notice = " "
+        Notice1 = " "
         wtt = Tk()                             # 윈도우 창을 생성
         wtt.title("Get Tiles.")                # 타이틀
         wtt.geometry("480x300+100+100")        # "너비x높이+x좌표+y좌표"
@@ -1256,7 +1342,8 @@ def main_loop(): # Game main loop scene
         wtt.mainloop()
         
     def ability_activated(): # 능력 누르면 창 하나 뜨면서 알려주고 싶은데 모르겠음
-        global uaan, Notice
+        global uaan, Notice, Notice1
+        Notice1 = " "
         if player_ability[turn][1] == -1:
             Notice = "ability inactivated"
         if p[turn].get_point() >= a_ability_point[player_ability[turn][1]-1]:
@@ -1290,6 +1377,8 @@ def main_loop(): # Game main loop scene
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
         Notice_box._blit_(loc=(SCREEN_WIDTH/2,70))
+        Notice1_box = PRINTTEXT(Notice1, 20)
+        Notice1_box._blit_(loc=(SCREEN_WIDTH/2,90))
         
         # 덱 그리기(플러이어 텍스트 포함)
         T = list(range(turn,turn+num_players))
