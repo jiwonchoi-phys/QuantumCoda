@@ -33,6 +33,7 @@ GRAY    = (201,201,201)
 GRAY_2  = (169,169,169)
 
 # Music
+intro_music = "White River - Aakash Gandhi.wav"
 main_music = "Wayne Jones - Goat.wav"
 win_music = "Trimmed & Taught - Dan Lebowitz.wav"
 
@@ -478,6 +479,7 @@ class BUTTON():
                     pass
                 elif asdf == 0:
                     button_sound()
+                    time.sleep(0.1)
                     action()
                     asdf = 1
                     
@@ -750,6 +752,40 @@ def theory_desc(): # 이론 Tk.
 
     window.mainloop()
 
+def rule_desc(): # Rule Description
+    screen.fill([255, 255, 255])
+    title = PRINTTEXT("Game Rule Description", size = 50)
+    sub_title = PRINTTEXT("1. General Rule of Coda game", size = 30)
+    dp1 = PRINTTEXT("1", size = 20)
+    dp2 = PRINTTEXT("2", size = 20)
+    dp3 = PRINTTEXT("3", size = 20)
+    dp4 = PRINTTEXT("4", size = 20)
+    dp5 = PRINTTEXT("5", size = 20)
+    dp6 = PRINTTEXT("6", size = 20)
+    back_button = BUTTON("Back")
+    next_button = BUTTON("Next")
+
+    play = False
+    while not play:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+
+        back_button._draw_(loc = (800,50), size = (130,30), action = how_to_play)
+        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = None)
+        
+        # text positions
+        # text positions
+        dp = [dp1,dp2,dp3,dp4,dp5,dp6]
+        for i in range (6):
+            dp[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
+        sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
+        title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
+        
+        clock.tick(15)
+        pygame.display.flip()    
+
 def f_pn(): # 플레이어 수를 입력 받는 Tk.
     global plabel, num_players
     player_num_max = 4  #게임 가능 플레이어 수 제한
@@ -823,11 +859,28 @@ def f_tn(num_players):  # 초기 타일 수를 입력 받는 Tk.
 
     tn_tk.mainloop()
 
-def f_play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
+def play_music(name, vol): # 음악 연속 재생 함수. (vol: 0 ~ 1)
     pygame.mixer.init()
     pygame.mixer.music.load(name)
     pygame.mixer.music.set_volume(vol)
     pygame.mixer.music.play(-1) # 무한재생.
+
+def init_music(event):  # 음악 볼륨 및 재생 여부
+    pygame.mixer.init()
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP:
+            v = pygame.mixer.music.get_volume()
+            pygame.mixer.music.set_volume(v + 0.05)
+
+        if event.key == pygame.K_DOWN:
+            v = pygame.mixer.music.get_volume()
+            pygame.mixer.music.set_volume(v - 0.05)
+
+        if event.key == pygame.K_LEFT:
+            pygame.mixer.music.pause()
+
+        if event.key == pygame.K_RIGHT:
+            pygame.mixer.music.unpause()
 
 def f_level_set(): # 난이도 설정 Tk.
     global states
@@ -874,14 +927,14 @@ def f_win_page(): # 승리 페이지.
     wpb1 = BUTTON("ReGame", inactive_color = WHITE, active_color=GRAY)
     wpb2 = BUTTON("home", inactive_color = WHITE, active_color=GRAY)
     wpb3 = BUTTON("Level Setting", inactive_color = WHITE, active_color=GRAY)
-    f_play_music(win_music, 0.5)
+    play_music(win_music, 0.5)
     play = False
     while not play:
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
-
+        init_music(event)
         wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=f_pn)
         wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=bati_window)
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=f_level_set)
@@ -1010,10 +1063,14 @@ def ability_show():
 
 def game_intro():   # Game intro scene
     screen.fill(WHITE)
+    play_music(intro_music, 0.3)
     intro = False   # while문 돌리기 위함
 
     title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
-    version = PRINTTEXT("v.0.12", size = 15)
+    version = PRINTTEXT("v.0.13test", size = 15)
+
+    music1 = PRINTTEXT("Music Control", size = 20)
+    music2 = PRINTTEXT("↑: Turn up the Volume, ↓: Turn down the Volume, ←: Pause, →: Play", size = 20)
 
     credits_title = PRINTTEXT("Credits", size = 30)
     credits_affilation = PRINTTEXT("Undergraduate Students, Department of Physics, Pukyong National University", size = 20)
@@ -1030,10 +1087,13 @@ def game_intro():   # Game intro scene
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
-        
+        init_music(event)
+
         # text _blit_ location
         title._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
         version._blit_(loc=(SCREEN_WIDTH-40, SCREEN_HEIGHT-20))
+        music1._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-160))
+        music2._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-140))
         credits_title._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-100))
         credits_affilation._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-70))
         credits_name._blit_(loc=(SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT-40))
@@ -1043,17 +1103,17 @@ def game_intro():   # Game intro scene
         mplay_button._draw_(loc = (SCREEN_WIDTH*6 // 10, SCREEN_HEIGHT*3 // 8), size = (160,60),action=tbu_window)
         how_button._draw_(loc = (SCREEN_WIDTH*4 // 10, SCREEN_HEIGHT*4 // 8), size = (160,60),action=how_to_play)
         gsettings_button._draw_(loc = (SCREEN_WIDTH*6 // 10,SCREEN_HEIGHT*4 // 8), size = (160,60), action=f_level_set)
-        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (160,60),action=pygame.quit)
+        title_exit_button._draw_(loc = (SCREEN_WIDTH // 2, SCREEN_HEIGHT*5 // 8), size = (160,60),action=quit)
 
         pygame.display.update()
-        clock.tick(15)
+        clock.tick(30)
 
-def how_to_play(): # scene for game description # 장면 테스트 중
+def how_to_play(): # Scene for game description
     screen.fill(WHITE)
     play = False
         
     # dp: description
-
+    title = PRINTTEXT("How to Play?", size = 50)
     dp_en1 = PRINTTEXT("Quantum Coda is a new game based on 'Coda' and the game included", size = 20)
     dp_en2 = PRINTTEXT("weird elements inspired on the phenomenon of Quantum Mechanics.", size = 20)
     dp_en3 = PRINTTEXT("If you need 'help' about this game, click the button on the rightside", size = 20)
@@ -1076,12 +1136,13 @@ def how_to_play(): # scene for game description # 장면 테스트 중
         dp_en = [dp_en1,dp_en2,dp_en3,dp_en4,dp_en5,dp_en6]
         for i in range (6):
             dp_en[i]._blit_(loc= (SCREEN_WIDTH // 3, SCREEN_HEIGHT // 4 + 25*i))
+        title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
 
         theory_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT // 4), size = (SCREEN_WIDTH // 4,100), action = theory_desc)
-        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = tbu_window)
+        Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = rule_desc)
         prac_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*3 // 4), size = (SCREEN_WIDTH // 4,100), action = tbu_window)
         back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
-        exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = pygame.quit)
+        exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = quit)
 
         pygame.display.flip()
         clock.tick(15)
@@ -1092,7 +1153,7 @@ def main_loop(): # Game main loop scene
     screen.fill(WHITE)
     done = False
     make_card(num_players, stn)
-    f_play_music(main_music, 1)
+    play_music(main_music, 1)
     f_ftile_color_arrnage(tii)
     asdf = 0
     select_ability()
@@ -1224,20 +1285,7 @@ def main_loop(): # Game main loop scene
         f_end_conditions()
         
         # 음악 조절
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                v = pygame.mixer.music.get_volume()
-                pygame.mixer.music.set_volume(v + 0.05)
-
-            if event.key == pygame.K_DOWN:
-                v = pygame.mixer.music.get_volume()
-                pygame.mixer.music.set_volume(v - 0.05)
-
-            if event.key == pygame.K_LEFT:
-                pygame.mixer.music.pause()
-
-            if event.key == pygame.K_RIGHT:
-                pygame.mixer.music.unpause()
+        init_music(event)
 
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
