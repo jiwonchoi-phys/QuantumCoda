@@ -780,6 +780,7 @@ def rule_desc1(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
+        init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = how_to_play)
         next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc2)
@@ -802,7 +803,7 @@ def rule_desc2(): # Rule Description
     screen.fill([255, 255, 255])
     title = PRINTTEXT("Game Rule Description", size = 50)
     sub_title = PRINTTEXT("I. General Rule of Coda game", size = 30)
-    dp1 = PRINTTEXT(" ", size = 20)
+    dp1 = PRINTTEXT("Game process of general Coda", size = 20)
     dp2 = PRINTTEXT(" ", size = 20)
     dp3 = PRINTTEXT(" ", size = 20)
     dp4 = PRINTTEXT(" ", size = 20)
@@ -819,6 +820,7 @@ def rule_desc2(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
+        init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc1)
         next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc3)
@@ -826,7 +828,7 @@ def rule_desc2(): # Rule Description
         # text positions
         dp = [dp1,dp2,dp3,dp4,dp5,dp6]
         for i in range (6):
-            dp[i]._blit_(loc= (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
+            dp[i]._blit_(loc= (SCREEN_WIDTH * 1 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
         sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
         title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
         screen.blit(image_flow, (SCREEN_WIDTH//2 - 250, SCREEN_HEIGHT/4))
@@ -838,15 +840,30 @@ def rule_desc3(): # Rule Description
     screen.fill([255, 255, 255])
     title = PRINTTEXT("Game Rule Description", size = 50)
     sub_title = PRINTTEXT("II. Rule of Quantum Coda game", size = 30)
-    dp1 = PRINTTEXT("Any tiles contain two numbers.", size = 20)
+    dp1 = PRINTTEXT("SUPERPOSTION: Any tiles contain two numbers.", size = 20)
     dp1_1 = PRINTTEXT("It also exists with the same number on one other tile of the same color, except for the same tile.", size = 20)
-    dp2 = PRINTTEXT(" ", size = 20)
-    dp3 = PRINTTEXT(" ", size = 20)
+    dp2 = PRINTTEXT("ENTANGLED STATE: A same number exists in two different tiles at the same time.", size = 20)
+    dp2_1 = PRINTTEXT("If the tile you point to has the number you guessed,", size = 20)
+    dp2_2 = PRINTTEXT("it will be affected on the other tile that has same number as well.", size = 20)
+    dp3 = PRINTTEXT("COLLAPSE PROCESS: one of the superposition numbers of a tile is matched,", size = 20)
+    dp3_1 = PRINTTEXT("a 'Collapse' phenomenon will be occured then the number is determined as one of the two.", size = 20)
+    dp3_2 = PRINTTEXT("However, if the specified number does not match the tile number,", size = 20)
+    dp3_3 = PRINTTEXT("the tile you took recently goes on collapse process and opened.", size = 20)
     dp4 = PRINTTEXT(" ", size = 20)
     dp5 = PRINTTEXT(" ", size = 20)
     dp6 = PRINTTEXT(" ", size = 20)
     back_button = BUTTON("Back")
     next_button = BUTTON("Next")
+    image_qct = pygame.image.load("images/rule_qc_tile.png")
+    image_qct = pygame.transform.scale(image_qct, (100,100))
+    image_ent1 = pygame.image.load("images/rule_qc_entangledtile1.png")
+    image_ent1 = pygame.transform.scale(image_ent1, (100,100))
+    image_ent2 = pygame.image.load("images/rule_qc_entangledtile2.png")
+    image_ent2 = pygame.transform.scale(image_ent2, (100,100))
+    image_col1 = pygame.image.load("images/rule_qc_collapsedtile1.png")
+    image_col1 = pygame.transform.scale(image_col1, (90,100))
+    image_col2 = pygame.image.load("images/rule_qc_collapsedtile2.png")
+    image_col2 = pygame.transform.scale(image_col2, (90,100))
 
     done = False
     while not done:
@@ -854,17 +871,67 @@ def rule_desc3(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
+        init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc2)
-        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = quit)
+        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc4)
         
         # text positions
         dp = [dp1,dp2,dp3,dp4,dp5,dp6]
         for i in range (6):
             dp[i]._blit_(loc= (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
         dp1_1._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*0 + 25), loc_center=False)
+        dp2_1._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*1 + 25), loc_center=False)
+        dp2_2._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*1 + 50), loc_center=False)
+        dp3_1._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*2 + 25), loc_center=False)
+        dp3_2._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*2 + 50), loc_center=False)
+        dp3_3._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*2 + 75), loc_center=False)
         sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
         title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
+        screen.blit(image_qct, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4))
+        screen.blit(image_ent1, (SCREEN_WIDTH/10-100, SCREEN_HEIGHT/4+100))
+        screen.blit(image_ent2, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4+100))
+        screen.blit(image_col1, (SCREEN_WIDTH/10-100, SCREEN_HEIGHT/4+200))
+        screen.blit(image_col2, (SCREEN_WIDTH/10, SCREEN_HEIGHT/4+200))
+        
+        clock.tick(15) 
+        pygame.display.flip()
+
+def rule_desc4(): # Rule Description
+    screen.fill([255, 255, 255])
+    title = PRINTTEXT("Game Rule Description", size = 50)
+    sub_title = PRINTTEXT("II. Rule of Quantum Coda game", size = 30)
+    dp1 = PRINTTEXT("Addition game process of", size = 20)
+    dp1_1 = PRINTTEXT("Quantum Coda", size = 20)
+    dp2 = PRINTTEXT(" ", size = 20)
+    dp3 = PRINTTEXT(" ", size = 20)
+    dp4 = PRINTTEXT(" ", size = 20)
+    dp5 = PRINTTEXT(" ", size = 20)
+    dp6 = PRINTTEXT(" ", size = 20)
+    back_button = BUTTON("Back")
+    next_button = BUTTON("How to Play", active_color=BLUE)
+    image_flow = pygame.image.load("images/rule_qc_flowchart.png")
+    image_flow = pygame.transform.scale(image_flow, (600,400))
+
+    done = False
+    while not done:
+        for event in pygame.event.get():        # 기본 event loop
+            if event.type == pygame.QUIT:       # pygame 종료
+                pygame.quit()
+                quit()
+        init_music(event)
+
+        back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc3)
+        next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = how_to_play)
+        
+        # text positions
+        dp = [dp1,dp2,dp3,dp4,dp5,dp6]
+        for i in range (6):
+            dp[i]._blit_(loc= (SCREEN_WIDTH * 1 // 10, SCREEN_HEIGHT // 4 + 100*i), loc_center=False)
+        dp1_1._blit_(loc = (SCREEN_WIDTH * 2 // 10, SCREEN_HEIGHT // 4 + 100*0 + 25), loc_center=False)
+        sub_title._blit_(loc= (SCREEN_WIDTH/4, SCREEN_HEIGHT/4-45))
+        title._blit_(loc= (SCREEN_WIDTH/10, SCREEN_HEIGHT/4-140), loc_center=False)
+        screen.blit(image_flow, (SCREEN_WIDTH//2 - 150, SCREEN_HEIGHT/4))
         
         clock.tick(15) 
         pygame.display.flip()
@@ -968,13 +1035,13 @@ def init_music(event):  # 음악 볼륨 및 재생 여부
 def f_level_set(): # 난이도 설정 Tk.
     global states
     
-    name_box = ["Use color alignment","Use probability view","Use items"]
+    name_box = ["Use color alignment","Use probability view","Use abilities"]
     chk = [0,0,0] # Dummy list for name.
     
     def onPress(i):                       
         states[i] = not states[i]   
     root = Tk()
-    root.title("Level Settings.")
+    root.title("Level Settings")
     root.geometry("480x300+100+100")
     root.resizable(False, False)
     t = Label(text="Difficulty increases if you don't use the features. (Check =  Use)\n난이도는 아래의 기능들을 사용하지 않으면 올라갑니다.")
@@ -987,9 +1054,9 @@ def f_level_set(): # 난이도 설정 Tk.
     a3.pack(anchor = "w", pady=0)
     a4 = Message(width = 480, justify= "left", text="Watch the probability of tiles on your opponent.\n상대방이 소유한 타일의 확률을 봅니다.")
     a4.pack(anchor = "w", pady=0)
-    a5 = Message(width = 480, text="# Items (아이템) :")
+    a5 = Message(width = 480, text="# Ability (능력) :")
     a5.pack(anchor = "w", pady=0)
-    a6 = Message(width = 480, justify= "left", text="Use an item that lowers the difficulty of the game.\n게임의 난이도를 낮추는 아이템을 사용합니다.")
+    a6 = Message(width = 480, justify= "left", text="Use abilities that lower the difficulty of the game.\n게임의 난이도를 낮추는 능력을 사용합니다.")
     a6.pack(anchor = "w", pady=0)
     
     for i in range(3):
@@ -1151,7 +1218,7 @@ def game_intro():   # Game intro scene
     intro = False   # while문 돌리기 위함
 
     title = PRINTTEXT("Quantum Coda", size = 50)    # Title Texts
-    version = PRINTTEXT("v.0.13test", size = 15)
+    version = PRINTTEXT("v.0.13", size = 15)
 
     music1 = PRINTTEXT("Music Control", size = 20)
     music2 = PRINTTEXT("↑: Turn up the Volume, ↓: Turn down the Volume, ←: Pause, →: Play", size = 20)
@@ -1215,6 +1282,7 @@ def how_to_play(): # Scene for game description
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
+        init_music(event)
 
         # text positions
         dp_en = [dp_en1,dp_en2,dp_en3,dp_en4,dp_en5,dp_en6]
@@ -1226,7 +1294,7 @@ def how_to_play(): # Scene for game description
         Rule_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*2 // 4), size = (SCREEN_WIDTH // 4,100), action = rule_desc1)
         prac_button._draw_(loc = (SCREEN_WIDTH-200, SCREEN_HEIGHT*3 // 4), size = (SCREEN_WIDTH // 4,100), action = tbu_window)
         back_button._draw_(loc = (800,50), size = (130,30), action = game_intro)
-        exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = quit)
+        exit_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = exit_window)
 
         pygame.display.flip()
         clock.tick(15)
@@ -1448,7 +1516,7 @@ pygame.init()                               # pygame library 초기화.
 clock = pygame.time.Clock()                 # create an object to help track time.
 clock.tick(30)                              # 딜레이 추가. Target_FPS = 30.
 
-states = [True,True,True]                   # 초기 난이도 세팅 값.
+states = [True,True,False]                   # 초기 난이도 세팅 값.
 game_intro()                                # 실행 장면을 위한 최초 함수.
 
 pygame.quit()                               # pygame 종료
