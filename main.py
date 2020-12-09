@@ -33,9 +33,9 @@ GRAY    = (201,201,201)
 GRAY_2  = (169,169,169)
 
 # Music
-intro_music = "White River - Aakash Gandhi.wav"
-main_music = "Wayne Jones - Goat.wav"
-win_music = "Trimmed & Taught - Dan Lebowitz.wav"
+intro_music = "music/White River - Aakash Gandhi.wav"
+main_music = "music/Wayne Jones - Goat.wav"
+win_music = "music/Trimmed & Taught - Dan Lebowitz.wav"
 
 # Object size
 SCREEN_WIDTH  = 1100
@@ -449,7 +449,7 @@ class BUTTON():
         global asdf
 
         def button_sound():
-            b_s = pygame.mixer.Sound("18V Cordless Drill Switch.wav")
+            b_s = pygame.mixer.Sound("music/18V Cordless Drill Switch.wav")
             b_s.play()
 
         # 텍스트로 위치 지정, 텍스트 아니면 직접 값으로 위치 지정
@@ -674,7 +674,7 @@ def theory_desc(): # 이론 Tk.
     frame1=Frame(window)
     notebook.add(frame1, text="Intro")
 
-    A = open('Intro.txt', 'r', encoding='UTF8')
+    A = open('texts/Intro.txt', 'r', encoding='UTF8')
     Intro = A.read()
     
     msg1=Message(frame1, width = n_width, text=Intro)
@@ -684,7 +684,7 @@ def theory_desc(): # 이론 Tk.
     frame2=Frame(window)
     notebook.add(frame2, text="Superposition")
 
-    B = open('superposition_en.txt', 'r', encoding='UTF8')
+    B = open('texts/superposition_en.txt', 'r', encoding='UTF8')
     sup_en = B.read()
     
     msg2=Message(frame2, width = n_width, text=sup_en)
@@ -694,7 +694,7 @@ def theory_desc(): # 이론 Tk.
     frame3=Frame(window)
     notebook.add(frame3, text="Entanglement")
 
-    C = open('entanglement_en.txt', 'r', encoding='UTF8')
+    C = open('texts/entanglement_en.txt', 'r', encoding='UTF8')
     ent_en = C.read()
     
     msg3 = Message(frame3, width = n_width, text=ent_en)
@@ -704,7 +704,7 @@ def theory_desc(): # 이론 Tk.
     frame4 = Frame(window)
     notebook.add(frame4, text="Measurement & Collapse")
 
-    D = open('measurement_and_collapse_en.txt', 'r', encoding='UTF8')
+    D = open('texts/measurement_and_collapse_en.txt', 'r', encoding='UTF8')
     measncoll_en = D.read()
     
     msg4 = Message(frame4, width = n_width, text=measncoll_en)
@@ -714,7 +714,7 @@ def theory_desc(): # 이론 Tk.
     frame5=Frame(window)
     notebook.add(frame5, text="중첩")
 
-    B = open('superposition_ko.txt', 'r', encoding='UTF8')
+    B = open('texts/superposition_ko.txt', 'r', encoding='UTF8')
     sup_ko = B.read()
     
     msg5=Message(frame5, width = n_width, text=sup_ko)
@@ -724,7 +724,7 @@ def theory_desc(): # 이론 Tk.
     frame6=Frame(window)
     notebook.add(frame6, text="얽힘")
 
-    C = open('entanglement_ko.txt', 'r', encoding='UTF8')
+    C = open('texts/entanglement_ko.txt', 'r', encoding='UTF8')
     ent_ko = C.read()
     
     msg6 = Message(frame6, width = n_width, text=ent_ko)
@@ -734,22 +734,11 @@ def theory_desc(): # 이론 Tk.
     frame7 = Frame(window)
     notebook.add(frame7, text="측정과 붕괴")
 
-    D = open('measurement_and_collapse_ko.txt', 'r', encoding='UTF8')
+    D = open('texts/measurement_and_collapse_ko.txt', 'r', encoding='UTF8')
     measncoll_ko = D.read()
     
     msg7 = Message(frame7, width = n_width, text=measncoll_ko)
     msg7.pack(side = "top", anchor = "w")
-
-    # 4
-    frame8 = Frame(window)
-    notebook.add(frame8, text="이미지 크기조절 및 출력 테스트")
-
-    image=Image.open("a.png")
-    image = image.resize((n_width,n_heigh-20),Image.ANTIALIAS)
-    r_img = ImageTk.PhotoImage(image)
-    
-    msg8=Label(frame8, width = n_width, image=r_img)
-    msg8.pack(side = "top", anchor = "w")
 
     window.mainloop()
 
