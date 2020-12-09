@@ -7,9 +7,9 @@ Wecome to visit our repository! This repository is for **QuantumCoda (양자 다
 - Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
 - Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
-# Download: v0.12
+# Download: v0.13
 
-Now we released QuantumCoda version 0.12. This version is currently test version so we focused on being able to play the QuantumCoda. 
+Now we released QuantumCoda version 0.13. This version is currently test version so we focused on being able to play the QuantumCoda. 
 
 **[Download](https://github.com/jiwonchoi-phys/QuantumCoda/releases)**
 
@@ -44,12 +44,15 @@ You can play our game in English and Korean.
     If you don't have the fonts above in your PC then written words in Hangul may look broken. Sure, there is no problem with running the game.
 
 ## Release Notes
-### v0.12
-* Single Player game
-    - Now you can control the volume of background music. Use arrow keys on your keyboard (Up arrow: Turn up the Volume, Down arrow: Turn down the Volume, Left arrow: Pause, Right arrow: Play).
-* System
-    - Modified a text position on the win page.
-    - Fixed an issue where the new game button function was incorrectly linked on the win page.
+### v0.13
+Single Player Game
+- Now you can do the 'Ability' mode to play the Quantum Coda easier. Basically It does not set the first time you run the game, so you need to go to the Game Settings then you turn on the 'ability' before you play the game.
+
+How to Play
+- Game rule description is updated. There is a description of the rule of general Coda and the rule of Quantum Coda. There is a problem with Pygame Print in the malgungothic font, so the description is only in English.
+
+System
+- Delayed the button click a little to use music control function anywhere.
 
 ## QuantumCoda Legacy
 You can play the CLI-based version of Quantum Coda. Just download 'QCodalegacy.py (No joker card version)' then execute the file. this game used only 4 modules - random, numpy, copy, math. But the game is available in Korean only.
@@ -453,6 +456,9 @@ gui branch, New_main.py
 6. 내 타일에 페이크를 걸어 정확히 유추 못하게 한다
 7. 지목한 상대방의 랜덤한 타일 1개를 본다
 
+## 15th Week (12.07~12.13)
+Final Exam week
+
 ### 201207 용 패치노트
 main.py
 - 음악 컨트롤 하는 것을 함수로 뺌.
@@ -473,9 +479,6 @@ main.py
     > 소모성인 아이템과 다르게 능력을 사용하는 것이 어감에 맞는듯 함
 - 처음 실행할 때 능력모드는 기본 체크 해제 되도록 변경.
     > 플레이어들이 어려움을 느낄 때 체크를 하는게 적절하다고 생각함.
-
-## 15th Week (12.07~12.13)
-Final Exam week
 
 ### 201209 용 패치노트
 - 코드 실행에 지장을 주지 않는 파일들 폴더로 분리
