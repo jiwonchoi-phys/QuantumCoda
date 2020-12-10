@@ -769,7 +769,7 @@ def rule_desc1(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
-        init_music(event)
+            init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = how_to_play)
         next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc2)
@@ -809,7 +809,7 @@ def rule_desc2(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
-        init_music(event)
+            init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc1)
         next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc3)
@@ -860,7 +860,7 @@ def rule_desc3(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
-        init_music(event)
+            init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc2)
         next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = rule_desc4)
@@ -908,7 +908,7 @@ def rule_desc4(): # Rule Description
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
-        init_music(event)
+            init_music(event)
 
         back_button._draw_(loc = (800,50), size = (130,30), action = rule_desc3)
         next_button._draw_(loc = (SCREEN_WIDTH-100,50), size = (130,30), action = how_to_play)
@@ -1073,7 +1073,8 @@ def f_win_page(): # 승리 페이지.
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
                 quit()
-        init_music(event)
+            init_music(event)
+            
         wpb1._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT/4), size = (150,60), action=f_pn)
         wpb2._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*2/4), size = (150,60), action=bati_window)
         wpb3._draw_(loc = (SCREEN_WIDTH*4/5,SCREEN_HEIGHT*3/4), size = (150,60), action=f_level_set)
@@ -1227,7 +1228,7 @@ def game_intro():   # Game intro scene
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
-        init_music(event)
+            init_music(event)
 
         # text _blit_ location
         title._blit_(loc= (SCREEN_WIDTH*1 // 2, SCREEN_HEIGHT*3 // 16))
@@ -1271,7 +1272,7 @@ def how_to_play(): # Scene for game description
         for event in pygame.event.get():        # 기본 event loop
             if event.type == pygame.QUIT:       # pygame 종료
                 pygame.quit()
-        init_music(event)
+            init_music(event)
 
         # text positions
         dp_en = [dp_en1,dp_en2,dp_en3,dp_en4,dp_en5,dp_en6]
@@ -1416,7 +1417,8 @@ def main_loop(): # Game main loop scene
         for event in pygame.event.get():        # 닫기 전까지 계속 실행.
             if event.type == pygame.QUIT:       # 종료 if문
                 exit_window()
-        
+            init_music(event)                   # 음악 조절
+
         # 턴 관련
         pygame.draw.rect(screen, WHITE, [0,0,SCREEN_WIDTH,SCREEN_HEIGHT])          # 삭제금지.
         pl_turn = PRINTTEXT("Turn of player "+str(turn+1), 25)
@@ -1427,9 +1429,6 @@ def main_loop(): # Game main loop scene
 
         # 승리 조건
         f_end_conditions()
-        
-        # 음악 조절
-        init_music(event)
 
         # 공지
         Notice_box = PRINTTEXT(Notice, 20)
