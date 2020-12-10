@@ -20,17 +20,21 @@ You can play our game in English and Korean.
 게임 언어는 영어와 한국어로 제공됩니다.
 
 ## System Requirements
-- Windows 10, Linux (Ubuntu) (We tested only two OS. It will probably run on macOS too.)
-    > **FOR WSL USERS**; If you want to run our game you'll need to set X11 Forwarding and PulseAudio to send GUI & audio information to your PC. If you not set them, you can not run the game due to an interpreter error.
-- Python 3.8.5
+- Windows 10, Linux (Ubuntu 20.04) (We tested only two OS. It will probably run on macOS, or other linux OS, too.)
+    > **FOR WSL USERS**; If you want to run our game you'll need to set X11 Forwarding and PulseAudio to send GUI & audio information to your PC. If you not set them, you **can not run the game** due to an interpreter error.
+- Python 3.6.12 or higher
+    > We recommend run the game using newest version of python.
 - Python Modules
-    > Pygame
+    > Pygame 1.9.3 or higher
+    >> maybe you'll need to install using pip.
+    >
+    > Numpy 1.12.0 or higher
     >> maybe you'll need to install using pip.
     >
     > Python tkinter, Pillow
     >> maybe you'll need to install this module if you are Linux user. Turn on the bash and type 'apt install python3-tk'. With same context type 'pip3 install pillow' using pip.
     >
-    > math, random, numpy, time, platform
+    > math, random, time, platform
     >> This modules are provided by python. If the modules are not installed, use pip to get modules.
 - System fonts (for Korean Users)
     > Windows: 'Calibri' or 'malgungothic'
@@ -484,6 +488,10 @@ main.py
 - 코드 실행에 지장을 주지 않는 파일들 폴더로 분리
     > 음악 파일은 music, 설명에 필요한 텍스트 파일은 texts, 이미지 삽입이 필요한 것들은 images 폴더로 옮김
 - v0.13 Release
+
+### 2012010 용 패치노트
+- 버튼 클릭시 간헐적으로 종료되던 문제 수정
+    > 음악 컨트롤 함수 때문에 발생한 문제로 코드 위치 재정렬하여 문제 해결.
 
 ## 16th Week (12.14~12.20)
 Final Exam week
