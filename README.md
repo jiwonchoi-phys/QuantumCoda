@@ -461,8 +461,13 @@ gui branch, New_main.py
 7. 지목한 상대방의 랜덤한 타일 1개를 본다
 
 ### 201206 세형 패치노트
+master branch, main.py
 1. Notice 위치 버튼에 가려지지 않게 조정.
 2. 플레이어 클릭 버튼 위치 및 크기 조절.
+
+master branch, client.py
+1. 최신 main으로 client 내용 업데이트
+2. 방 입장 버튼 위치 조절.
 
 ## 15th Week (12.07~12.13)
 Final Exam week
