@@ -7,6 +7,8 @@ Wecome to visit our repository! This repository is for **QuantumCoda (양자 다
 - Project: QuantumCoda (a.k.a Quantum Da Vinci Code '양자 다빈치 코드')
 - Members: Jong hee Kim, Yong chul Lee, Yong Kwon, Sae hyeong Cho, Ji won Choi
 
+**Note**: This project was closed on 2020.12 and will not be updated at all.
+
 # Download: v0.13
 
 Now we released QuantumCoda version 0.13. This version is currently test version so we focused on being able to play the QuantumCoda. 
@@ -21,7 +23,7 @@ You can play our game in English and Korean.
 
 ## System Requirements
 - Windows 10, Linux (Ubuntu 20.04) (We tested only two OS. It will probably run on macOS, or other linux OS, too.)
-    > **FOR WSL USERS**; If you want to run our game you'll need to set X11 Forwarding and PulseAudio to send GUI & audio information to your PC. If you not set them, you **can not run the game** due to an interpreter error.
+    > **FOR WSL USERS**; If you want to run our game you'll need to set X11 Forwarding and PulseAudio to send GUI & audio information to your PC. Unless you set them, you **can not run the game** due to an interpreter error.
 - Python 3.6.12 or higher
     > We recommend run the game using newest version of python.
 - Python Modules
@@ -32,10 +34,10 @@ You can play our game in English and Korean.
     >> maybe you'll need to install using pip.
     >
     > Python tkinter, Pillow
-    >> maybe you'll need to install this module if you are Linux user. Turn on the bash and type 'apt install python3-tk'. With same context type 'pip3 install pillow' using pip.
+    >> maybe you'll need to install this module if you are Linux user. For example, if your computer is Debian-like os, turn on any terminal simulators and type 'apt install python3-tk'. With same context type 'pip3 install pillow' using pip.
     >
     > math, random, time, platform
-    >> This modules are provided by python. If the modules are not installed, use pip to get modules.
+    >> This modules are basically provided by python. If the modules are not installed, use pip to get them.
 - System fonts (for Korean Users)
     > Windows: 'Calibri' or 'malgungothic'
     >
@@ -45,7 +47,7 @@ You can play our game in English and Korean.
     >
     > Others: 'nanumgothic'
 
-    If you don't have the fonts above in your PC then written words in Hangul may look broken. Sure, there is no problem with running the game.
+    If you don't have the fonts above in your PC then written Hangul words in our game may be looking broken. Sure, there is no problem with running the game.
 
 ## Release Notes
 ### v0.13
